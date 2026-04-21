@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal } from './Modal';
-import { useLanguage } from '../../../contexts/LanguageContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 import { Building2, MapPin, Phone, Mail } from 'lucide-react';
 
 interface BranchData {

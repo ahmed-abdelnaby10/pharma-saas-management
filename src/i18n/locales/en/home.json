@@ -1,0 +1,44 @@
+{
+  "hero": {
+    "title": "Discover Quality Products for Every Store",
+    "subtitle": "Browse a flexible multi-tenant catalog built for electronics, food, fashion, and more",
+    "cta": "Explore Now",
+    "popular": "Popular:"
+  },
+  "featuredCategories": {
+    "title": "Browse by Category",
+    "subtitle": "Find the right products for your storefront"
+  },
+  "allProducts": {
+    "title": "Browse All Products",
+    "subtitle": "Discover a wide range of products from various stores"
+  },
+  "brands": {
+    "title": "Shop by Brand",
+    "subtitle": "Find your favorite products from top brands"
+  },
+  "recommended": {
+    "title": "Recommended for You",
+    "subtitle": "Handpicked products based on your interests"
+  },
+  "bestSellers": {
+    "title": "Best Sellers",
+    "subtitle": "Most popular products this month"
+  },
+  "newArrivals": {
+    "title": "New Arrivals",
+    "subtitle": "Latest additions to our collection"
+  },
+  "promotional": {
+    "banner1": {
+      "title": "Save 20% on Electronics",
+      "description": "Limited time offer on top electronics",
+      "cta": "Shop Electronics"
+    },
+    "banner2": {
+      "title": "Seasonal Fashion Picks",
+      "description": "Fresh fashion arrivals and deals",
+      "cta": "Shop Fashion"
+    }
+  }
+}

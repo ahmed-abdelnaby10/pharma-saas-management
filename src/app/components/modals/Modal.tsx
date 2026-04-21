@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
-import { useLanguage } from '../../../contexts/LanguageContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 interface ModalProps {
   isOpen: boolean;

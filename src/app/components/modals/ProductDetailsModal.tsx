@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from './Modal';
-import { useLanguage } from '../../../contexts/LanguageContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 import { Pill, Barcode, Package, Calendar, DollarSign, Building2, AlertCircle } from 'lucide-react';
 
 interface ProductDetailsModalProps {
@@ -208,7 +208,7 @@ export function ProductDetailsModal({ isOpen, onClose, product }: ProductDetails
         {product.prescriptionRequired !== undefined && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-800">
-              {product.prescriptionRequired ? '⚕️ This medicine requires a valid prescription' : 'ℹ️ No prescription required'}
+              {product.prescriptionRequired ? 'âš•ï¸ This medicine requires a valid prescription' : 'â„¹ï¸ No prescription required'}
             </p>
           </div>
         )}

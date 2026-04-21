@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router';
 import { Pill, Menu, X, Globe, Download } from 'lucide-react';
-import { useLanguage } from '../../../contexts/LanguageContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 export function PublicLayout() {
   const { t, language, setLanguage } = useLanguage();
@@ -187,7 +187,7 @@ export function PublicLayout() {
 
           <div className="mt-8 pt-8 border-t border-gray-200">
             <p className="text-sm text-gray-500 text-center">
-              © {new Date().getFullYear()} PharmaSaaS. All rights reserved.
+              Â© {new Date().getFullYear()} PharmaSaaS. All rights reserved.
               {' '}
               <Link to="/admin" className="text-gray-400 hover:text-[#0F5C47] transition-colors ml-2">
                 Admin

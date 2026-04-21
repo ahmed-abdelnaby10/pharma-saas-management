@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal } from './Modal';
-import { useLanguage } from '../../../contexts/LanguageContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 import { Sparkles, Barcode, Package, DollarSign, Calendar } from 'lucide-react';
 
 interface Cosmetic {

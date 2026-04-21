@@ -1,0 +1,54 @@
+{
+  "title": "Profile Settings",
+  "subtitle": "Manage your account information",
+  "personal": {
+    "title": "Personal Information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "phonePlaceholder": "+20 XXX XXX XXXX",
+    "preferredLang": "Preferred Language",
+    "preferredLangEn": "English",
+    "preferredLangAr": "Arabic",
+    "notificationEnabled": "Notifications",
+    "notificationEnabledHint": "Receive shipment and account updates."
+  },
+  "company": {
+    "title": "Company Information",
+    "companyName": "Company Name",
+    "companyAddress": "Company Address",
+    "postalCode": "Postal Code",
+    "city": "City"
+  },
+  "password": {
+    "title": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "currentPlaceholder": "Enter current password",
+    "newPlaceholder": "Enter new password (8–72 characters)",
+    "confirmPlaceholder": "Re-enter new password"
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "changePassword": "Change Password",
+    "changing": "Changing..."
+  },
+  "validation": {
+    "required": "This field is required.",
+    "emailInvalid": "Enter a valid email address.",
+    "passwordMin": "Password must be 8–72 characters.",
+    "passwordMatch": "Passwords do not match."
+  },
+  "messages": {
+    "profileUpdated": "Profile updated successfully.",
+    "passwordChanged": "Password changed successfully.",
+    "wrongCurrentPassword": "Current password is incorrect.",
+    "error": "Something went wrong. Please try again."
+  },
+  "passwordChanged": "Password changed successfully.",
+  "wrongCurrentPassword": "Current password is incorrect."
+}

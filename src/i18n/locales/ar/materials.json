@@ -1,0 +1,108 @@
+{
+  "title": "المنتجات",
+  "filters": {
+    "title": "التصفية",
+    "clear": "مسح الكل",
+    "apply": "تطبيق التصفية",
+    "type": "النوع",
+    "price": "نطاق السعر",
+    "rating": "التقييم",
+    "format": "التنسيق",
+    "level": "الفئة",
+    "language": "اللغة",
+    "category": "الفئة",
+    "brand": "العلامة التجارية",
+    "favorites": "المفضلة",
+    "newArrivals": "أحدث الإضافات",
+    "orderedBefore": "المطلوب سابقا"
+  },
+  "sort": {
+    "label": "ترتيب حسب",
+    "relevance": "الملاءمة",
+    "priceLow": "السعر: من الأقل إلى الأعلى",
+    "priceHigh": "السعر: من الأعلى إلى الأقل",
+    "rating": "الأعلى تقييماً",
+    "newest": "الأحدث",
+    "popular": "الأكثر شعبية"
+  },
+  "types": {
+    "book": "الإلكترونيات",
+    "pdf": "الأزياء",
+    "course": "الأغذية",
+    "worksheet": "المنزل",
+    "lessonPlan": "الجمال",
+    "exam": "الرياضة",
+    "video": "المكتب",
+    "teachingKit": "أخرى"
+  },
+  "formats": {
+    "digital": "رقمي",
+    "physical": "مادي",
+    "hybrid": "خدمة"
+  },
+  "levels": {
+    "elementary": "أساسي",
+    "middleSchool": "مميز",
+    "highSchool": "فاخر",
+    "college": "أساسي",
+    "adult": "مميز",
+    "allLevels": "جميع الفئات"
+  },
+  "accessTypes": {
+    "instant": "وصول فوري",
+    "download": "تحميل",
+    "streaming": "بث مباشر",
+    "subscription": "اشتراك"
+  },
+  "resultsCount": "{{count}} نتيجة",
+  "showing": "عرض {{from}}-{{to}} من {{total}} منتج",
+  "viewMode": {
+    "grid": "عرض الشبكة",
+    "list": "عرض القائمة"
+  },
+  "details": {
+    "overview": "نظرة عامة",
+    "highlights": "النقاط البارزة",
+    "learningOutcomes": "نتائج التعلم",
+    "specifications": "المواصفات",
+    "reviews": "المراجعات",
+    "related": "منتجات ذات صلة",
+    "author": "المؤلف",
+    "publisher": "الناشر",
+    "by": "بواسطة",
+    "addToCart": "أضف إلى السلة",
+    "buyNow": "اشتر الآن",
+    "addToWishlist": "أضف إلى المفضلة",
+    "removeFromWishlist": "حذف من المفضلة",
+    "share": "مشاركة",
+    "reviewsCount": "{{count}} مراجعة",
+    "writeReview": "اكتب مراجعة",
+    "helpful": "مفيد ({{count}})",
+    "notHelpful": "غير مفيد",
+    "notFound": "المنتج غير متاح",
+    "backToProducts": "العودة إلى المنتجات",
+    "customerReviews": "تعليقات العملاء",
+    "noReviews": "لا يوجد تعليقات بعد. كن صاحب أول تعليق علي المنتج!",
+    "ratings": "{{ratings}} تقييمات",
+    "limitedTimeDeal": "عرض محدود",
+    "was": "كان",
+    "freeDlivery": "توصيل مجاني",
+    "shipsFrom": "شحن من",
+    "amazonFulfillment": "Amazon Fulfillment Center",
+    "soldBy": "يُباع بواسطة",
+    "returns": "مرتجعات",
+    "eligibleForReturn": "مؤهل للإرجاع أو الاسترداد أو الاستبدال",
+    "inStock": "متوفر",
+    "size": "المقاس",
+    "customersWhoBoughtThisAlsoBought": "العملاء الذين اشتروا هذا المنتج اشتروا أيضاً",
+    "brand": "العلامة التجارية: {{brand}}",
+    "brandInformationAvailable": "معلومات العلامة التجارية المتاحة",
+    "description": "معلومات عن المنتج"
+  },
+  "search": {
+    "recent": "البحث الأخير",
+    "popular": "البحث الشائع",
+    "noResults": "لم يتم العثور على نتائج لـ \"{{query}}\"",
+    "showing": "عرض نتائج \"{{query}}\""
+  }
+}

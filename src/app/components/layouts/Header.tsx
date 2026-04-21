@@ -1,8 +1,8 @@
 import React from 'react';
 import { Bell, ChevronDown, Globe } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import { useLanguage } from '../../../contexts/LanguageContext';
-import { useApp } from '../../../contexts/AppContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import { useApp } from '@/app/contexts/AppContext';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 export function Header() {
@@ -74,7 +74,7 @@ export function Header() {
                 className="px-3 py-2 rounded-md hover:bg-gray-100 cursor-pointer outline-none"
                 onSelect={() => setLanguage('ar')}
               >
-                <span className="text-sm">العربية</span>
+                <span className="text-sm">Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©</span>
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Portal>

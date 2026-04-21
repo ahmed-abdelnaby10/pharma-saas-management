@@ -1,0 +1,58 @@
+{
+  "title": "Shopping Cart",
+  "subtitle": "Review your items and checkout when you're ready.",
+  "itemsHeading": "Your items",
+  "empty": {
+    "title": "Your cart is empty",
+    "description": "Add some products to get started",
+    "action": "Browse Products"
+  },
+  "clearCart": "Clear Cart",
+  "checkout": "Proceed to Checkout",
+  "createOrder": "Create Order",
+  "orderCreated": "Order created successfully",
+  "createOrderError": "Unable to create your order right now",
+  "missingDeliveryAddress": "Add a delivery address before creating your order",
+  "continueShopping": "Continue Shopping",
+  "quantityUpdated": "Quantity updated",
+  "itemRemoved": "Item removed from cart",
+  "cartCleared": "Cart cleared",
+  "authDialog": {
+    "title": "Please sign in first",
+    "description": "Creating an order requires an authenticated account.",
+    "action": "Sign in"
+  },
+  "summary": {
+    "title": "Order Summary",
+    "subtotal": "Subtotal",
+    "tax": "Tax",
+    "discount": "Discount",
+    "total": "Total",
+    "secure": "Secure checkout",
+    "hint": "Final totals are confirmed after the order is created."
+  },
+  "itemCount": "{{count}} item",
+  "itemCount_other": "{{count}} items",
+  "subtotal": "Subtotal",
+  "tax": "Tax",
+  "discount": "Discount",
+  "total": "Total",
+  "proceedToCheckout": "Proceed to Checkout",
+  "decreaseQty": "Decrease quantity",
+  "increaseQty": "Increase quantity",
+  "remove": "Remove",
+  "saveForLater": "Save for Later",
+  "moveToCart": "Move to Cart",
+  "quantity": "Quantity",
+  "coupon": {
+    "title": "Have a coupon code?",
+    "placeholder": "Enter coupon code",
+    "apply": "Apply",
+    "applied": "Coupon applied",
+    "invalid": "Invalid coupon code"
+  },
+  "savedItems": {
+    "title": "Saved for Later",
+    "empty": "No saved items"
+  }
+}

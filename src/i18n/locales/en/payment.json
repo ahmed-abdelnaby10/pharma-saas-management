@@ -1,0 +1,55 @@
+{
+  "title": "Payment",
+  "selectMethod": "Select Payment Method",
+  "methods": {
+    "creditCard": "Credit Card",
+    "debitCard": "Debit Card",
+    "paypal": "PayPal",
+    "applePay": "Apple Pay",
+    "googlePay": "Google Pay"
+  },
+  "cardDetails": {
+    "title": "Card Details",
+    "cardNumber": "Card Number",
+    "cardholderName": "Cardholder Name",
+    "expiryDate": "Expiry Date",
+    "cvv": "CVV"
+  },
+  "cardForm": {
+    "cardNumber": "Card Number",
+    "cardNumberPlaceholder": "1234 5678 9012 3456",
+    "cardName": "Name on Card",
+    "cardNamePlaceholder": "John Doe",
+    "expiryDate": "Expiry Date",
+    "expiryDatePlaceholder": "MM/YY",
+    "cvv": "CVV",
+    "cvvPlaceholder": "123"
+  },
+  "securePayment": "Your payment information is encrypted and secure",
+  "secure": {
+    "title": "Secure Payment",
+    "description": "Your payment information is encrypted and secure",
+    "ssl": "SSL Encrypted",
+    "pci": "PCI Compliant"
+  },
+  "processing": "Processing payment...",
+  "completePayment": "Complete Payment",
+  "completePurchase": "Complete Purchase",
+  "orderSummary": {
+    "title": "Order Summary",
+    "subtotal": "Subtotal",
+    "tax": "Tax",
+    "total": "Total",
+    "items": "Items"
+  },
+  "errors": {
+    "cardNumberRequired": "Card number is required",
+    "cardNameRequired": "Name on card is required",
+    "expiryDateRequired": "Expiry date is required",
+    "cvvRequired": "CVV is required",
+    "invalidCard": "Invalid card number",
+    "invalidExpiry": "Invalid expiry date",
+    "invalidCvv": "Invalid CVV",
+    "processingFailed": "Payment processing failed. Please try again."
+  }
+}

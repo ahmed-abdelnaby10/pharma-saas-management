@@ -1,0 +1,85 @@
+{
+  "hero": {
+    "badge": "Saved addresses",
+    "title": "Manage your delivery addresses",
+    "subtitle": "Keep your home, office, and pickup details organized so checkout stays fast and accurate.",
+    "statLabel": "Available"
+  },
+  "auth": {
+    "title": "Sign in to manage addresses",
+    "description": "Your saved addresses are tied to your account. Sign in to view, add, or update delivery locations.",
+    "action": "Go to sign in"
+  },
+  "actions": {
+    "addNew": "Add address",
+    "addFirst": "Add your first address",
+    "create": "Create address",
+    "creating": "Creating...",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "delete": "Delete address",
+    "cancel": "Cancel"
+  },
+  "states": {
+    "emptyTitle": "No addresses saved yet",
+    "emptyDescription": "Add a delivery address to speed up checkout and keep your orders routed correctly.",
+    "errorTitle": "Couldn't load addresses",
+    "errorDescription": "There was a problem loading your saved locations."
+  },
+  "form": {
+    "createTitle": "Add a new address",
+    "createDescription": "Enter the delivery details exactly as you want them used for future orders.",
+    "editTitle": "Edit address",
+    "editDescription": "Update the saved details for this delivery location.",
+    "primaryHint": "Mark this address as your preferred default at checkout."
+  },
+  "card": {
+    "primary": "Primary",
+    "contact": "Contact",
+    "edit": "Edit",
+    "delete": "Delete",
+    "building": "Bldg {{value}}",
+    "floor": "Floor {{value}}",
+    "governorate": "Code {{value}}",
+    "postal": "Postal {{value}}",
+    "updatedAt": "Updated {{date}}"
+  },
+  "fields": {
+    "address_label": "Address label",
+    "city": "City",
+    "postal_code": "Postal code",
+    "governorate_code": "Governorate code",
+    "area": "Area",
+    "street": "Street",
+    "building_number": "Building number",
+    "floor": "Floor",
+    "mobile_number": "Mobile number",
+    "secondary_mobile": "Secondary mobile",
+    "additional_notes": "Additional notes",
+    "is_primary": "Use as primary address"
+  },
+  "addressLabelOptions": {
+    "Home": "Home",
+    "Work": "Work",
+    "Other": "Other"
+  },
+  "placeholders": {
+    "address_label": "Select address label",
+    "mobile_number": "Enter mobile number",
+    "secondary_mobile": "Enter secondary mobile number"
+  },
+  "validation": {
+    "required": "This field is required.",
+    "phoneInvalid": "Enter a valid phone number."
+  },
+  "messages": {
+    "created": "Address created successfully.",
+    "updated": "Address updated successfully.",
+    "deleted": "Address deleted successfully.",
+    "error": "Something went wrong while saving the address."
+  },
+  "deleteDialog": {
+    "title": "Delete this address?",
+    "description": "This action removes the address from your saved locations."
+  }
+}

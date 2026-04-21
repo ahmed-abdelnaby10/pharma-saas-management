@@ -1,0 +1,110 @@
+{
+  "title": "الدفع",
+  "subtitle": "أكمل عملية الشراء بأمان في خطوات بسيطة.",
+  "payment": {
+    "title": "طريقة الدفع",
+    "creditCard": "بطاقة ائتمان أو خصم",
+    "cashOnDelivery": "الدفع عند الاستلام",
+    "cardDetails": "بيانات البطاقة",
+    "nameOnCard": "الاسم على البطاقة",
+    "cardNumber": "رقم البطاقة",
+    "expiry": "تاريخ الانتهاء",
+    "cvv": "رمز الأمان",
+    "namePlaceholder": "الاسم كما يظهر على البطاقة",
+    "numberPlaceholder": "1234 5678 9012 3456",
+    "expiryPlaceholder": "شهر/سنة",
+    "cvvPlaceholder": "123"
+  },
+  "modal": {
+    "orderPlaced": {
+      "title": "تم تقديم الطلب!",
+      "message": "تم تقديم طلبك بنجاح.",
+      "delivery": "التوصيل المتوقع خلال 2–4 أيام.",
+      "continueShopping": "متابعة التسوق",
+      "rateOrder": "تقييم الطلب"
+    },
+    "rating": {
+      "title": "قيّم طلبك",
+      "question": "كيف كان طلبك؟",
+      "placeholder": "شارك تفاصيل تجربتك (اختياري)",
+      "submit": "إرسال التقييم",
+      "skip": "تخطّي الآن"
+    },
+    "thanks": {
+      "title": "شكرًا لملاحظاتك!",
+      "subtitle": "مراجعتك تساعدنا على خدمتك بشكل أفضل.",
+      "returning": "جارٍ العودة للرئيسية..."
+    },
+    "ratingStar1": "ضعيف",
+    "ratingStar2": "مقبول",
+    "ratingStar3": "جيد",
+    "ratingStar4": "جيد جدًا",
+    "ratingStar5": "ممتاز"
+  },
+  "steps": {
+    "customerInfo": "معلومات العميل",
+    "billing": "تفاصيل الفواتير",
+    "review": "مراجعة الطلب"
+  },
+  "contactInfo": {
+    "title": "معلومات الاتصال",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "your.email@example.com",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "phone": "الهاتف (اختياري)",
+    "phonePlaceholder": "+1 (555) 000-0000"
+  },
+  "customerInfo": {
+    "title": "معلومات العميل",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "your.email@example.com",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "phone": "الهاتف (اختياري)",
+    "phonePlaceholder": "+1 (555) 000-0000"
+  },
+  "billing": {
+    "title": "تفاصيل الفواتير",
+    "street": "عنوان الشارع",
+    "city": "المدينة",
+    "state": "الولاية / المحافظة",
+    "zipCode": "الرمز البريدي",
+    "country": "البلد"
+  },
+  "review": {
+    "title": "راجع طلبك",
+    "orderSummary": "ملخص الطلب",
+    "billingInfo": "معلومات الفواتير",
+    "edit": "تعديل"
+  },
+  "orderSummary": {
+    "title": "ملخص الطلب",
+    "items": "العناصر",
+    "subtotal": "المجموع الفرعي",
+    "tax": "الضريبة المقدرة",
+    "discount": "الخصم",
+    "total": "إجمالي الطلب",
+    "shipping": "الشحن والمناولة"
+  },
+  "terms": {
+    "accept": "أوافق على شروط الخدمة وسياسة الخصوصية",
+    "required": "يجب عليك قبول الشروط للمتابعة"
+  },
+  "acceptTerms": "أوافق على شروط الخدمة وسياسة الخصوصية",
+  "continueToPayment": "المتابعة إلى الدفع",
+  "placeOrder": "تقديم طلبك",
+  "useThisPaymentMethod": "استخدام طريقة الدفع هذه",
+  "paymentMethod": "طريقة الدفع",
+  "paymentMethodNote": "سيتم توجيهك لإتمام الدفع في الصفحة التالية",
+  "reviewItems": "مراجعة العناصر والتوصيل",
+  "secureTransaction": "اختر طريقة الدفع لمتابعة الدفع. ستظل لديك فرصة لمراجعة وتعديل طلبك قبل إتمامه.",
+  "errors": {
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "invalidEmail": "الرجاء إدخال بريد إلكتروني صحيح",
+    "firstNameRequired": "الاسم الأول مطلوب",
+    "lastNameRequired": "اسم العائلة مطلوب",
+    "acceptTerms": "يجب عليك قبول الشروط للمتابعة",
+    "cardIncomplete": "يرجى إكمال جميع بيانات البطاقة"
+  }
+}

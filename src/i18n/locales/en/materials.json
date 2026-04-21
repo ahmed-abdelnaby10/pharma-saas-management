@@ -1,0 +1,110 @@
+{
+  "title": "Products",
+  "sortBy": "Sort by",
+  "resultsFound": "results found",
+  "filters": {
+    "title": "Filters",
+    "clear": "Clear All",
+    "apply": "Apply Filters",
+    "type": "Type",
+    "price": "Price Range",
+    "rating": "Rating",
+    "format": "Format",
+    "level": "Tier",
+    "language": "Language",
+    "category": "Category",
+    "brand": "Brand",
+    "favorites": "Favorites",
+    "newArrivals": "New Arrivals",
+    "orderedBefore": "Ordered before"
+  },
+  "sort": {
+    "label": "Sort by",
+    "relevance": "Relevance",
+    "priceLow": "Price: Low to High",
+    "priceHigh": "Price: High to Low",
+    "rating": "Highest Rated",
+    "newest": "Newest",
+    "popular": "Most Popular"
+  },
+  "types": {
+    "book": "Electronics",
+    "pdf": "Fashion",
+    "course": "Food",
+    "worksheet": "Home",
+    "lessonPlan": "Beauty",
+    "exam": "Sports",
+    "video": "Office",
+    "teachingKit": "Other"
+  },
+  "formats": {
+    "digital": "Digital",
+    "physical": "Physical",
+    "hybrid": "Service"
+  },
+  "levels": {
+    "elementary": "Standard",
+    "middleSchool": "Premium",
+    "highSchool": "Luxury",
+    "college": "Standard",
+    "adult": "Premium",
+    "allLevels": "All Tiers"
+  },
+  "accessTypes": {
+    "instant": "Instant Access",
+    "download": "Download",
+    "streaming": "Streaming",
+    "subscription": "Subscription"
+  },
+  "resultsCount": "{{count}} results",
+  "showing": "Showing {{from}}-{{to}} of {{total}} products",
+  "viewMode": {
+    "grid": "Grid View",
+    "list": "List View"
+  },
+  "details": {
+    "overview": "Overview",
+    "highlights": "Highlights",
+    "learningOutcomes": "Learning Outcomes",
+    "specifications": "Specifications",
+    "reviews": "Reviews",
+    "related": "Related Products",
+    "author": "Author",
+    "publisher": "Publisher",
+    "by": "by",
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "addToWishlist": "Add to Wishlist",
+    "removeFromWishlist": "Remove from Wishlist",
+    "share": "Share",
+    "reviewsCount": "{{count}} reviews",
+    "writeReview": "Write a Review",
+    "helpful": "Helpful ({{count}})",
+    "notHelpful": "Not Helpful",
+    "notFound": "Product not found",
+    "backToProducts": "Back to Products",
+    "customerReviews": "Customer Reviews",
+    "noReviews": "No reviews yet. Be the first to review this product!",
+    "ratings": "{{ratings}} ratings",
+    "limitedTimeDeal": "Limited time deal",
+    "was": "Was",
+    "freeDlivery": "Prime FREE delivery",
+    "shipsFrom": "Ships from",
+    "amazonFulfillment": "Amazon Fulfillment Center",
+    "soldBy": "Sold by",
+    "returns": "Returns",
+    "eligibleForReturn": "Eligible for Return, Refund or Replacement",
+    "inStock": "In Stock",
+    "size": "Size",
+    "customersWhoBoughtThisAlsoBought": "Customers who bought this also bought",
+    "brand": "Brand: {{brand}}",
+    "brandInformationAvailable": "Brand information available",
+    "description": "About this item"
+  },
+  "search": {
+    "recent": "Recent Searches",
+    "popular": "Popular Searches",
+    "noResults": "No results found for \"{{query}}\"",
+    "showing": "Showing results for \"{{query}}\""
+  }
+}

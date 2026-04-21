@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
-import { useLanguage } from '../../../contexts/LanguageContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 export function DashboardLayout() {
   const { direction } = useLanguage();
