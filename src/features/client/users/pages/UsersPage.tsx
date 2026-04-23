@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Plus, Shield, Mail, Edit, Trash2 } from "lucide-react";
-import { useLanguage } from "@/app/contexts/LanguageContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
 import { UserFormModal } from "@/app/components/modals/UserFormModal";
 import { DeleteConfirmModal } from "@/app/components/modals/DeleteConfirmModal";
 

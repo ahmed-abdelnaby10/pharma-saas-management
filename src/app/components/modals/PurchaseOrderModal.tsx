@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal } from './Modal';
-import { useLanguage } from '@/app/contexts/LanguageContext';
+import { useLanguage } from '@/app/contexts/useLanguage';
 import { FileText, Plus, Trash2, Package, Pill, Sparkles } from 'lucide-react';
 
 interface OrderItem {

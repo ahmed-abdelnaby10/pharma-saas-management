@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Calendar, AlertTriangle, Download, Eye, Filter } from "lucide-react";
-import { useLanguage } from "@/app/contexts/LanguageContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
 import { ProductDetailsModal } from "@/app/components/modals/ProductDetailsModal";
 
 const mockExpiryProducts = [
@@ -148,7 +148,7 @@ export function ExpiryReportPage() {
               <Calendar className="w-6 h-6 text-orange-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-600">Expiring Soon (Ã¢â€°Â¤14 days)</p>
+              <p className="text-sm text-gray-600">Expiring Soon (ÃƒÂ¢Ã¢â‚¬Â°Ã‚Â¤14 days)</p>
               <p className="text-2xl font-semibold text-gray-900">
                 {stats.expiringSoon}
               </p>
@@ -162,7 +162,7 @@ export function ExpiryReportPage() {
               <Calendar className="w-6 h-6 text-yellow-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-600">Near Expiry (Ã¢â€°Â¤60 days)</p>
+              <p className="text-sm text-gray-600">Near Expiry (ÃƒÂ¢Ã¢â‚¬Â°Ã‚Â¤60 days)</p>
               <p className="text-2xl font-semibold text-gray-900">
                 {stats.nearExpiry}
               </p>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { Pill, Globe } from "lucide-react";
-import { useLanguage } from "@/app/contexts/LanguageContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
 
 export function LoginPage() {
   const { t, language, setLanguage } = useLanguage();
@@ -25,7 +25,7 @@ export function LoginPage() {
           >
             <Globe className="w-4 h-4" />
             <span className="text-sm font-medium">
-              {language === "en" ? "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©" : "English"}
+              {language === "en" ? "Ã˜Â§Ã™â€žÃ˜Â¹Ã˜Â±Ã˜Â¨Ã™Å Ã˜Â©" : "English"}
             </span>
           </button>
         </div>
@@ -86,7 +86,7 @@ export function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none transition-all"
-                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
                 required
               />
             </div>
@@ -118,7 +118,7 @@ export function LoginPage() {
           {/* Footer */}
           <div className="mt-6 text-center">
             <p className="text-xs text-gray-500">
-              Â© 2026 PharmaSaaS. All rights reserved.
+              Ã‚Â© 2026 PharmaSaaS. All rights reserved.
             </p>
           </div>
         </div>

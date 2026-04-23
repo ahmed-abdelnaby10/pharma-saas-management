@@ -10,7 +10,7 @@ import {
   AlertCircle,
   Package,
 } from "lucide-react";
-import { useLanguage } from "@/app/contexts/LanguageContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
 
 interface Medicine {
   id: string;

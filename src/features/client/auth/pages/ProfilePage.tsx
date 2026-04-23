@@ -9,8 +9,8 @@ import {
   Camera,
   Save,
 } from "lucide-react";
-import { useLanguage } from "@/app/contexts/LanguageContext";
-import { useApp } from "@/app/contexts/AppContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
+import { useApp } from "@/app/contexts/useApp";
 
 export function ProfilePage() {
   const { t } = useLanguage();
@@ -69,7 +69,7 @@ export function ProfilePage() {
                   <Shield className="w-3 h-3" />
                   {user?.role}
                 </span>
-                <span className="text-sm text-gray-500">Ã¢â‚¬Â¢ {tenant?.name}</span>
+                <span className="text-sm text-gray-500">ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {tenant?.name}</span>
               </div>
             </div>
 

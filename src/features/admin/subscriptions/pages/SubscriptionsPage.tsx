@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import { Search, Filter, Plus, MoreVertical } from 'lucide-react';
+import { useAdminSubscriptionsListQuery } from '@/features/admin/subscriptions/api/subscriptions.hooks';
+import type {
+  SubscriptionRecord,
+  SubscriptionStatus,
+} from '@/features/admin/subscriptions/api/subscriptions.types';
 
-interface Subscription {
-  id: string;
-  tenant: string;
-  plan: string;
-  cycle: 'Monthly' | 'Yearly';
-  status: 'Trialing' | 'Active' | 'Past Due' | 'Canceled' | 'Expired';
-  trialEnd: string | null;
-  renewal: string;
-  amount: number;
-  cancelAtPeriodEnd: boolean;
-}
-
-const mockSubscriptions: Subscription[] = [
+const mockSubscriptions: SubscriptionRecord[] = [
   {
     id: 'sub_001',
     tenant: 'Green Valley Pharmacy',
@@ -85,8 +78,19 @@ const mockSubscriptions: Subscription[] = [
 export function SubscriptionsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const subscriptionsQuery = useAdminSubscriptionsListQuery(
+    {
+      search: searchQuery || undefined,
+      status:
+        selectedStatus === 'all'
+          ? undefined
+          : (selectedStatus as SubscriptionStatus),
+    },
+    false,
+  );
+  const subscriptions = subscriptionsQuery.data?.data ?? mockSubscriptions;
 
-  const filteredSubscriptions = mockSubscriptions.filter(sub => {
+  const filteredSubscriptions = subscriptions.filter(sub => {
     const matchesSearch = sub.tenant.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = selectedStatus === 'all' || sub.status === selectedStatus;
     return matchesSearch && matchesStatus;
@@ -108,11 +112,11 @@ export function SubscriptionsPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <StatCard label="Total" value={mockSubscriptions.length} color="gray" />
-        <StatCard label="Active" value={mockSubscriptions.filter(s => s.status === 'Active').length} color="green" />
-        <StatCard label="Trialing" value={mockSubscriptions.filter(s => s.status === 'Trialing').length} color="blue" />
-        <StatCard label="Past Due" value={mockSubscriptions.filter(s => s.status === 'Past Due').length} color="orange" />
-        <StatCard label="Canceled" value={mockSubscriptions.filter(s => s.status === 'Canceled').length} color="red" />
+        <StatCard label="Total" value={subscriptions.length} color="gray" />
+        <StatCard label="Active" value={subscriptions.filter(s => s.status === 'Active').length} color="green" />
+        <StatCard label="Trialing" value={subscriptions.filter(s => s.status === 'Trialing').length} color="blue" />
+        <StatCard label="Past Due" value={subscriptions.filter(s => s.status === 'Past Due').length} color="orange" />
+        <StatCard label="Canceled" value={subscriptions.filter(s => s.status === 'Canceled').length} color="red" />
       </div>
 
       {/* Filters */}

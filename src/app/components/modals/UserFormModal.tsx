@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal } from './Modal';
-import { useLanguage } from '@/app/contexts/LanguageContext';
-import { useApp } from '@/app/contexts/AppContext';
+import { useLanguage } from '@/app/contexts/useLanguage';
+import { useApp } from '@/app/contexts/useApp';
 import { User, Mail, Phone, Shield, Building2 } from 'lucide-react';
 
 interface UserData {

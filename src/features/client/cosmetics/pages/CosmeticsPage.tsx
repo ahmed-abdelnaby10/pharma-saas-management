@@ -12,7 +12,7 @@ import {
   AlertCircle,
   DollarSign,
 } from "lucide-react";
-import { useLanguage } from "@/app/contexts/LanguageContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
 
 const mockCosmetics = [
   {

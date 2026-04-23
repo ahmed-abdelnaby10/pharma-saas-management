@@ -15,8 +15,8 @@ import {
   XCircle,
 } from "lucide-react";
 import { useNavigate } from "react-router";
-import { useLanguage } from "@/app/contexts/LanguageContext";
-import { useApp } from "@/app/contexts/AppContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
+import { useApp } from "@/app/contexts/useApp";
 import {
   AreaChart,
   Area,

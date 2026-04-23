@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from './Modal';
-import { useLanguage } from '@/app/contexts/LanguageContext';
+import { useLanguage } from '@/app/contexts/useLanguage';
 import { FileText, Building2, Calendar, Package, DollarSign } from 'lucide-react';
 
 interface PurchaseOrderDetailsModalProps {

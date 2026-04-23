@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Plus, FileText, Package, DollarSign, Clock, Eye } from "lucide-react";
-import { useLanguage } from "@/app/contexts/LanguageContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
 import { PurchaseOrderModal } from "@/app/components/modals/PurchaseOrderModal";
 import { PurchaseOrderDetailsModal } from "@/app/components/modals/PurchaseOrderDetailsModal";
 

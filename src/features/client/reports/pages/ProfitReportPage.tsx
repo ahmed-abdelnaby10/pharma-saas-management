@@ -8,7 +8,7 @@ import {
   Percent,
 } from "lucide-react";
 import { useNavigate } from "react-router";
-import { useLanguage } from "@/app/contexts/LanguageContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
 import {
   LineChart,
   Line,
@@ -94,7 +94,7 @@ export function ProfitReportPage() {
             onClick={() => navigate("/app/reports")}
             className="text-sm text-gray-600 hover:text-gray-900 mb-2 flex items-center gap-1"
           >
-            â† Back to Reports
+            Ã¢â€ Â Back to Reports
           </button>
           <h1 className="text-2xl font-semibold text-gray-900">
             {t("profitReport")}

@@ -1,6 +1,6 @@
 import React from "react";
 import { Globe, Bell, Printer, Save } from "lucide-react";
-import { useLanguage } from "@/app/contexts/LanguageContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
 
 export function SettingsPage() {
   const { t } = useLanguage();
@@ -183,7 +183,7 @@ export function SettingsPage() {
             </label>
             <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] outline-none">
               <option value="en">English</option>
-              <option value="ar">Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©</option>
+              <option value="ar">Ã˜Â§Ã™â€žÃ˜Â¹Ã˜Â±Ã˜Â¨Ã™Å Ã˜Â©</option>
             </select>
           </div>
         </div>

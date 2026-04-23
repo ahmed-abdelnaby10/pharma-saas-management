@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Plus, Building2, MapPin, Users, Edit, Trash2 } from "lucide-react";
-import { useLanguage } from "@/app/contexts/LanguageContext";
-import { useApp } from "@/app/contexts/AppContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
+import { useApp } from "@/app/contexts/useApp";
 import { BranchFormModal } from "@/app/components/modals/BranchFormModal";
 import { DeleteConfirmModal } from "@/app/components/modals/DeleteConfirmModal";
 

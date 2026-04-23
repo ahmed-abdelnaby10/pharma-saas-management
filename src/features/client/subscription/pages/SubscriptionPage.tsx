@@ -1,7 +1,7 @@
 import React from "react";
 import { CreditCard, Check, Lock, TrendingUp } from "lucide-react";
-import { useLanguage } from "@/app/contexts/LanguageContext";
-import { useApp } from "@/app/contexts/AppContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
+import { useApp } from "@/app/contexts/useApp";
 
 const plans = [
   {
@@ -86,7 +86,7 @@ export function SubscriptionPage() {
             </div>
             <div>
               <p className="text-sm text-white/80">Products</p>
-              <p className="text-lg font-semibold">342 / Ã¢Ë†Å¾</p>
+              <p className="text-lg font-semibold">342 / ÃƒÂ¢Ã‹â€ Ã…Â¾</p>
             </div>
           </div>
         </div>

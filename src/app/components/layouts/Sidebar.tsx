@@ -16,7 +16,7 @@ import {
   X,
   Menu,
 } from 'lucide-react';
-import { useLanguage } from '@/app/contexts/LanguageContext';
+import { useLanguage } from '@/app/contexts/useLanguage';
 import { cn } from '../../../lib/utils';
 
 const navigationItems = [
@@ -87,7 +87,7 @@ export function Sidebar() {
       {/* Footer */}
       <div className="p-4 border-t border-[#0d4a39]">
         <div className="text-xs text-white/50 text-center">
-          Â© 2026 PharmaSaaS
+          Ã‚Â© 2026 PharmaSaaS
         </div>
       </div>
     </>

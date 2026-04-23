@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AlertCircle, Package, Filter, Download, Eye } from "lucide-react";
-import { useLanguage } from "@/app/contexts/LanguageContext";
+import { useLanguage } from "@/app/contexts/useLanguage";
 import { ProductDetailsModal } from "@/app/components/modals/ProductDetailsModal";
 
 const mockLowStockProducts = [

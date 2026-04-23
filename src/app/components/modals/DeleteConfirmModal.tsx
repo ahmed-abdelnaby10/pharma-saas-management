@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { Modal } from './Modal';
-import { useLanguage } from '@/app/contexts/LanguageContext';
+import { useLanguage } from '@/app/contexts/useLanguage';
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;
