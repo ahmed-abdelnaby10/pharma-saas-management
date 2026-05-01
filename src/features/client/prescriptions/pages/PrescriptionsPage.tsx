@@ -509,7 +509,7 @@ export function PrescriptionsPage() {
           prefill={ocrPrefill}
           onCreated={(id) => { setOcrCreatedId(id); }}
         />
-      )}}
+      )}
       {dispenseTarget && (
         <DispenseModal
           prescription={dispenseTarget}

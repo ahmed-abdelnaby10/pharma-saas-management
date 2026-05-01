@@ -13,7 +13,7 @@ export function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
@@ -22,7 +22,7 @@ export function LoginPage() {
       const { accessToken, refreshToken, user } = await tenantLogin({
         email,
         password,
-        tenantId: tenantId.trim() || email.split("@")[1]?.split(".")[0] ?? "",
+        tenantId: tenantId.trim() || (email.split("@")[1]?.split(".")[0] ?? ""),
       });
 
       await storeTokens({
