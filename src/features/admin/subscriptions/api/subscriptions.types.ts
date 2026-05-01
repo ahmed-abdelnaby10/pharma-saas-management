@@ -1,27 +1,33 @@
-export type SubscriptionBillingCycle = 'Monthly' | 'Yearly';
+export type SubscriptionBillingCycle = "monthly" | "yearly";
 
 export type SubscriptionStatus =
-  | 'Trialing'
-  | 'Active'
-  | 'Past Due'
-  | 'Canceled'
-  | 'Expired';
+  | "trialing"
+  | "active"
+  | "past_due"
+  | "canceled"
+  | "expired";
 
 export interface SubscriptionRecord {
   id: string;
-  tenant: string;
-  plan: string;
-  cycle: SubscriptionBillingCycle;
+  tenantId: string;
+  tenant?: { id: string; name: string };
+  planId: string;
+  plan?: { id: string; name: string };
+  billingCycle: SubscriptionBillingCycle;
   status: SubscriptionStatus;
-  trialEnd: string | null;
-  renewal: string;
+  trialEndsAt: string | null;
+  currentPeriodEnd: string;
   amount: number;
   cancelAtPeriodEnd: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AdminSubscriptionsListParams {
   search?: string;
   status?: SubscriptionStatus;
+  page?: number;
+  limit?: number;
 }
 
-export type AdminSubscriptionsListResponse = PaginatedResponse<SubscriptionRecord>;
+export type AdminSubscriptionsListResponse = SubscriptionRecord[];

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Bell, ChevronDown, Globe } from 'lucide-react';
+import { ChevronDown, Globe } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useLanguage } from '@/app/contexts/useLanguage';
 import { useApp } from '@/app/contexts/useApp';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { NotificationBell } from '@/features/client/notifications/components/NotificationBell';
 
 export function Header() {
   const { t, language, setLanguage, direction } = useLanguage();
@@ -81,10 +82,7 @@ export function Header() {
         </DropdownMenu.Root>
 
         {/* Notifications */}
-        <button className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
-          <Bell className="w-5 h-5 text-gray-600" />
-          <span className={`absolute top-1 w-2 h-2 bg-red-500 rounded-full ${direction === 'rtl' ? 'left-1' : 'right-1'}`}></span>
-        </button>
+        <NotificationBell />
 
         {/* User Menu */}
         <DropdownMenu.Root>

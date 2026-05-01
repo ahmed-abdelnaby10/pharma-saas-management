@@ -15,8 +15,29 @@ export interface RetryableAppRequestConfig<D = unknown>
   _retry?: boolean;
 }
 
-type ApiEnvelope<T> = {
+// Backend response envelope
+// { success: boolean, message: string, data: T, meta?: ApiMeta, requestId?: string }
+export interface ApiMeta {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface ApiSuccessResponse<T> {
+  success: boolean;
+  message: string;
   data: T;
+  meta?: ApiMeta;
+  requestId?: string;
+}
+
+type ApiEnvelope<T> = {
+  success?: boolean;
+  message?: string;
+  data: T;
+  meta?: ApiMeta;
+  requestId?: string;
 };
 
 export function unwrapResponseData<T>(
@@ -25,8 +46,27 @@ export function unwrapResponseData<T>(
   const payload = response.data;
 
   if (payload && typeof payload === "object" && "data" in payload) {
-    return payload.data as T;
+    return (payload as ApiEnvelope<T>).data as T;
   }
 
   return payload as T;
+}
+
+/**
+ * Unwrap a paginated response — returns both the data array and the meta object.
+ * Use this when you need the pagination meta (total, page, totalPages, limit).
+ */
+export function unwrapPaginatedResponse<T>(
+  response: AxiosResponse<ApiEnvelope<T[]>>,
+): { data: T[]; meta: ApiMeta | undefined } {
+  const payload = response.data;
+
+  if (payload && typeof payload === "object" && "data" in payload) {
+    return {
+      data: (payload as ApiEnvelope<T[]>).data ?? [],
+      meta: (payload as ApiEnvelope<T[]>).meta,
+    };
+  }
+
+  return { data: payload as unknown as T[], meta: undefined };
 }

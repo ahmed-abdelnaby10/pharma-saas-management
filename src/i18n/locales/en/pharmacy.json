@@ -1,0 +1,103 @@
+{
+  "validation": {
+    "required": "This field is required",
+    "too_short": "Must be at least {{min}} characters",
+    "too_long": "Must be at most {{max}} characters",
+    "invalid_email": "Enter a valid email address",
+    "invalid_phone": "Enter a valid phone number",
+    "passwords_mismatch": "Passwords do not match",
+    "must_be_number": "Must be a valid number",
+    "must_be_positive": "Must be greater than zero",
+    "invalid_date": "Enter a valid date"
+  },
+
+  "notifications": {
+    "low_stock_title": "Low Stock Alert",
+    "low_stock_body": "{{medicineName}} is running low — only {{quantity}} left",
+    "expiry_alert_title": "Expiry Alert",
+    "expiry_alert_body": "{{medicineName}} (Batch {{batchNumber}}) expires in {{days}} day",
+    "expiry_alert_body_plural": "{{medicineName}} (Batch {{batchNumber}}) expires in {{days}} days",
+    "ocr_completed_title": "Document Processed",
+    "ocr_completed_body": "Document processed successfully — confidence {{confidence}}%",
+    "ocr_failed_title": "Document Processing Failed",
+    "ocr_failed_body": "Could not process document: {{error}}",
+    "shift_opened_title": "Shift Opened",
+    "shift_opened_body": "A new shift has been opened",
+    "shift_closed_title": "Shift Closed",
+    "shift_closed_body": "Shift has been closed",
+    "purchase_order_received_title": "Purchase Order Received",
+    "purchase_order_received_body": "Purchase order #{{id}} has been received",
+    "general_title": "Notification",
+    "general_body": "You have a new notification"
+  },
+
+  "trial": {
+    "banner_title_warning": "Your trial ends in {{days}} days",
+    "banner_title_urgent": "Trial ending soon — {{days}} day left",
+    "banner_title_urgent_plural": "Trial ending soon — {{days}} days left",
+    "upgrade_now": "Upgrade Now",
+    "toast_warning": "Your free trial expires in {{days}} days. Upgrade to keep access."
+  },
+
+  "subscription": {
+    "blocked_title": "Subscription Required",
+    "blocked_body": "Your subscription has expired or your trial has ended. Please upgrade to continue.",
+    "trial_expired": "Your trial period has ended.",
+    "canceled": "Your subscription has been canceled.",
+    "past_due": "Your payment is overdue. Please update your billing information.",
+    "offline_expired": "Offline access has expired. Please connect to the internet to verify your subscription.",
+    "contact_support": "Contact Support",
+    "upgrade": "Upgrade Plan"
+  },
+
+  "signup": {
+    "title": "Start Your Free Trial",
+    "subtitle": "Set up your pharmacy management system in minutes",
+    "tenant_name": "Pharmacy / Business Name",
+    "contact_name": "Contact Name",
+    "contact_email": "Email Address",
+    "contact_phone": "Phone Number",
+    "country": "Country",
+    "select_plan": "Select a Plan",
+    "notes": "Additional Notes",
+    "notes_placeholder": "Anything you'd like us to know…",
+    "submit": "Request Free Trial",
+    "submitting": "Sending request…",
+    "success_title": "Request Received!",
+    "success_body": "Thank you! We'll review your request and send you access credentials within 24 hours.",
+    "back_home": "Back to Home",
+    "plan_trial_days": "{{days}}-day free trial",
+    "plan_price": "{{price}} / {{interval}}",
+    "already_have_account": "Already have an account?",
+    "sign_in": "Sign in"
+  },
+
+  "signup_requests": {
+    "title": "Signup Requests",
+    "subtitle": "Review and manage incoming trial requests",
+    "status_pending": "Pending",
+    "status_approved": "Approved",
+    "status_rejected": "Rejected",
+    "approve": "Approve",
+    "reject": "Reject",
+    "approve_title": "Approve Request",
+    "approve_description": "This will create a new tenant and send the admin an email with their credentials.",
+    "reject_title": "Reject Request",
+    "reject_description": "This will permanently reject the request. Please provide a reason.",
+    "reject_reason": "Reason",
+    "reject_reason_placeholder": "Why is this request being rejected?",
+    "admin_email": "Admin Email (optional override)",
+    "temp_password_title": "Tenant Created",
+    "temp_password_body": "The tenant has been created. Share the temporary password below — it will only be shown once.",
+    "temp_password_label": "Temporary Password",
+    "copy_password": "Copy",
+    "copied": "Copied!",
+    "done": "Done",
+    "empty_heading": "No signup requests",
+    "empty_subline": "New requests from the public signup form will appear here.",
+    "search_placeholder": "Search by name, email…",
+    "filter_all": "All",
+    "requested_plan": "Requested Plan",
+    "submitted_at": "Submitted"
+  }
+}

@@ -33,6 +33,8 @@ export function PurchaseOrderModal({
   const [items, setItems] = useState<OrderItem[]>([
     { id: '1', productName: '', quantity: 0, unitPrice: 0, discount: 0, priceAfterDiscount: 0, total: 0 }
   ]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const hasErrors = Object.keys(errors).length > 0;
 
   const addItem = () => {
     setItems([...items, { 
@@ -64,12 +66,25 @@ export function PurchaseOrderModal({
       }
       return item;
     }));
+    setErrors((prev) => { const next = { ...prev }; delete next[`${id}_${field}`]; return next; });
   };
 
   const totalAmount = items.reduce((sum, item) => sum + item.total, 0);
 
+  const validate = (): Record<string, string> => {
+    const e: Record<string, string> = {};
+    items.forEach((item) => {
+      if (!item.productName.trim()) e[`${item.id}_productName`] = "Product name is required";
+      if (item.quantity <= 0) e[`${item.id}_quantity`] = "Quantity must be greater than 0";
+      if (item.unitPrice < 0) e[`${item.id}_unitPrice`] = "Unit price cannot be negative";
+    });
+    return e;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     onSave({
       supplier,
       invoiceNumber,
@@ -166,31 +181,35 @@ export function PurchaseOrderModal({
               <div key={item.id} className="grid grid-cols-12 gap-3 p-3 bg-gray-50 rounded-lg">
                 <div className="col-span-4">
                   <label className="block text-xs font-medium text-gray-600 mb-1">
-                    Product Name
+                    Product Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     value={item.productName}
                     onChange={(e) => updateItem(item.id, 'productName', e.target.value)}
-                    required
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none"
+                    className={`w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none ${errors[`${item.id}_productName`] ? "border-red-400" : "border-gray-300"}`}
                     placeholder="Enter product name"
                   />
+                  {errors[`${item.id}_productName`] && (
+                    <p className="mt-0.5 text-xs text-red-600">{errors[`${item.id}_productName`]}</p>
+                  )}
                 </div>
 
                 <div className="col-span-2">
                   <label className="block text-xs font-medium text-gray-600 mb-1">
-                    Quantity
+                    Quantity <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="number"
                     value={item.quantity}
                     onChange={(e) => updateItem(item.id, 'quantity', parseFloat(e.target.value) || 0)}
-                    required
                     min="0"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none"
+                    className={`w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none ${errors[`${item.id}_quantity`] ? "border-red-400" : "border-gray-300"}`}
                     placeholder="0"
                   />
+                  {errors[`${item.id}_quantity`] && (
+                    <p className="mt-0.5 text-xs text-red-600">{errors[`${item.id}_quantity`]}</p>
+                  )}
                 </div>
 
                 <div className="col-span-2">
@@ -201,12 +220,14 @@ export function PurchaseOrderModal({
                     type="number"
                     value={item.unitPrice}
                     onChange={(e) => updateItem(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
-                    required
                     min="0"
                     step="0.01"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none"
+                    className={`w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none ${errors[`${item.id}_unitPrice`] ? "border-red-400" : "border-gray-300"}`}
                     placeholder="0.00"
                   />
+                  {errors[`${item.id}_unitPrice`] && (
+                    <p className="mt-0.5 text-xs text-red-600">{errors[`${item.id}_unitPrice`]}</p>
+                  )}
                 </div>
 
                 <div className="col-span-1">
@@ -275,7 +296,7 @@ export function PurchaseOrderModal({
           </button>
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || hasErrors}
             className="flex-1 px-4 py-2 bg-[#0F5C47] text-white rounded-lg hover:bg-[#0d4a39] transition-colors disabled:opacity-50"
           >
             {isLoading ? 'Creating...' : 'Create Order'}

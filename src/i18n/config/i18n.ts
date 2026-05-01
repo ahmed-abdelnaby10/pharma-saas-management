@@ -13,6 +13,7 @@ import enPayment from "../locales/en/payment.json";
 import enOrder from "../locales/en/order.json";
 import enProfile from "../locales/en/profile.json";
 import enLocations from "../locales/en/locations.json";
+import enPharmacy from "../locales/en/pharmacy.json";
 
 import arCommon from "../locales/ar/common.json";
 import arAuth from "../locales/ar/auth.json";
@@ -25,6 +26,7 @@ import arPayment from "../locales/ar/payment.json";
 import arOrder from "../locales/ar/order.json";
 import arProfile from "../locales/ar/profile.json";
 import arLocations from "../locales/ar/locations.json";
+import arPharmacy from "../locales/ar/pharmacy.json";
 
 const resources = {
   en: {
@@ -39,6 +41,7 @@ const resources = {
     order: enOrder,
     profile: enProfile,
     locations: enLocations,
+    pharmacy: enPharmacy,
   },
   ar: {
     common: arCommon,
@@ -52,6 +55,7 @@ const resources = {
     order: arOrder,
     profile: arProfile,
     locations: arLocations,
+    pharmacy: arPharmacy,
   },
 };
 

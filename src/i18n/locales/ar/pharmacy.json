@@ -1,0 +1,103 @@
+{
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "too_short": "يجب أن يكون {{min}} أحرف على الأقل",
+    "too_long": "يجب ألا يتجاوز {{max}} حرفًا",
+    "invalid_email": "أدخل عنوان بريد إلكتروني صالحًا",
+    "invalid_phone": "أدخل رقم هاتف صالحًا",
+    "passwords_mismatch": "كلمتا المرور غير متطابقتين",
+    "must_be_number": "يجب أن يكون رقمًا صالحًا",
+    "must_be_positive": "يجب أن يكون أكبر من الصفر",
+    "invalid_date": "أدخل تاريخًا صالحًا"
+  },
+
+  "notifications": {
+    "low_stock_title": "تنبيه نقص المخزون",
+    "low_stock_body": "{{medicineName}} يقترب من النفاد — متبقٍّ {{quantity}} فقط",
+    "expiry_alert_title": "تنبيه انتهاء الصلاحية",
+    "expiry_alert_body": "{{medicineName}} (دفعة {{batchNumber}}) تنتهي صلاحيته خلال {{days}} يوم",
+    "expiry_alert_body_plural": "{{medicineName}} (دفعة {{batchNumber}}) تنتهي صلاحيته خلال {{days}} أيام",
+    "ocr_completed_title": "تمت معالجة المستند",
+    "ocr_completed_body": "تمت معالجة المستند بنجاح — دقة {{confidence}}%",
+    "ocr_failed_title": "فشل معالجة المستند",
+    "ocr_failed_body": "تعذّرت معالجة المستند: {{error}}",
+    "shift_opened_title": "تم فتح وردية",
+    "shift_opened_body": "تم فتح وردية جديدة",
+    "shift_closed_title": "تم إغلاق الوردية",
+    "shift_closed_body": "تم إغلاق الوردية",
+    "purchase_order_received_title": "تم استلام أمر الشراء",
+    "purchase_order_received_body": "تم استلام أمر الشراء رقم #{{id}}",
+    "general_title": "إشعار",
+    "general_body": "لديك إشعار جديد"
+  },
+
+  "trial": {
+    "banner_title_warning": "تنتهي تجربتك المجانية خلال {{days}} أيام",
+    "banner_title_urgent": "التجربة تنتهي قريبًا — {{days}} يوم متبقٍّ",
+    "banner_title_urgent_plural": "التجربة تنتهي قريبًا — {{days}} أيام متبقية",
+    "upgrade_now": "الترقية الآن",
+    "toast_warning": "تنتهي تجربتك المجانية خلال {{days}} أيام. قم بالترقية للاستمرار في الوصول."
+  },
+
+  "subscription": {
+    "blocked_title": "الاشتراك مطلوب",
+    "blocked_body": "انتهت صلاحية اشتراكك أو انتهت فترة التجربة المجانية. يُرجى الترقية للمتابعة.",
+    "trial_expired": "انتهت فترة التجربة المجانية.",
+    "canceled": "تم إلغاء اشتراكك.",
+    "past_due": "الدفع متأخر. يُرجى تحديث معلومات الفاتورة.",
+    "offline_expired": "انتهت صلاحية الوصول دون اتصال. يُرجى الاتصال بالإنترنت للتحقق من اشتراكك.",
+    "contact_support": "تواصل مع الدعم",
+    "upgrade": "ترقية الخطة"
+  },
+
+  "signup": {
+    "title": "ابدأ تجربتك المجانية",
+    "subtitle": "أعدّ نظام إدارة الصيدلية في دقائق",
+    "tenant_name": "اسم الصيدلية / المنشأة",
+    "contact_name": "اسم جهة الاتصال",
+    "contact_email": "البريد الإلكتروني",
+    "contact_phone": "رقم الهاتف",
+    "country": "الدولة",
+    "select_plan": "اختر الخطة",
+    "notes": "ملاحظات إضافية",
+    "notes_placeholder": "أي شيء تودّ إخبارنا به…",
+    "submit": "طلب التجربة المجانية",
+    "submitting": "جارٍ إرسال الطلب…",
+    "success_title": "تم استلام طلبك!",
+    "success_body": "شكرًا لك! سنراجع طلبك ونرسل لك بيانات الوصول خلال 24 ساعة.",
+    "back_home": "العودة إلى الصفحة الرئيسية",
+    "plan_trial_days": "{{days}} يومًا مجانيًا",
+    "plan_price": "{{price}} / {{interval}}",
+    "already_have_account": "لديك حساب بالفعل؟",
+    "sign_in": "تسجيل الدخول"
+  },
+
+  "signup_requests": {
+    "title": "طلبات التسجيل",
+    "subtitle": "مراجعة وإدارة طلبات التجربة المجانية الواردة",
+    "status_pending": "قيد الانتظار",
+    "status_approved": "موافق عليه",
+    "status_rejected": "مرفوض",
+    "approve": "موافقة",
+    "reject": "رفض",
+    "approve_title": "الموافقة على الطلب",
+    "approve_description": "سيتم إنشاء مستأجر جديد وإرسال بيانات الاعتماد إلى المسؤول بالبريد الإلكتروني.",
+    "reject_title": "رفض الطلب",
+    "reject_description": "سيتم رفض الطلب نهائيًا. يُرجى تقديم سبب الرفض.",
+    "reject_reason": "السبب",
+    "reject_reason_placeholder": "لماذا يتم رفض هذا الطلب؟",
+    "admin_email": "بريد المسؤول (اختياري)",
+    "temp_password_title": "تم إنشاء المستأجر",
+    "temp_password_body": "تم إنشاء المستأجر بنجاح. شارك كلمة المرور المؤقتة أدناه — ستُعرض مرة واحدة فقط.",
+    "temp_password_label": "كلمة المرور المؤقتة",
+    "copy_password": "نسخ",
+    "copied": "تم النسخ!",
+    "done": "تم",
+    "empty_heading": "لا توجد طلبات تسجيل",
+    "empty_subline": "ستظهر الطلبات الجديدة من نموذج التسجيل العام هنا.",
+    "search_placeholder": "البحث بالاسم أو البريد الإلكتروني…",
+    "filter_all": "الكل",
+    "requested_plan": "الخطة المطلوبة",
+    "submitted_at": "تاريخ التقديم"
+  }
+}

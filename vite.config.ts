@@ -31,6 +31,20 @@ function manualChunks(id: string): string | undefined {
 }
 
 export default defineConfig({
+  // Prevent Vite from clearing the terminal when running alongside Tauri output.
+  clearScreen: false,
+
+  server: {
+    port: 5173,
+    // Tauri requires a fixed port; fail fast if it's already in use.
+    strictPort: true,
+    // TAURI_DEV_HOST is set by Tauri for remote device dev (mobile/LAN). Unused for desktop.
+    host: process.env.TAURI_DEV_HOST || false,
+  },
+
+  // Expose TAURI_* env vars to the frontend (e.g. TAURI_ENV_TARGET_TRIPLE).
+  envPrefix: ["VITE_", "TAURI_"],
+
   plugins: [
     // The React and Tailwind plugins are both required for Make, even if
     // Tailwind is not being actively used – do not remove them

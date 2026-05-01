@@ -3,9 +3,13 @@ import { Outlet } from 'react-router';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { useLanguage } from '@/app/contexts/useLanguage';
+import { useApp } from '@/app/contexts/useApp';
+import { useAlertDispatch } from '@/features/client/alerts/hooks/useAlertDispatch';
 
 export function DashboardLayout() {
   const { direction } = useLanguage();
+  const { currentBranch } = useApp();
+  useAlertDispatch(currentBranch?.id);
 
   return (
     <div className={`min-h-screen bg-[#F8F9FA] ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>

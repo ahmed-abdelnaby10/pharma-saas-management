@@ -16,7 +16,18 @@ import {
   FileText,
   Activity,
   Settings,
+  Loader2,
 } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router';
+import { toast } from 'sonner';
+import {
+  useTenantQuery,
+  useTenantUsageQuery,
+  useFeatureOverridesQuery,
+  useUpdateFeatureOverrideMutation,
+  useSuspendTenantMutation,
+  useActivateTenantMutation,
+} from '@/features/admin/api';
 
 const tabs = [
   { id: 'overview', label: 'Overview', icon: Activity },
@@ -54,12 +65,49 @@ const auditLogs = [
 ];
 
 export function TenantDetailsPage() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
+
+  const { data: tenant, isLoading } = useTenantQuery(id ?? '');
+  const suspend = useSuspendTenantMutation();
+  const activate = useActivateTenantMutation();
+
+  async function handleToggleStatus() {
+    if (!tenant) return;
+    try {
+      if (tenant.status === 'suspended') {
+        await activate.mutateAsync(tenant.id);
+        toast.success('Tenant activated');
+      } else {
+        await suspend.mutateAsync(tenant.id);
+        toast.success('Tenant suspended');
+      }
+    } catch {
+      toast.error('Action failed');
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-24 text-gray-400">
+        <Loader2 className="w-6 h-6 animate-spin mr-2" />
+        Loading…
+      </div>
+    );
+  }
+
+  if (!tenant) {
+    return <p className="text-sm text-gray-500 p-6">Tenant not found.</p>;
+  }
 
   return (
     <div className="space-y-6">
       {/* Back Button */}
-      <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+      <button
+        onClick={() => navigate('/admin/tenants')}
+        className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
+      >
         <ArrowLeft className="w-4 h-4" />
         Back to Tenants
       </button>
@@ -72,31 +120,26 @@ export function TenantDetailsPage() {
               <Building2 className="w-7 h-7 text-teal-600" />
             </div>
             <div>
-              <h1 className="text-2xl font-semibold text-gray-900">Green Valley Pharmacy</h1>
+              <h1 className="text-2xl font-semibold text-gray-900">{tenant.name}</h1>
               <div className="flex items-center gap-3 mt-2">
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                  Trialing
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 capitalize">
+                  {tenant.status}
                 </span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                  Growth Plan
-                </span>
-                <span className="inline-flex items-center gap-1 text-xs text-orange-600">
-                  <Clock className="w-3 h-3" />
-                  Trial ends in 3 days
-                </span>
+                {tenant.plan && (
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                    {tenant.plan.name} Plan
+                  </span>
+                )}
               </div>
             </div>
           </div>
 
           <div className="flex gap-2">
-            <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-              Extend Trial
-            </button>
-            <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-              Change Plan
-            </button>
-            <button className="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700">
-              Impersonate
+            <button
+              onClick={handleToggleStatus}
+              className="px-4 py-2 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100"
+            >
+              {tenant.status === 'suspended' ? 'Activate' : 'Suspend'}
             </button>
           </div>
         </div>
@@ -110,13 +153,16 @@ export function TenantDetailsPage() {
           <div className="bg-white border border-gray-200 rounded-xl p-5">
             <h3 className="text-sm font-semibold text-gray-900 mb-4">Account Information</h3>
             <div className="space-y-4">
-              <InfoItem icon={Mail} label="Owner" value="Sarah Johnson" />
-              <InfoItem icon={Phone} label="Phone" value="+1 (555) 123-4567" />
-              <InfoItem icon={MapPin} label="Location" value="California, USA" />
-              <InfoItem icon={Calendar} label="Created" value="Jan 15, 2026" />
-              <InfoItem icon={Users} label="Branches" value="2 / 5" />
-              <InfoItem icon={Users} label="Users" value="8 / 15" />
-              <InfoItem icon={Clock} label="Last Login" value="2 hours ago" />
+              <InfoItem icon={Mail} label="Email" value={tenant.email} />
+              {tenant.phone && <InfoItem icon={Phone} label="Phone" value={tenant.phone} />}
+              {tenant.address && <InfoItem icon={MapPin} label="Address" value={tenant.address} />}
+              <InfoItem icon={Calendar} label="Created" value={new Date(tenant.createdAt).toLocaleDateString()} />
+              {tenant.branchCount != null && (
+                <InfoItem icon={Users} label="Branches" value={String(tenant.branchCount)} />
+              )}
+              {tenant.userCount != null && (
+                <InfoItem icon={Users} label="Users" value={String(tenant.userCount)} />
+              )}
             </div>
           </div>
 
@@ -177,8 +223,8 @@ export function TenantDetailsPage() {
               {activeTab === 'overview' && <OverviewTab />}
               {activeTab === 'subscription' && <SubscriptionTab />}
               {activeTab === 'invoices' && <InvoicesTab />}
-              {activeTab === 'features' && <FeaturesTab />}
-              {activeTab === 'usage' && <UsageTab />}
+              {activeTab === 'features' && <FeaturesTab tenantId={id ?? ''} />}
+              {activeTab === 'usage' && <UsageTab tenantId={id ?? ''} />}
               {activeTab === 'audit' && <AuditTab />}
             </div>
           </div>
@@ -351,62 +397,93 @@ function InvoicesTab() {
   );
 }
 
-function FeaturesTab() {
+function FeaturesTab({ tenantId }: { tenantId: string }) {
+  const { data: overrides = [], isLoading } = useFeatureOverridesQuery(tenantId);
+  const updateOverride = useUpdateFeatureOverrideMutation();
+
+  async function toggle(key: string, currentEnabled: boolean) {
+    try {
+      await updateOverride.mutateAsync({
+        tenantId,
+        key,
+        payload: { enabled: !currentEnabled },
+      });
+      toast.success(`Feature ${!currentEnabled ? 'enabled' : 'disabled'}`);
+    } catch {
+      toast.error('Failed to update feature');
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-8 text-gray-400">
+        <Loader2 className="w-5 h-5 animate-spin mr-2" />
+        Loading features…
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-gray-900">Feature Access</h3>
-        <button className="px-3 py-1.5 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700">
-          Add Override
-        </button>
-      </div>
+      <h3 className="text-sm font-semibold text-gray-900">Feature Overrides</h3>
 
-      <div className="space-y-2">
-        {features.map((feature) => (
-          <div key={feature.name} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-            <div className="flex-1">
-              <div className="flex items-center gap-3">
-                <p className="text-sm font-medium text-gray-900">{feature.name}</p>
-                {feature.planDefault ? (
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                ) : (
-                  <AlertCircle className="w-4 h-4 text-gray-300" />
-                )}
-                {feature.override && (
-                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-50 text-orange-700 border border-orange-200">
-                    Override Active
-                  </span>
+      {overrides.length === 0 ? (
+        <p className="text-sm text-gray-400">No feature overrides configured for this tenant.</p>
+      ) : (
+        <div className="space-y-2">
+          {overrides.map((f) => (
+            <div key={f.key} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+              <div className="flex-1">
+                <div className="flex items-center gap-3">
+                  <p className="text-sm font-medium text-gray-900 capitalize">{f.key.replace(/_/g, ' ')}</p>
+                  {f.enabled ? (
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                  ) : (
+                    <AlertCircle className="w-4 h-4 text-gray-300" />
+                  )}
+                </div>
+                {f.description && (
+                  <p className="text-xs text-gray-500 mt-1">{f.description}</p>
                 )}
               </div>
-              {feature.override && (
-                <p className="text-xs text-gray-500 mt-1">
-                  Enabled until {feature.override.until} — {feature.override.reason}
-                </p>
-              )}
+              <button
+                onClick={() => toggle(f.key, f.enabled)}
+                disabled={updateOverride.isPending}
+                className="text-sm text-teal-600 hover:text-teal-800 font-medium disabled:opacity-50"
+              >
+                {f.enabled ? 'Disable' : 'Enable'}
+              </button>
             </div>
-            <button className="text-sm text-gray-600 hover:text-gray-900">Edit</button>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-function UsageTab() {
+function UsageTab({ tenantId }: { tenantId: string }) {
+  const { data: usage, isLoading } = useTenantUsageQuery(tenantId);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-8 text-gray-400">
+        <Loader2 className="w-5 h-5 animate-spin mr-2" />
+        Loading usage…
+      </div>
+    );
+  }
+
+  if (!usage) return <p className="text-sm text-gray-400">No usage data available.</p>;
+
   return (
     <div className="space-y-6">
       <h3 className="text-sm font-semibold text-gray-900">Resource Usage</h3>
 
-      <UsageBar label="Branches" used={2} max={5} />
-      <UsageBar label="Users" used={8} max={15} />
-      <UsageBar label="OCR Pages (This Month)" used={450} max={1000} />
-      <UsageBar label="Storage" used={2.4} max={10} unit="GB" />
-
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p className="text-sm text-blue-800">
-          <strong>Note:</strong> Customer is using 53% of branches and 53% of users. Consider suggesting upgrade to Pro plan.
-        </p>
-      </div>
+      <UsageBar label="Branches" used={usage.branchCount} max={99} />
+      <UsageBar label="Users" used={usage.userCount} max={99} />
+      <UsageBar label="Inventory Items" used={usage.inventoryItemCount} max={9999} />
+      <UsageBar label="Sales This Month" used={usage.salesThisMonth} max={9999} />
+      <UsageBar label="Storage" used={parseFloat((usage.storageUsedMb / 1024).toFixed(2))} max={10} unit="GB" />
     </div>
   );
 }

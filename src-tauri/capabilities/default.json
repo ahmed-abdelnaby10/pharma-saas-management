@@ -1,0 +1,10 @@
+{
+  "identifier": "default",
+  "description": "Default capability — grants core window permissions only.",
+  "platforms": ["linux", "macOS", "windows"],
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "sql:default"
+  ]
+}

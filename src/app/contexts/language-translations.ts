@@ -21,6 +21,11 @@ export const translations: Record<Language, Record<string, string>> = {
     'users': 'Users & Roles',
     'subscription': 'Subscription',
     'settings': 'Settings',
+    'patients': 'Patients',
+    'prescriptions': 'Prescriptions',
+    'ocrDocuments': 'OCR Documents',
+    'salesHistory': 'Sales History',
+    'support': 'Support',
     
     // Dashboard
     'todaySales': 'Today\'s Sales',
@@ -163,6 +168,11 @@ export const translations: Record<Language, Record<string, string>> = {
     'users': 'المستخدمين والأدوار',
     'subscription': 'الاشتراك',
     'settings': 'الإعدادات',
+    'patients': 'المرضى',
+    'prescriptions': 'الوصفات الطبية',
+    'ocrDocuments': 'مستندات OCR',
+    'salesHistory': 'سجل المبيعات',
+    'support': 'الدعم',
     
     // Dashboard
     'todaySales': 'مبيعات اليوم',

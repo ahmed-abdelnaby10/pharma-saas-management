@@ -1,5 +1,7 @@
 import React from 'react';
 import { Check, X, Plus, Edit2 } from 'lucide-react';
+import { usePlansQuery, useDeletePlanMutation } from '@/features/admin/api';
+import { toast } from 'sonner';
 
 const plans = [
   {
@@ -109,6 +111,10 @@ const featureLabels: Record<string, string> = {
 };
 
 export function PlansPage() {
+  // Real plans from API — available for future wiring into the comparison table
+  const { data: _apiPlans } = usePlansQuery();
+  const _deleteMutation = useDeletePlanMutation();
+
   return (
     <div className="space-y-6">
       {/* Page Header */}

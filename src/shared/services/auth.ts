@@ -6,7 +6,8 @@ import {
   ACCESS_TOKEN_EXPIRES_AT_KEY,
   USER_KEY,
   TOKEN_TTL_MS,
-  API_ENDPOINTS,
+  TENANT_API,
+  PLATFORM_API,
   BASE_URL,
 } from "../utils/constants";
 import axios from "axios";
@@ -63,7 +64,42 @@ function decodeJwtExp(token: string): number | null {
   }
 }
 
-// ---- Getters (now from cookies)
+export interface SubscriptionClaimsFromToken {
+  id: string;
+  status: string;
+  trialEndsAt?: string | null;
+  offlineValidUntil?: string | null;
+}
+
+/** Decode a JWT and extract the `subscription` claim if present. */
+export function decodeAccessToken(token: string): {
+  exp: number | null;
+  subscription: SubscriptionClaimsFromToken | null;
+} {
+  try {
+    const payload = token.split(".")[1];
+    const json = JSON.parse(
+      atob(payload.replace(/-/g, "+").replace(/_/g, "/")),
+    );
+    const exp =
+      typeof json?.exp === "number" ? json.exp * 1000 : null;
+    const sub = json?.subscription ?? null;
+    const subscription: SubscriptionClaimsFromToken | null =
+      sub && typeof sub === "object" && typeof sub.id === "string"
+        ? {
+            id: sub.id,
+            status: sub.status ?? "ACTIVE",
+            trialEndsAt: sub.trialEndsAt ?? null,
+            offlineValidUntil: sub.offlineValidUntil ?? null,
+          }
+        : null;
+    return { exp, subscription };
+  } catch {
+    return { exp: null, subscription: null };
+  }
+}
+
+// ---- Getters (from cookies)
 export function getAccessToken(): string | null {
   return getCookie(ACCESS_TOKEN_KEY);
 }
@@ -82,25 +118,38 @@ export function isAccessExpired(leewayMs = 30_000): boolean {
 
 // ---- Setters
 export async function storeTokens(params: {
-  access: string;
-  refresh: string;
+  accessToken: string;
+  refreshToken: string;
   user?: any;
   navigate?: () => void;
   setIsAuthenticated?: (v: boolean) => void;
 }): Promise<void> {
-  const { access, refresh, user, navigate, setIsAuthenticated } = params;
+  const { accessToken, refreshToken, user, navigate, setIsAuthenticated } = params;
 
-  const exp =
-    decodeJwtExp(access) ??
-    Date.now() + (typeof TOKEN_TTL_MS === "number" ? TOKEN_TTL_MS : 0);
+  const { exp, subscription } = decodeAccessToken(accessToken);
+  const resolvedExp =
+    exp ?? Date.now() + (typeof TOKEN_TTL_MS === "number" ? TOKEN_TTL_MS : 0);
 
-  // 1 day cookie for both tokens
-  setCookie(ACCESS_TOKEN_KEY, access, { days: 1 });
-  setCookie(REFRESH_TOKEN_KEY, refresh, { days: 1 });
-  localStorage.setItem(ACCESS_TOKEN_EXPIRES_AT_KEY, String(exp));
+  // 1-day cookie for both tokens
+  setCookie(ACCESS_TOKEN_KEY, accessToken, { days: 1 });
+  setCookie(REFRESH_TOKEN_KEY, refreshToken, { days: 1 });
+  localStorage.setItem(ACCESS_TOKEN_EXPIRES_AT_KEY, String(resolvedExp));
 
   // user stays in localStorage
   if (user) localStorage.setItem(USER_KEY, JSON.stringify(user));
+
+  // Persist subscription claims to global store
+  if (subscription) {
+    // Lazy import avoids circular dep during initialisation
+    import("@/shared/store/useSubscription").then(({ default: useSubscription }) => {
+      useSubscription.getState().setClaims({
+        id: subscription.id,
+        status: subscription.status as any,
+        trialEndsAt: subscription.trialEndsAt,
+        offlineValidUntil: subscription.offlineValidUntil,
+      });
+    });
+  }
 
   if (setIsAuthenticated) setIsAuthenticated(true);
   if (navigate) navigate();
@@ -119,43 +168,82 @@ export async function removeTokens(
   if (navigate) navigate("/login", { replace: true });
 }
 
+// ---- Tenant login
+export async function tenantLogin(credentials: {
+  email: string;
+  password: string;
+  tenantId: string;
+}): Promise<{ accessToken: string; refreshToken: string; user: any }> {
+  const res = await axios.post(
+    BASE_URL + TENANT_API.auth.login,
+    credentials,
+    { headers: { "Accept-Language": resolveRequestLanguage() } },
+  );
+
+  const root = res.data?.data ?? res.data ?? {};
+  const accessToken: string = root.accessToken;
+  const refreshToken: string = root.refreshToken;
+  const user = root.user ?? null;
+
+  if (!accessToken) throw new Error("No access token in login response");
+
+  return { accessToken, refreshToken, user };
+}
+
+// ---- Platform (super-admin) login
+export async function platformLogin(credentials: {
+  email: string;
+  password: string;
+}): Promise<{ accessToken: string; refreshToken: string; user: any }> {
+  const res = await axios.post(
+    BASE_URL + PLATFORM_API.auth.login,
+    credentials,
+    { headers: { "Accept-Language": resolveRequestLanguage() } },
+  );
+
+  const root = res.data?.data ?? res.data ?? {};
+  const accessToken: string = root.accessToken;
+  const refreshToken: string = root.refreshToken;
+  const user = root.user ?? null;
+
+  if (!accessToken) throw new Error("No access token in platform login response");
+
+  return { accessToken, refreshToken, user };
+}
+
 // ---- Refresh (de-dup concurrent calls)
 let refreshingPromise: Promise<string | null> | null = null;
 
 export async function refreshAccessToken(): Promise<string | null> {
-  const refresh = getRefreshToken();
-  if (!refresh) return null;
+  const refreshToken = getRefreshToken();
+  if (!refreshToken) return null;
 
   if (!refreshingPromise) {
     refreshingPromise = axios
       .post(
-        BASE_URL + API_ENDPOINTS.refresh,
-        { refresh },
+        BASE_URL + TENANT_API.auth.refresh,
+        { refreshToken },
         { headers: { "Accept-Language": resolveRequestLanguage() } },
       )
       .then((res) => {
-        // handle shapes:
-        // {data:{access,refresh}} or {access,refresh} or nested tokens
         const root = res.data?.data ?? res.data ?? {};
-        const newAccess = root?.tokens?.access ?? root?.access ?? null;
-        const newRefresh = root?.tokens?.refresh ?? root?.refresh ?? null;
+        const newAccess: string = root.accessToken;
+        const newRefresh: string | undefined = root.refreshToken;
 
         if (!newAccess) throw new Error("No access token in refresh response");
 
-        const exp = decodeJwtExp(newAccess) ?? Date.now() + 5 * 60_000; // fallback 5min
+        const exp = decodeJwtExp(newAccess) ?? Date.now() + 5 * 60_000;
 
-        // Replace both cookies (1 day)
         setCookie(ACCESS_TOKEN_KEY, newAccess, { days: 1 });
         if (newRefresh) setCookie(REFRESH_TOKEN_KEY, newRefresh, { days: 1 });
         localStorage.setItem(ACCESS_TOKEN_EXPIRES_AT_KEY, String(exp));
 
-        // Let the app know tokens changed (invalidate queries, etc.)
         notifyTokensRefreshed();
 
-        return newAccess as string;
+        return newAccess;
       })
       .catch(() => {
-        // refresh failed → force logout
+        // Refresh failed → force logout
         removeTokens();
         return null;
       })
@@ -181,6 +269,3 @@ export function readUserFromStorage(): any | null {
     return null;
   }
 }
-
-export const roleOf = (u: any | null): "student" | "instructor" =>
-  u?.is_student ? "student" : "instructor";

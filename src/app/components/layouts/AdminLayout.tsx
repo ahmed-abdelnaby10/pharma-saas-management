@@ -17,13 +17,17 @@ import {
   Bell,
   Search,
   LogOut,
+  BookOpen,
+  UserPlus,
 } from 'lucide-react';
 
 const navigationItems = [
   { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/admin' },
   { key: 'tenants', label: 'Tenants', icon: Users, path: '/admin/tenants' },
+  { key: 'signup-requests', label: 'Signup Requests', icon: UserPlus, path: '/admin/signup-requests' },
   { key: 'subscriptions', label: 'Subscriptions', icon: CreditCard, path: '/admin/subscriptions' },
   { key: 'plans', label: 'Plans', icon: Package, path: '/admin/plans' },
+  { key: 'catalog', label: 'Product Catalog', icon: BookOpen, path: '/admin/catalog' },
   { key: 'invoices', label: 'Invoices', icon: FileText, path: '/admin/invoices' },
   { key: 'features', label: 'Feature Overrides', icon: Shield, path: '/admin/feature-overrides' },
   { key: 'usage', label: 'Usage & Limits', icon: TrendingUp, path: '/admin/usage-limits' },

@@ -6,7 +6,9 @@ interface AppUser {
   id: string;
   name: string;
   email: string;
-  role: "owner" | "pharmacist";
+  role: "owner" | "pharmacist" | "cashier" | "admin";
+  branchId?: string;
+  tenantId?: string;
 }
 
 interface AppContextType {
@@ -19,9 +21,23 @@ interface AppContextType {
   toggleTheme: () => void;
 }
 
+/** Backend paginated data shape: { data: T[], meta: { total, page, limit, totalPages } } */
 interface PaginatedResponse<T> {
-  next: number;
-  previous: number;
-  count: number;
   data: T[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
+
+/** Generic list params shared across list endpoints */
+interface ListParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+  branchId?: string;
 }

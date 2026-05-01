@@ -21,84 +21,43 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import { useSalesReportQuery } from "@/features/client/reports/api";
+import { useTopProductsQuery } from "@/features/client/dashboard/api";
 
 export function SalesReportPage() {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [dateRange, setDateRange] = useState("monthly");
 
-  const salesData = [
-    {
-      id: "week1",
-      period: "Week 1",
-      medicines: 12500,
-      cosmetics: 4200,
-      total: 16700,
-    },
-    {
-      id: "week2",
-      period: "Week 2",
-      medicines: 15200,
-      cosmetics: 5800,
-      total: 21000,
-    },
-    {
-      id: "week3",
-      period: "Week 3",
-      medicines: 13800,
-      cosmetics: 4900,
-      total: 18700,
-    },
-    {
-      id: "week4",
-      period: "Week 4",
-      medicines: 16500,
-      cosmetics: 6200,
-      total: 22700,
-    },
-  ];
+  const groupBy = dateRange === "daily" ? "day" : dateRange === "weekly" ? "week" : "month";
+  const { data: reportRows = [] } = useSalesReportQuery({ groupBy: groupBy as any });
+  const { data: topProductsData = [] } = useTopProductsQuery();
 
-  const topProducts = [
-    {
-      id: 1,
-      name: "Paracetamol 500mg",
-      type: "Medicine",
-      sold: 450,
-      revenue: 4500,
-    },
-    { id: 2, name: "Vitamin D3", type: "Medicine", sold: 320, revenue: 6400 },
-    {
-      id: 3,
-      name: "Moisturizer Cream",
-      type: "Cosmetic",
-      sold: 280,
-      revenue: 7000,
-    },
-    {
-      id: 4,
-      name: "Antibiotic Syrup",
-      type: "Medicine",
-      sold: 250,
-      revenue: 7500,
-    },
-    {
-      id: 5,
-      name: "Sunscreen SPF 50",
-      type: "Cosmetic",
-      sold: 220,
-      revenue: 7700,
-    },
-  ];
+  // Map API data to chart shape; fall back to empty chart if no data yet
+  const salesData = reportRows.length
+    ? reportRows.map((r) => ({
+        id: r.date,
+        period: new Date(r.date).toLocaleDateString("en", { month: "short", day: "numeric" }),
+        medicines: r.netRevenue * 0.7, // approximate split until backend provides breakdown
+        cosmetics: r.netRevenue * 0.3,
+        total: r.totalRevenue,
+      }))
+    : [
+        { id: "placeholder", period: "—", medicines: 0, cosmetics: 0, total: 0 },
+      ];
+
+
+  const topProducts = topProductsData.map((p) => ({
+    id: p.id,
+    name: p.name,
+    type: p.category === "medicine" ? "Medicine" : "Cosmetic",
+    sold: p.totalSold,
+    revenue: p.revenue,
+  }));
 
   const totalSales = salesData.reduce((sum, item) => sum + item.total, 0);
-  const totalMedicineSales = salesData.reduce(
-    (sum, item) => sum + item.medicines,
-    0,
-  );
-  const totalCosmeticSales = salesData.reduce(
-    (sum, item) => sum + item.cosmetics,
-    0,
-  );
+  const totalMedicineSales = salesData.reduce((sum, item) => sum + item.medicines, 0);
+  const totalCosmeticSales = salesData.reduce((sum, item) => sum + item.cosmetics, 0);
 
   return (
     <div className="space-y-6">

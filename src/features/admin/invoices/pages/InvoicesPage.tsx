@@ -1,108 +1,65 @@
-import React, { useState } from 'react';
-import { Search, Filter, Download, Plus, MoreVertical, FileText } from 'lucide-react';
+import React, { useState } from "react";
+import { Search, Filter, Download, Plus, MoreVertical, FileText, Loader2 } from "lucide-react";
+import { useInvoicesQuery, type InvoiceStatus } from "@/features/admin/api";
 
-interface Invoice {
-  id: string;
-  tenant: string;
-  date: string;
-  dueDate: string;
-  amount: number;
-  status: 'Draft' | 'Open' | 'Paid' | 'Overdue' | 'Void';
-  items: string;
+const STATUS_STYLES: Record<string, string> = {
+  draft: "bg-gray-50 text-gray-700 border-gray-200",
+  open: "bg-blue-50 text-blue-700 border-blue-200",
+  paid: "bg-green-50 text-green-700 border-green-200",
+  uncollectible: "bg-red-50 text-red-700 border-red-200",
+  void: "bg-gray-50 text-gray-500 border-gray-200",
+};
+
+function StatusBadge({ status }: { status: string }) {
+  return (
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize ${STATUS_STYLES[status] ?? STATUS_STYLES.draft}`}>
+      {status}
+    </span>
+  );
 }
 
-const mockInvoices: Invoice[] = [
-  {
-    id: 'INV-2026-0048',
-    tenant: 'Green Valley Pharmacy',
-    date: '2026-03-18',
-    dueDate: '2026-04-01',
-    amount: 2499,
-    status: 'Open',
-    items: 'Growth Plan - Monthly',
-  },
-  {
-    id: 'INV-2026-0047',
-    tenant: 'MediCare Plus',
-    date: '2026-03-15',
-    dueDate: '2026-03-29',
-    amount: 4999,
-    status: 'Paid',
-    items: 'Pro Plan - Monthly',
-  },
-  {
-    id: 'INV-2026-0046',
-    tenant: 'HealthHub Pharmacy',
-    date: '2026-03-15',
-    dueDate: '2026-03-29',
-    amount: 9999,
-    status: 'Paid',
-    items: 'Enterprise Plan - Monthly',
-  },
-  {
-    id: 'INV-2026-0045',
-    tenant: 'Sunrise Pharmacy',
-    date: '2026-03-01',
-    dueDate: '2026-03-15',
-    amount: 2499,
-    status: 'Overdue',
-    items: 'Growth Plan - Monthly',
-  },
-  {
-    id: 'INV-2026-0044',
-    tenant: 'Central Meds',
-    date: '2026-03-01',
-    dueDate: '2026-03-15',
-    amount: 4999,
-    status: 'Overdue',
-    items: 'Pro Plan - Monthly',
-  },
-  {
-    id: 'INV-2026-0043',
-    tenant: 'QuickMeds Rx',
-    date: '2026-03-10',
-    dueDate: '2026-03-24',
-    amount: 999,
-    status: 'Paid',
-    items: 'Starter Plan - Monthly',
-  },
-  {
-    id: 'INV-2026-0042',
-    tenant: 'Wellness Rx',
-    date: '2026-03-05',
-    dueDate: '2026-03-19',
-    amount: 2499,
-    status: 'Paid',
-    items: 'Growth Plan - Monthly',
-  },
-  {
-    id: 'INV-2026-0041',
-    tenant: 'Metro Health Pharmacy',
-    date: '2026-03-02',
-    dueDate: '2026-03-16',
-    amount: 2499,
-    status: 'Paid',
-    items: 'Growth Plan - Monthly',
-  },
-];
+function SummaryCard({ label, value, color, icon: Icon }: { label: string; value: string; color: string; icon: React.ElementType }) {
+  const colorStyles: Record<string, string> = {
+    gray: "bg-gray-50 text-gray-600",
+    green: "bg-green-50 text-green-600",
+    blue: "bg-blue-50 text-blue-600",
+    red: "bg-red-50 text-red-600",
+  };
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl p-6">
+      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${colorStyles[color] ?? colorStyles.gray}`}>
+        <Icon className="w-5 h-5" />
+      </div>
+      <p className="text-sm text-gray-600 mt-4">{label}</p>
+      <p className="text-2xl font-semibold text-gray-900 mt-1">{value}</p>
+    </div>
+  );
+}
 
 export function InvoicesPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
 
-  const filteredInvoices = mockInvoices.filter(invoice => {
-    const matchesSearch = invoice.tenant.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         invoice.id.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = selectedStatus === 'all' || invoice.status === selectedStatus;
+  const { data: invoices = [], isLoading } = useInvoicesQuery();
+
+  const filtered = invoices.filter((inv) => {
+    const matchesSearch =
+      inv.tenant?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      inv.id.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = selectedStatus === "all" || inv.status === selectedStatus;
     return matchesSearch && matchesStatus;
   });
 
-  const stats = {
-    total: mockInvoices.reduce((sum, inv) => sum + inv.amount, 0),
-    paid: mockInvoices.filter(inv => inv.status === 'Paid').reduce((sum, inv) => sum + inv.amount, 0),
-    overdue: mockInvoices.filter(inv => inv.status === 'Overdue').reduce((sum, inv) => sum + inv.amount, 0),
-    open: mockInvoices.filter(inv => inv.status === 'Open').reduce((sum, inv) => sum + inv.amount, 0),
-  };
+  const totalBilled = invoices.reduce((s, i) => s + i.amount, 0);
+  const totalPaid = invoices.filter((i) => i.status === "paid").reduce((s, i) => s + i.amount, 0);
+  const totalOverdue = invoices
+    .filter((i) => {
+      const isOpen = i.status === "open";
+      const isPastDue = i.dueDate && new Date(i.dueDate) < new Date();
+      return isOpen && isPastDue;
+    })
+    .reduce((s, i) => s + i.amount, 0);
+  const totalOpen = invoices.filter((i) => i.status === "open").reduce((s, i) => s + i.amount, 0);
 
   return (
     <div className="space-y-6">
@@ -126,30 +83,10 @@ export function InvoicesPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <SummaryCard
-          label="Total Billed"
-          value={`$${(stats.total / 100).toLocaleString()}`}
-          color="gray"
-          icon={FileText}
-        />
-        <SummaryCard
-          label="Total Paid"
-          value={`$${(stats.paid / 100).toLocaleString()}`}
-          color="green"
-          icon={FileText}
-        />
-        <SummaryCard
-          label="Overdue Amount"
-          value={`$${(stats.overdue / 100).toLocaleString()}`}
-          color="red"
-          icon={FileText}
-        />
-        <SummaryCard
-          label="Open Invoices"
-          value={`$${(stats.open / 100).toLocaleString()}`}
-          color="blue"
-          icon={FileText}
-        />
+        <SummaryCard label="Total Billed" value={`$${totalBilled.toLocaleString()}`} color="gray" icon={FileText} />
+        <SummaryCard label="Total Paid" value={`$${totalPaid.toLocaleString()}`} color="green" icon={FileText} />
+        <SummaryCard label="Overdue" value={`$${totalOverdue.toLocaleString()}`} color="red" icon={FileText} />
+        <SummaryCard label="Open Invoices" value={`$${totalOpen.toLocaleString()}`} color="blue" icon={FileText} />
       </div>
 
       {/* Filters */}
@@ -165,7 +102,6 @@ export function InvoicesPage() {
               className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
           </div>
-
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               <Filter className="w-4 h-4 text-gray-500" />
@@ -177,19 +113,11 @@ export function InvoicesPage() {
               className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
               <option value="all">All Statuses</option>
-              <option value="Draft">Draft</option>
-              <option value="Open">Open</option>
-              <option value="Paid">Paid</option>
-              <option value="Overdue">Overdue</option>
-              <option value="Void">Void</option>
-            </select>
-
-            <select className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
-              <option>This Month</option>
-              <option>Last Month</option>
-              <option>Last 3 Months</option>
-              <option>This Year</option>
-              <option>Custom Range</option>
+              <option value="draft">Draft</option>
+              <option value="open">Open</option>
+              <option value="paid">Paid</option>
+              <option value="uncollectible">Uncollectible</option>
+              <option value="void">Void</option>
             </select>
           </div>
         </div>
@@ -197,65 +125,69 @@ export function InvoicesPage() {
 
       {/* Table */}
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  <input type="checkbox" className="rounded border-gray-300 text-teal-600 focus:ring-teal-500" />
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice ID</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tenant</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {filteredInvoices.map((invoice) => (
-                <tr key={invoice.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <input type="checkbox" className="rounded border-gray-300 text-teal-600 focus:ring-teal-500" />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{invoice.id}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{invoice.tenant}</div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-600">{invoice.items}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {invoice.date}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {invoice.dueDate}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    ${(invoice.amount / 100).toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <StatusBadge status={invoice.status} />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <button className="p-1 text-gray-400 hover:text-gray-600 rounded">
-                      <MoreVertical className="w-5 h-5" />
-                    </button>
-                  </td>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-16 text-gray-500">
+            <Loader2 className="w-5 h-5 animate-spin mr-2" />
+            Loading invoices…
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice ID</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tenant</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {filtered.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="py-12 text-center text-sm text-gray-500">
+                      No invoices found.
+                    </td>
+                  </tr>
+                )}
+                {filtered.map((invoice) => (
+                  <tr key={invoice.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900 font-mono">{invoice.id}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{invoice.tenant?.name ?? "—"}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      {new Date(invoice.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      {invoice.dueDate ? new Date(invoice.dueDate).toLocaleDateString() : "—"}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      ${invoice.amount.toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <StatusBadge status={invoice.status} />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <button className="p-1 text-gray-400 hover:text-gray-600 rounded">
+                        <MoreVertical className="w-5 h-5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
-        {/* Pagination */}
         <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
           <div className="text-sm text-gray-500">
-            Showing <span className="font-medium">{filteredInvoices.length}</span> of <span className="font-medium">{mockInvoices.length}</span> invoices
+            Showing <span className="font-medium">{filtered.length}</span> of{" "}
+            <span className="font-medium">{invoices.length}</span> invoices
           </div>
           <div className="flex gap-2">
             <button className="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50" disabled>
@@ -267,41 +199,6 @@ export function InvoicesPage() {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const styles = {
-    Draft: 'bg-gray-50 text-gray-700 border-gray-200',
-    Open: 'bg-blue-50 text-blue-700 border-blue-200',
-    Paid: 'bg-green-50 text-green-700 border-green-200',
-    Overdue: 'bg-red-50 text-red-700 border-red-200',
-    Void: 'bg-gray-50 text-gray-700 border-gray-200',
-  };
-
-  return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${styles[status as keyof typeof styles]}`}>
-      {status}
-    </span>
-  );
-}
-
-function SummaryCard({ label, value, color, icon: Icon }: any) {
-  const colorStyles = {
-    gray: 'bg-gray-50 text-gray-600',
-    green: 'bg-green-50 text-green-600',
-    blue: 'bg-blue-50 text-blue-600',
-    red: 'bg-red-50 text-red-600',
-  };
-
-  return (
-    <div className="bg-white border border-gray-200 rounded-xl p-6">
-      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${colorStyles[color as keyof typeof colorStyles]}`}>
-        <Icon className="w-5 h-5" />
-      </div>
-      <p className="text-sm text-gray-600 mt-4">{label}</p>
-      <p className="text-2xl font-semibold text-gray-900 mt-1">{value}</p>
     </div>
   );
 }

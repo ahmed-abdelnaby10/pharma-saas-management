@@ -10,46 +10,36 @@ import {
   Plus,
   ArrowUpRight,
   ArrowDownRight,
+  Loader2,
 } from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-
-// Mock data
-const revenueData = [
-  { month: 'Jan', revenue: 45000, subscriptions: 28 },
-  { month: 'Feb', revenue: 52000, subscriptions: 32 },
-  { month: 'Mar', revenue: 58000, subscriptions: 38 },
-  { month: 'Apr', revenue: 65000, subscriptions: 42 },
-  { month: 'May', revenue: 73000, subscriptions: 48 },
-  { month: 'Jun', revenue: 82000, subscriptions: 54 },
-];
-
-const statusData = [
-  { name: 'Active', value: 42, color: '#10B981' },
-  { name: 'Trialing', value: 12, color: '#3B82F6' },
-  { name: 'Past Due', value: 5, color: '#F59E0B' },
-  { name: 'Suspended', value: 3, color: '#EF4444' },
-];
-
-const recentTrials = [
-  { name: 'Green Valley Pharmacy', daysLeft: 2, plan: 'Growth' },
-  { name: 'MediCare Plus', daysLeft: 3, plan: 'Pro' },
-  { name: 'HealthHub Pharmacy', daysLeft: 5, plan: 'Growth' },
-  { name: 'QuickMeds Rx', daysLeft: 7, plan: 'Starter' },
-];
-
-const overdueInvoices = [
-  { tenant: 'Sunrise Pharmacy', amount: 2499, daysOverdue: 15 },
-  { tenant: 'Central Meds', amount: 4999, daysOverdue: 8 },
-  { tenant: 'Valley Drug Store', amount: 999, daysOverdue: 3 },
-];
-
-const recentSignups = [
-  { name: 'Metro Health Pharmacy', date: '2 hours ago', plan: 'Growth' },
-  { name: 'Wellness Rx', date: '5 hours ago', plan: 'Pro' },
-  { name: 'Community Care Pharmacy', date: '1 day ago', plan: 'Starter' },
-];
+import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { usePlatformDashboardQuery } from '@/features/admin/api';
 
 export function PlatformDashboardPage() {
+  const { data: dashboard, isLoading } = usePlatformDashboardQuery();
+
+  const kpis = dashboard?.kpis;
+  const health = dashboard?.subscriptionHealth;
+  const revenueTrend = dashboard?.revenueTrend ?? [];
+  const tenantGrowth = dashboard?.tenantGrowthTrend ?? [];
+  const recentActivity = dashboard?.recentActivity ?? [];
+
+  const statusData = [
+    { name: 'Active',   value: health?.active ?? 0,    color: '#10B981' },
+    { name: 'Trialing', value: health?.trialing ?? 0,  color: '#3B82F6' },
+    { name: 'Past Due', value: health?.pastDue ?? 0,   color: '#F59E0B' },
+    { name: 'Suspended',value: health?.suspended ?? 0, color: '#EF4444' },
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-24 text-gray-400">
+        <Loader2 className="w-6 h-6 animate-spin mr-2" />
+        Loading dashboard…
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -73,32 +63,32 @@ export function PlatformDashboardPage() {
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <KPICard
           title="Total Tenants"
-          value="62"
-          change="+8.2%"
+          value={String(kpis?.totalTenants ?? '—')}
+          change={kpis?.churnRate != null ? `${kpis.churnRate.toFixed(1)}% churn` : '—'}
           trend="up"
           icon={Users}
           color="teal"
         />
         <KPICard
           title="Active Tenants"
-          value="42"
-          change="+12.5%"
+          value={String(kpis?.activeTenants ?? '—')}
+          change="—"
           trend="up"
           icon={CheckCircle}
           color="green"
         />
         <KPICard
           title="MRR"
-          value="$82,450"
-          change="+15.3%"
+          value={kpis?.mrr != null ? `$${kpis.mrr.toLocaleString()}` : '—'}
+          change="—"
           trend="up"
           icon={DollarSign}
           color="blue"
         />
         <KPICard
           title="Past Due"
-          value="5"
-          change="-2"
+          value={String(kpis?.pastDueInvoices ?? '—')}
+          change="—"
           trend="down"
           icon={AlertCircle}
           color="orange"
@@ -107,10 +97,10 @@ export function PlatformDashboardPage() {
 
       {/* Secondary KPIs */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="Trialing Tenants" value="12" subtitle="3 ending soon" />
-        <StatCard title="Suspended" value="3" subtitle="Non-payment" />
-        <StatCard title="ARR" value="$989,400" subtitle="+18% YoY" />
-        <StatCard title="Overdue Invoices" value="$8,497" subtitle="3 invoices" />
+        <StatCard title="Trialing Tenants" value={String(kpis?.trialingTenants ?? '—')} subtitle="" />
+        <StatCard title="Suspended" value={String(health?.suspended ?? '—')} subtitle="" />
+        <StatCard title="ARR" value={kpis?.arr != null ? `$${kpis.arr.toLocaleString()}` : '—'} subtitle="" />
+        <StatCard title="Overdue Invoices" value={String(kpis?.pastDueInvoices ?? '—')} subtitle="" />
       </div>
 
       {/* Charts */}
@@ -129,9 +119,9 @@ export function PlatformDashboardPage() {
             </select>
           </div>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={revenueData}>
+            <LineChart data={revenueTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-              <XAxis dataKey="month" stroke="#6B7280" style={{ fontSize: '12px' }} />
+              <XAxis dataKey="period" stroke="#6B7280" style={{ fontSize: '12px' }} />
               <YAxis stroke="#6B7280" style={{ fontSize: '12px' }} />
               <Tooltip
                 contentStyle={{
@@ -141,7 +131,7 @@ export function PlatformDashboardPage() {
                   fontSize: '12px',
                 }}
               />
-              <Line type="monotone" dataKey="revenue" stroke="#0D9488" strokeWidth={2} dot={{ fill: '#0D9488' }} />
+              <Line type="monotone" dataKey="mrr" stroke="#0D9488" strokeWidth={2} dot={{ fill: '#0D9488' }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -155,9 +145,9 @@ export function PlatformDashboardPage() {
             </div>
           </div>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={revenueData}>
+            <BarChart data={tenantGrowth}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-              <XAxis dataKey="month" stroke="#6B7280" style={{ fontSize: '12px' }} />
+              <XAxis dataKey="period" stroke="#6B7280" style={{ fontSize: '12px' }} />
               <YAxis stroke="#6B7280" style={{ fontSize: '12px' }} />
               <Tooltip
                 contentStyle={{
@@ -167,7 +157,7 @@ export function PlatformDashboardPage() {
                   fontSize: '12px',
                 }}
               />
-              <Bar dataKey="subscriptions" fill="#0D9488" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="newTenants" fill="#0D9488" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -209,91 +199,63 @@ export function PlatformDashboardPage() {
           </div>
         </div>
 
-        {/* Trials Ending Soon */}
+        {/* Subscription Health */}
         <div className="bg-white border border-gray-200 rounded-xl p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Trials Ending Soon</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Subscription Health</h3>
             <Clock className="w-5 h-5 text-orange-500" />
           </div>
           <div className="space-y-3">
-            {recentTrials.map((trial) => (
-              <div key={trial.name} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
-                <div>
-                  <p className="text-sm font-medium text-gray-900">{trial.name}</p>
-                  <p className="text-xs text-gray-500">{trial.plan} Plan</p>
+            {statusData.map((s) => (
+              <div key={s.name} className="flex items-center justify-between py-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: s.color }} />
+                  <span className="text-sm text-gray-700">{s.name}</span>
                 </div>
-                <span className="px-2.5 py-1 text-xs font-medium text-orange-700 bg-orange-50 rounded-full">
-                  {trial.daysLeft}d left
-                </span>
+                <span className="text-sm font-semibold text-gray-900">{s.value}</span>
               </div>
             ))}
           </div>
-          <button className="w-full mt-4 px-4 py-2 text-sm font-medium text-teal-700 bg-teal-50 rounded-lg hover:bg-teal-100">
-            View All Trials
-          </button>
         </div>
 
-        {/* Overdue Invoices */}
+        {/* Recent Activity */}
         <div className="bg-white border border-gray-200 rounded-xl p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Overdue Invoices</h3>
-            <AlertCircle className="w-5 h-5 text-red-500" />
+            <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
+            <AlertCircle className="w-5 h-5 text-gray-400" />
           </div>
           <div className="space-y-3">
-            {overdueInvoices.map((invoice) => (
-              <div key={invoice.tenant} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
-                <div>
-                  <p className="text-sm font-medium text-gray-900">{invoice.tenant}</p>
-                  <p className="text-xs text-gray-500">{invoice.daysOverdue} days overdue</p>
+            {recentActivity.length === 0 ? (
+              <p className="text-sm text-gray-400">No recent activity</p>
+            ) : (
+              recentActivity.slice(0, 5).map((a) => (
+                <div key={a.id} className="flex items-start justify-between py-2 border-b border-gray-100 last:border-0">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{a.description}</p>
+                    {a.tenantName && (
+                      <p className="text-xs text-gray-500">{a.tenantName}</p>
+                    )}
+                  </div>
+                  <span className="text-xs text-gray-400 whitespace-nowrap ml-3">
+                    {new Date(a.occurredAt).toLocaleDateString()}
+                  </span>
                 </div>
-                <span className="text-sm font-semibold text-red-600">
-                  ${invoice.amount.toLocaleString()}
-                </span>
-              </div>
-            ))}
+              ))
+            )}
           </div>
-          <button className="w-full mt-4 px-4 py-2 text-sm font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100">
-            Manage Invoices
-          </button>
         </div>
       </div>
 
-      {/* Recent Activity */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Recent Signups */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Signups</h3>
-          <div className="space-y-4">
-            {recentSignups.map((signup) => (
-              <div key={signup.name} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center">
-                    <Users className="w-5 h-5 text-teal-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">{signup.name}</p>
-                    <p className="text-xs text-gray-500">{signup.date}</p>
-                  </div>
-                </div>
-                <span className="px-2.5 py-1 text-xs font-medium text-gray-700 bg-gray-100 rounded-full">
-                  {signup.plan}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <QuickActionButton icon={Plus} label="Create Tenant" />
-            <QuickActionButton icon={Clock} label="Start Trial" />
-            <QuickActionButton icon={DollarSign} label="Create Invoice" />
-            <QuickActionButton icon={CheckCircle} label="Assign Plan" />
-            <QuickActionButton icon={XCircle} label="Suspend Tenant" />
-            <QuickActionButton icon={TrendingUp} label="View Reports" />
-          </div>
+      {/* Quick Actions */}
+      <div className="bg-white border border-gray-200 rounded-xl p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <QuickActionButton icon={Plus} label="Create Tenant" />
+          <QuickActionButton icon={Clock} label="Start Trial" />
+          <QuickActionButton icon={DollarSign} label="Create Invoice" />
+          <QuickActionButton icon={CheckCircle} label="Assign Plan" />
+          <QuickActionButton icon={XCircle} label="Suspend Tenant" />
+          <QuickActionButton icon={TrendingUp} label="View Reports" />
         </div>
       </div>
     </div>
