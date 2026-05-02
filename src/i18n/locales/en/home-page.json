@@ -1,0 +1,96 @@
+{
+  "hero": {
+    "trialBadge": "3-Day Free Trial - No Credit Card Required",
+    "title": "Complete Pharmacy Management Platform",
+    "subtitle": "Streamline your pharmacy operations with our all-in-one SaaS platform. POS, inventory, purchasing, reports, and more - all in one place.",
+    "startTrial": "Start Free Trial",
+    "watchDemo": "Watch Demo",
+    "bullets": {
+      "webDesktop": "Web and Windows App",
+      "barcodeReady": "Barcode Scanner Ready"
+    },
+    "preview": {
+      "pos": "POS",
+      "inventory": "Inventory",
+      "reports": "Reports"
+    }
+  },
+  "stats": {
+    "activeUsers": "Active Users",
+    "dailyTransactions": "Daily Transactions",
+    "uptime": "Uptime",
+    "support": "Support"
+  },
+  "features": {
+    "title": "Everything you need to run your pharmacy",
+    "subtitle": "From POS to inventory, purchasing to reports - all the tools you need in one powerful platform",
+    "viewAll": "View All Features",
+    "items": {
+      "pos": {
+        "title": "Point of Sale",
+        "description": "Fast, barcode-enabled POS with shift management and receipt printing"
+      },
+      "medicine": {
+        "title": "Medicine Management",
+        "description": "Complete medicine catalog with batch tracking and expiry alerts"
+      },
+      "inventory": {
+        "title": "Inventory Control",
+        "description": "Real-time stock levels, low stock alerts, and multi-branch visibility"
+      },
+      "ocr": {
+        "title": "OCR Invoice Import",
+        "description": "Automatically extract purchase data from invoices using AI"
+      },
+      "shifts": {
+        "title": "Shift Management",
+        "description": "Track opening and closing cash, cash in and out, and shift reconciliation"
+      },
+      "reports": {
+        "title": "Reports and Analytics",
+        "description": "Sales, profit, stock, and expiry reports across all branches"
+      }
+    }
+  },
+  "benefits": {
+    "title": "Why choose PharmaSaaS?",
+    "items": {
+      "branches": {
+        "title": "Multi-Branch Ready",
+        "description": "Manage unlimited branches from one account"
+      },
+      "barcode": {
+        "title": "Barcode Scanner Support",
+        "description": "Works with USB barcode scanners and receipt printers"
+      },
+      "speed": {
+        "title": "Fast and Modern",
+        "description": "Built for speed with a clean, professional interface"
+      },
+      "security": {
+        "title": "Secure and Reliable",
+        "description": "Your data is encrypted and backed up automatically"
+      }
+    }
+  },
+  "platforms": {
+    "title": "Works everywhere you work",
+    "subtitle": "Access your pharmacy from web browsers or download our Windows desktop app",
+    "web": {
+      "title": "Web Application",
+      "description": "Access from any device with a web browser. Works on desktop, tablet, and mobile.",
+      "button": "Launch Web App"
+    },
+    "desktop": {
+      "title": "Windows Desktop App",
+      "description": "Native Windows app with offline support and hardware integration for barcode scanners.",
+      "button": "Download for Windows"
+    }
+  },
+  "cta": {
+    "title": "Ready to modernize your pharmacy?",
+    "subtitle": "Start your 3-day free trial today. No credit card required.",
+    "startTrial": "Start Free Trial",
+    "contactSales": "Contact Sales"
+  }
+}

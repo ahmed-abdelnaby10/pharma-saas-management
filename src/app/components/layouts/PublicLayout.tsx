@@ -13,7 +13,7 @@ export function PublicLayout() {
     { name: t('home'), path: '/home' },
     { name: t('features'), path: '/features' },
     { name: t('pricing'), path: '/pricing' },
-    { name: 'Instructions', path: '/instructions' },
+    { name: t('pub.nav.instructions'), path: '/instructions' },
     { name: t('contact'), path: '/contact' },
   ];
 
@@ -67,7 +67,7 @@ export function PublicLayout() {
                 className="hidden lg:flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#0F5C47] transition-colors"
               >
                 <Download className="w-4 h-4" />
-                Download
+                {t('pub.nav.download')}
               </Link>
 
               {/* Login Button */}
@@ -83,7 +83,7 @@ export function PublicLayout() {
                 onClick={() => navigate('/signup')}
                 className="px-4 py-2 bg-[#0F5C47] text-white rounded-lg text-sm font-medium hover:bg-[#0d4a39] transition-colors"
               >
-                Start Free Trial
+                {t('pub.startTrial')}
               </button>
 
               {/* Mobile Menu Button */}
@@ -124,7 +124,7 @@ export function PublicLayout() {
                   className="flex items-center gap-2 text-sm font-medium text-gray-600"
                 >
                   <Download className="w-4 h-4" />
-                  Download
+                  {t('pub.nav.download')}
                 </Link>
               </div>
             </div>
@@ -150,44 +150,44 @@ export function PublicLayout() {
                 <span className="text-xl font-bold text-gray-900">PharmaSaaS</span>
               </div>
               <p className="text-sm text-gray-600">
-                Complete pharmacy management platform for modern pharmacies
+                {t('pub.footer.tagline')}
               </p>
             </div>
 
             {/* Product */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Product</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">{t('pub.footer.product')}</h3>
               <ul className="space-y-2">
-                <li><Link to="/features" className="text-sm text-gray-600 hover:text-[#0F5C47]">Features</Link></li>
-                <li><Link to="/pricing" className="text-sm text-gray-600 hover:text-[#0F5C47]">Pricing</Link></li>
-                <li><Link to="/download" className="text-sm text-gray-600 hover:text-[#0F5C47]">Download</Link></li>
-                <li><Link to="/instructions" className="text-sm text-gray-600 hover:text-[#0F5C47]">Instructions</Link></li>
+                <li><Link to="/features" className="text-sm text-gray-600 hover:text-[#0F5C47]">{t('features')}</Link></li>
+                <li><Link to="/pricing" className="text-sm text-gray-600 hover:text-[#0F5C47]">{t('pricing')}</Link></li>
+                <li><Link to="/download" className="text-sm text-gray-600 hover:text-[#0F5C47]">{t('pub.nav.download')}</Link></li>
+                <li><Link to="/instructions" className="text-sm text-gray-600 hover:text-[#0F5C47]">{t('pub.nav.instructions')}</Link></li>
               </ul>
             </div>
 
             {/* Company */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Company</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">{t('pub.footer.company')}</h3>
               <ul className="space-y-2">
-                <li><Link to="/contact" className="text-sm text-gray-600 hover:text-[#0F5C47]">Contact Us</Link></li>
-                <li><a href="#" className="text-sm text-gray-600 hover:text-[#0F5C47]">About</a></li>
-                <li><a href="#" className="text-sm text-gray-600 hover:text-[#0F5C47]">Blog</a></li>
+                <li><Link to="/contact" className="text-sm text-gray-600 hover:text-[#0F5C47]">{t('pub.footer.contactUs')}</Link></li>
+                <li><a href="#" className="text-sm text-gray-600 hover:text-[#0F5C47]">{t('pub.footer.about')}</a></li>
+                <li><a href="#" className="text-sm text-gray-600 hover:text-[#0F5C47]">{t('pub.footer.blog')}</a></li>
               </ul>
             </div>
 
             {/* Legal */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Legal</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">{t('pub.footer.legal')}</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-sm text-gray-600 hover:text-[#0F5C47]">Privacy Policy</a></li>
-                <li><a href="#" className="text-sm text-gray-600 hover:text-[#0F5C47]">Terms of Service</a></li>
+                <li><a href="#" className="text-sm text-gray-600 hover:text-[#0F5C47]">{t('pub.footer.privacy')}</a></li>
+                <li><a href="#" className="text-sm text-gray-600 hover:text-[#0F5C47]">{t('pub.footer.terms')}</a></li>
               </ul>
             </div>
           </div>
 
           <div className="mt-8 pt-8 border-t border-gray-200">
             <p className="text-sm text-gray-500 text-center">
-              Ã‚Â© {new Date().getFullYear()} PharmaSaaS. All rights reserved.
+              &copy; {new Date().getFullYear()} PharmaSaaS. {t('pub.footer.rights')}
               {' '}
               <Link to="/admin" className="text-gray-400 hover:text-[#0F5C47] transition-colors ml-2">
                 Admin

@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import {
@@ -13,12 +12,10 @@ import {
   Check,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useLanguage } from "@/app/contexts/useLanguage";
 import { get, post } from "@/shared/api/request";
 import { PUBLIC_API, QUERY_KEYS } from "@/shared/utils/constants";
-import type { AppRequestConfig } from "@/shared/api/types";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface PublicPlan {
   id: string;
@@ -39,17 +36,17 @@ interface SignupFormValues {
   notes: string;
 }
 
-// ─── Helper: public request config ───────────────────────────────────────────
-
-const publicConfig: AppRequestConfig = {
-  meta: { visibility: "public" },
+const publicConfig = {
+  meta: { visibility: "public" as const },
 };
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export function SignupPage() {
   const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t, language, direction } = useLanguage();
+  const isRtl = direction === "rtl";
+  const iconPositionClass = isRtl ? "right-3" : "left-3";
+  const inputPaddingClass = isRtl ? "pr-10 pl-4" : "pl-10 pr-4";
+  const textAlignClass = isRtl ? "text-right" : "text-left";
 
   const {
     register,
@@ -67,9 +64,8 @@ export function SignupPage() {
     },
   });
 
-  // Fetch public plans
   const { data: plans = [], isLoading: plansLoading } = useQuery<PublicPlan[]>({
-    queryKey: QUERY_KEYS.public.plans,
+    queryKey: QUERY_KEYS.public.plans(language),
     queryFn: () => get<PublicPlan[]>(PUBLIC_API.plans, publicConfig),
   });
 
@@ -84,13 +80,9 @@ export function SignupPage() {
       navigate("/signup/success");
     },
     onError: (err: any) => {
-      const status = err?.response?.status;
-      if (status === 409) {
-        toast.error(
-          "An account with this email already exists. Try signing in instead.",
-        );
+      if (err?.response?.status === 409) {
+        toast.error(t("auth:signup.errors.emailExists"));
       }
-      // Other errors are handled globally by the API client interceptor
     },
   });
 
@@ -98,19 +90,20 @@ export function SignupPage() {
     submitMutation.mutate(values);
   };
 
-  const trialBenefits = [
-    "No credit card required",
-    "Full access to all features",
-    "Cancel anytime",
-    "Works on web & desktop",
-  ];
+  const trialBenefitKeys = [
+    "auth:signup.benefits.items.noCreditCard",
+    "auth:signup.benefits.items.fullAccess",
+    "auth:signup.benefits.items.cancelAnytime",
+    "auth:signup.benefits.items.webAndDesktop",
+  ] as const;
+
+  const planIntervalLabel = (interval: PublicPlan["interval"]) =>
+    t(`auth:signup.planIntervals.${interval.toLowerCase()}`);
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Left Side - Form */}
-      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24">
+      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24 lg:min-h-screen overflow-auto">
         <div className="mx-auto w-full max-w-sm lg:w-96">
-          {/* Logo */}
           <Link to="/" className="flex items-center gap-2 mb-8">
             <div className="w-10 h-10 bg-[#0F5C47] rounded-lg flex items-center justify-center">
               <Pill className="w-6 h-6 text-white" />
@@ -119,151 +112,178 @@ export function SignupPage() {
           </Link>
 
           <h2 className="text-3xl font-bold text-gray-900">
-            Start Your Free Trial
+            {t("auth:signup.title")}
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Set up your pharmacy management system in minutes.
+            {t("auth:signup.subtitle")}
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
-            {/* Pharmacy Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Pharmacy / Business Name *
+                {t("auth:signup.fields.tenantName.label")}
               </label>
-              <div className="relative">
-                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <div className={`relative ${textAlignClass}`}>
+                <Building2
+                  className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 ${iconPositionClass}`}
+                />
                 <input
-                  {...register("tenantName", { required: "Business name is required" })}
-                  placeholder="Al-Noor Pharmacy"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm"
+                  {...register("tenantName", {
+                    required: t("auth:signup.validation.tenantNameRequired"),
+                  })}
+                  placeholder={t("auth:signup.fields.tenantName.placeholder")}
+                  className={`w-full ${inputPaddingClass} py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm`}
                 />
               </div>
               {errors.tenantName && (
-                <p className="mt-1 text-xs text-red-600">{errors.tenantName.message}</p>
+                <p className="mt-1 text-xs text-red-600">
+                  {errors.tenantName.message}
+                </p>
               )}
             </div>
 
-            {/* Contact Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Contact Name *
+                {t("auth:signup.fields.contactName.label")}
               </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <div className={`relative ${textAlignClass}`}>
+                <User
+                  className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 ${iconPositionClass}`}
+                />
                 <input
-                  {...register("contactName", { required: "Contact name is required" })}
-                  placeholder="Ahmed Al-Rashid"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm"
+                  {...register("contactName", {
+                    required: t("auth:signup.validation.contactNameRequired"),
+                  })}
+                  placeholder={t("auth:signup.fields.contactName.placeholder")}
+                  className={`w-full ${inputPaddingClass} py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm`}
                 />
               </div>
               {errors.contactName && (
-                <p className="mt-1 text-xs text-red-600">{errors.contactName.message}</p>
+                <p className="mt-1 text-xs text-red-600">
+                  {errors.contactName.message}
+                </p>
               )}
             </div>
 
-            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Email Address *
+                {t("auth:signup.fields.contactEmail.label")}
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <div className={`relative ${textAlignClass}`}>
+                <Mail
+                  className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 ${iconPositionClass}`}
+                />
                 <input
                   {...register("contactEmail", {
-                    required: "Email is required",
+                    required: t("auth:signup.validation.contactEmailRequired"),
                     pattern: {
                       value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: "Enter a valid email address",
+                      message: t("auth:signup.validation.contactEmailInvalid"),
                     },
                   })}
                   type="email"
-                  placeholder="contact@pharmacy.com"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm"
+                  placeholder={t("auth:signup.fields.contactEmail.placeholder")}
+                  className={`w-full ${inputPaddingClass} py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm`}
                 />
               </div>
               {errors.contactEmail && (
-                <p className="mt-1 text-xs text-red-600">{errors.contactEmail.message}</p>
+                <p className="mt-1 text-xs text-red-600">
+                  {errors.contactEmail.message}
+                </p>
               )}
             </div>
 
-            {/* Phone */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Phone Number
+                {t("auth:signup.fields.contactPhone.label")}
               </label>
-              <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <div className={`relative ${textAlignClass}`}>
+                <Phone
+                  className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 ${iconPositionClass}`}
+                />
                 <input
                   {...register("contactPhone")}
                   type="tel"
-                  placeholder="+966 50 000 0000"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm"
+                  placeholder={t("auth:signup.fields.contactPhone.placeholder")}
+                  className={`w-full ${inputPaddingClass} py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm`}
                 />
               </div>
             </div>
 
-            {/* Country */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Country *
+                {t("auth:signup.fields.country.label")}
               </label>
-              <div className="relative">
-                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <div className={`relative ${textAlignClass}`}>
+                <Globe
+                  className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 ${iconPositionClass}`}
+                />
                 <input
-                  {...register("country", { required: "Country is required" })}
-                  placeholder="Saudi Arabia"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm"
+                  {...register("country", {
+                    required: t("auth:signup.validation.countryRequired"),
+                  })}
+                  placeholder={t("auth:signup.fields.country.placeholder")}
+                  className={`w-full ${inputPaddingClass} py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm`}
                 />
               </div>
               {errors.country && (
-                <p className="mt-1 text-xs text-red-600">{errors.country.message}</p>
+                <p className="mt-1 text-xs text-red-600">
+                  {errors.country.message}
+                </p>
               )}
             </div>
 
-            {/* Plan */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Select a Plan *
+                {t("auth:signup.fields.requestedPlanId.label")}
               </label>
               {plansLoading ? (
                 <div className="flex items-center gap-2 text-sm text-gray-500 py-3">
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  Loading plans…
+                  {t("auth:signup.states.loadingPlans")}
                 </div>
               ) : (
                 <select
-                  {...register("requestedPlanId", { required: "Please select a plan" })}
+                  {...register("requestedPlanId", {
+                    required: t(
+                      "auth:signup.validation.requestedPlanIdRequired",
+                    ),
+                  })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm bg-white"
                 >
-                  <option value="">— Choose a plan —</option>
+                  <option value="">
+                    {t("auth:signup.fields.requestedPlanId.placeholder")}
+                  </option>
                   {plans.map((plan) => (
                     <option key={plan.id} value={plan.id}>
-                      {plan.name} · {plan.currency} {plan.price}/{plan.interval.toLowerCase()}
-                      {plan.trialDays > 0 ? ` · ${plan.trialDays}-day free trial` : ""}
+                      {plan.name} - {plan.currency} {plan.price}/
+                      {planIntervalLabel(plan.interval)}
+                      {plan.trialDays > 0
+                        ? ` - ${t("auth:signup.planTrialDays", { count: plan.trialDays })}`
+                        : ""}
                     </option>
                   ))}
                 </select>
               )}
               {errors.requestedPlanId && (
-                <p className="mt-1 text-xs text-red-600">{errors.requestedPlanId.message}</p>
+                <p className="mt-1 text-xs text-red-600">
+                  {errors.requestedPlanId.message}
+                </p>
               )}
             </div>
 
-            {/* Notes */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Additional Notes
+                {t("auth:signup.fields.notes.label")}
               </label>
               <textarea
                 {...register("notes")}
                 rows={3}
-                placeholder="Anything you'd like us to know…"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm resize-none"
+                placeholder={t("auth:signup.fields.notes.placeholder")}
+                className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm resize-none ${textAlignClass}`}
               />
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={submitMutation.isPending}
@@ -272,44 +292,49 @@ export function SignupPage() {
               {submitMutation.isPending ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Sending request…
+                  {t("auth:signup.states.submitting")}
                 </>
               ) : (
                 <>
-                  Request Free Trial
-                  <ArrowRight className="w-5 h-5" />
+                  {t("auth:signup.actions.submit")}
+                  <ArrowRight
+                    className={`w-5 h-5 ${isRtl ? "rotate-180" : ""}`}
+                  />
                 </>
               )}
             </button>
 
             <p className="text-center text-sm text-gray-600">
-              Already have an account?{" "}
-              <Link to="/login" className="text-[#0F5C47] font-medium hover:underline">
-                Sign in
+              {t("auth:signup.footer.alreadyHaveAccount")}{" "}
+              <Link
+                to="/login"
+                className="text-[#0F5C47] font-medium hover:underline"
+              >
+                {t("auth:signup.footer.signIn")}
               </Link>
             </p>
           </form>
         </div>
       </div>
 
-      {/* Right Side - Benefits */}
-      <div className="hidden lg:flex relative flex-1 bg-gradient-to-br from-[#0F5C47] to-[#0d4a39] flex-col justify-center px-12 xl:px-20">
-        <div className="max-w-lg">
+      <div className="hidden sticky lg:flex h-screen top-0 left-0 flex-1 bg-gradient-to-br from-[#0F5C47] to-[#0d4a39] flex-col justify-center px-12 xl:px-20">
+        <div
+          className={`max-w-lg ${isRtl ? "text-right ml-auto" : "text-left"}`}
+        >
           <h2 className="text-4xl font-bold text-white mb-6">
-            Everything you need to manage your pharmacy
+            {t("auth:signup.benefits.title")}
           </h2>
           <p className="text-xl text-white/90 mb-12">
-            Join pharmacies across the region using PharmaSaaS to streamline
-            their operations.
+            {t("auth:signup.benefits.subtitle")}
           </p>
 
           <div className="space-y-4 mb-12">
-            {trialBenefits.map((benefit) => (
-              <div key={benefit} className="flex items-center gap-3">
+            {trialBenefitKeys.map((benefitKey) => (
+              <div key={benefitKey} className={`flex items-center gap-3`}>
                 <div className="flex-shrink-0 w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
                   <Check className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-white text-lg">{benefit}</span>
+                <span className="text-white text-lg">{t(benefitKey)}</span>
               </div>
             ))}
           </div>

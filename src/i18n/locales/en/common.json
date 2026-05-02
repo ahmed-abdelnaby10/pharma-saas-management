@@ -24,6 +24,9 @@
   "success": "Success",
   "welcome": "Welcome",
   "home": "Home",
+  "features": "Features",
+  "pricing": "Pricing",
+  "contact": "Contact",
   "categories": "Categories",
   "materials": "Products",
   "products": "Products",
@@ -64,6 +67,25 @@
     "validation": {
       "required": "This field is required.",
       "email": "Enter a valid email address."
+    }
+  },
+  "pub": {
+    "nav": {
+      "download": "Download",
+      "instructions": "Instructions"
+    },
+    "startTrial": "Start Trial",
+    "footer": {
+      "tagline": "Pharmacy operations, billing, inventory, and team workflows in one place.",
+      "product": "Product",
+      "company": "Company",
+      "contactUs": "Contact Us",
+      "about": "About",
+      "blog": "Blog",
+      "legal": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "rights": "All rights reserved."
     }
   },
   "price": "Price",

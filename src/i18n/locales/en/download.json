@@ -1,0 +1,125 @@
+{
+  "hero": {
+    "title": "Download for Windows",
+    "subtitle": "Native Windows desktop app with better hardware integration and performance. Use the same account as the web version."
+  },
+  "cta": {
+    "title": "PharmaSaaS for Windows",
+    "meta": "Version 2.1.0 - Released March 2026 - 45 MB",
+    "button": "Download for Windows",
+    "note": "Free to download - Requires PharmaSaaS account"
+  },
+  "benefits": {
+    "title": "Why use the desktop app?",
+    "items": {
+      "hardware": {
+        "title": "Better Hardware Integration",
+        "description": "Direct connection to barcode scanners and thermal printers without browser limitations"
+      },
+      "performance": {
+        "title": "Faster Performance",
+        "description": "Native Windows app optimized for speed with local caching"
+      },
+      "offline": {
+        "title": "Offline Mode",
+        "description": "Continue working even when internet connection is unstable (coming soon)"
+      },
+      "sync": {
+        "title": "Same Account and Data",
+        "description": "Log in with your existing account and all data syncs automatically"
+      }
+    }
+  },
+  "features": {
+    "title": "Everything included",
+    "items": {
+      "pos": "Full POS system with barcode scanner support",
+      "printer": "Thermal receipt printer integration",
+      "catalog": "Medicine and cosmetics management",
+      "inventory": "Inventory tracking across branches",
+      "purchasing": "Purchase order management",
+      "ocr": "OCR invoice import",
+      "shifts": "Shift management and cash counting",
+      "reports": "Complete reports and analytics",
+      "branches": "Multi-branch support",
+      "cloudSync": "Automatic cloud sync",
+      "login": "Same login as web app",
+      "updates": "Free updates included"
+    }
+  },
+  "requirements": {
+    "title": "System Requirements",
+    "items": {
+      "os": {
+        "label": "Operating System",
+        "value": "Windows 10 or Windows 11 (64-bit)"
+      },
+      "processor": {
+        "label": "Processor",
+        "value": "Intel Core i3 or equivalent"
+      },
+      "ram": {
+        "label": "RAM",
+        "value": "4 GB minimum, 8 GB recommended"
+      },
+      "storage": {
+        "label": "Storage",
+        "value": "500 MB available space"
+      },
+      "display": {
+        "label": "Display",
+        "value": "1280x720 minimum resolution"
+      },
+      "internet": {
+        "label": "Internet",
+        "value": "Required for sync and updates"
+      }
+    }
+  },
+  "steps": {
+    "title": "How it works",
+    "items": {
+      "download": {
+        "title": "Download",
+        "description": "Download the Windows installer from this page"
+      },
+      "install": {
+        "title": "Install",
+        "description": "Run the installer and follow the setup wizard"
+      },
+      "login": {
+        "title": "Login",
+        "description": "Sign in with your existing PharmaSaaS account"
+      },
+      "start": {
+        "title": "Start Working",
+        "description": "All your data syncs automatically"
+      }
+    }
+  },
+  "faq": {
+    "title": "Common questions",
+    "items": {
+      "account": {
+        "question": "Do I need a separate account?",
+        "answer": "No. Use the same account for both web and desktop. Your data syncs automatically between them."
+      },
+      "free": {
+        "question": "Is the desktop app free?",
+        "answer": "Yes, the desktop app is free to download. You just need an active PharmaSaaS subscription."
+      },
+      "both": {
+        "question": "Can I use both web and desktop?",
+        "answer": "Absolutely. Use the web app on any device and the desktop app on your Windows PC. All data syncs in real time."
+      },
+      "scanner": {
+        "question": "Will it work with my barcode scanner?",
+        "answer": "Yes. The desktop app works with most USB barcode scanners and thermal receipt printers."
+      }
+    }
+  },
+  "bottomCta": {
+    "prompt": "Don't have an account yet?",
+    "button": "Start Free Trial"
+  }
+}

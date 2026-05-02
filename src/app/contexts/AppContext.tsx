@@ -5,6 +5,7 @@ import {
   mockTenant,
   mockUser,
 } from "@/app/contexts/app-context";
+import i18n from "@/i18n/config/i18n";
 import {
   getStoredLanguage,
   getStoredTheme,
@@ -34,6 +35,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setStoredLanguage(language);
+    void i18n.changeLanguage(language);
+  }, [language]);
+
+  useEffect(() => {
     setStoredTheme(theme);
     syncDocumentSettings(language, theme);
   }, [language, theme]);

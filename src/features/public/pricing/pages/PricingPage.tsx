@@ -1,255 +1,281 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
-import { Check, X, Zap, HelpCircle } from 'lucide-react';
+import { Fragment, useState } from "react";
+import { useNavigate } from "react-router";
+import { Check, X, HelpCircle } from "lucide-react";
+import { useLanguage } from "@/app/contexts/useLanguage";
+
+type BillingCycle = "monthly" | "yearly";
 
 export function PricingPage() {
   const navigate = useNavigate();
-  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+  const { t, direction } = useLanguage();
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
+  const isRtl = direction === "rtl";
+  const textAlignClass = isRtl ? "text-right" : "text-left";
 
   const plans = [
     {
-      name: 'Trial',
-      description: 'Try all features free for 3 days',
+      key: "trial",
       price: { monthly: 0, yearly: 0 },
-      badge: 'Free',
-      badgeColor: 'bg-blue-100 text-blue-700',
-      features: [
-        { name: 'All features unlocked', included: true },
-        { name: 'Up to 1 branch', included: true },
-        { name: 'Up to 2 users', included: true },
-        { name: 'Basic POS', included: true },
-        { name: 'Product management', included: true },
-        { name: 'Basic reports', included: true },
-        { name: 'Email support', included: true },
-        { name: 'OCR invoice import', included: false },
-        { name: 'Advanced reports', included: false },
-        { name: 'Multi-branch', included: false },
-      ],
-      cta: 'Start Free Trial',
+      badgeColor: "bg-blue-100 text-blue-700",
       popular: false,
+      features: [
+        { key: "allFeatures", included: true },
+        { key: "branches1", included: true },
+        { key: "users2", included: true },
+        { key: "basicPos", included: true },
+        { key: "productManagement", included: true },
+        { key: "basicReports", included: true },
+        { key: "emailSupport", included: true },
+        { key: "ocrImport", included: false },
+        { key: "advancedReports", included: false },
+        { key: "multiBranch", included: false },
+      ],
     },
     {
-      name: 'Basic',
-      description: 'Perfect for single pharmacy',
+      key: "basic",
       price: { monthly: 49, yearly: 470 },
-      badge: null,
-      features: [
-        { name: 'Up to 1 branch', included: true },
-        { name: 'Up to 3 users', included: true },
-        { name: 'Full POS system', included: true },
-        { name: 'Product management', included: true },
-        { name: 'Inventory tracking', included: true },
-        { name: 'Batch & expiry tracking', included: true },
-        { name: 'Basic reports', included: true },
-        { name: 'Shift management', included: true },
-        { name: 'Email support', included: true },
-        { name: 'OCR invoice import', included: false },
-        { name: 'Advanced reports', included: false },
-        { name: 'Multi-branch', included: false },
-      ],
-      cta: 'Get Started',
       popular: false,
+      features: [
+        { key: "branches1", included: true },
+        { key: "users3", included: true },
+        { key: "fullPos", included: true },
+        { key: "productManagement", included: true },
+        { key: "inventoryTracking", included: true },
+        { key: "batchExpiry", included: true },
+        { key: "basicReports", included: true },
+        { key: "shiftManagement", included: true },
+        { key: "emailSupport", included: true },
+        { key: "ocrImport", included: false },
+        { key: "advancedReports", included: false },
+        { key: "multiBranch", included: false },
+      ],
     },
     {
-      name: 'Professional',
-      description: 'For growing pharmacy businesses',
+      key: "professional",
       price: { monthly: 99, yearly: 950 },
-      badge: 'Popular',
-      badgeColor: 'bg-[#0F5C47] text-white',
-      features: [
-        { name: 'Up to 3 branches', included: true },
-        { name: 'Up to 10 users', included: true },
-        { name: 'Full POS system', included: true },
-        { name: 'Product management', included: true },
-        { name: 'Inventory tracking', included: true },
-        { name: 'Batch & expiry tracking', included: true },
-        { name: 'Advanced reports', included: true },
-        { name: 'Shift management', included: true },
-        { name: 'OCR invoice import', included: true },
-        { name: 'Stock movements', included: true },
-        { name: 'Priority email support', included: true },
-        { name: 'Phone support', included: false },
-      ],
-      cta: 'Get Started',
+      badgeColor: "bg-[#0F5C47] text-white",
       popular: true,
+      features: [
+        { key: "branches3", included: true },
+        { key: "users10", included: true },
+        { key: "fullPos", included: true },
+        { key: "productManagement", included: true },
+        { key: "inventoryTracking", included: true },
+        { key: "batchExpiry", included: true },
+        { key: "advancedReports", included: true },
+        { key: "shiftManagement", included: true },
+        { key: "ocrImport", included: true },
+        { key: "stockMovements", included: true },
+        { key: "priorityEmail", included: true },
+        { key: "phoneSupport", included: false },
+      ],
     },
     {
-      name: 'Enterprise',
-      description: 'For pharmacy chains',
+      key: "enterprise",
       price: { monthly: 199, yearly: 1910 },
-      badge: 'Best Value',
-      badgeColor: 'bg-purple-100 text-purple-700',
-      features: [
-        { name: 'Unlimited branches', included: true },
-        { name: 'Unlimited users', included: true },
-        { name: 'Full POS system', included: true },
-        { name: 'Product management', included: true },
-        { name: 'Inventory tracking', included: true },
-        { name: 'Batch & expiry tracking', included: true },
-        { name: 'Advanced reports', included: true },
-        { name: 'Shift management', included: true },
-        { name: 'OCR invoice import', included: true },
-        { name: 'Stock movements', included: true },
-        { name: 'Priority support', included: true },
-        { name: 'Phone & chat support', included: true },
-        { name: 'Custom integrations', included: true },
-        { name: 'Dedicated account manager', included: true },
-      ],
-      cta: 'Contact Sales',
+      badgeColor: "bg-purple-100 text-purple-700",
       popular: false,
+      features: [
+        { key: "branchesUnlimited", included: true },
+        { key: "usersUnlimited", included: true },
+        { key: "fullPos", included: true },
+        { key: "productManagement", included: true },
+        { key: "inventoryTracking", included: true },
+        { key: "batchExpiry", included: true },
+        { key: "advancedReports", included: true },
+        { key: "shiftManagement", included: true },
+        { key: "ocrImport", included: true },
+        { key: "stockMovements", included: true },
+        { key: "prioritySupport", included: true },
+        { key: "phoneChat", included: true },
+        { key: "customIntegrations", included: true },
+        { key: "accountManager", included: true },
+      ],
     },
-  ];
+  ] as const;
 
-  const allFeatures = [
+  const comparisonCategories = [
     {
-      category: 'Core Features',
+      key: "core",
       features: [
-        { name: 'Point of Sale (POS)', trial: true, basic: true, professional: true, enterprise: true },
-        { name: 'Product Management', trial: true, basic: true, professional: true, enterprise: true },
-        { name: 'Medicine Management', trial: true, basic: true, professional: true, enterprise: true },
-        { name: 'Cosmetics Management', trial: true, basic: true, professional: true, enterprise: true },
-        { name: 'Inventory Tracking', trial: true, basic: true, professional: true, enterprise: true },
-        { name: 'Batch & Expiry Tracking', trial: true, basic: true, professional: true, enterprise: true },
+        { key: "pos", trial: true, basic: true, professional: true, enterprise: true },
+        { key: "productManagement", trial: true, basic: true, professional: true, enterprise: true },
+        { key: "medicineManagement", trial: true, basic: true, professional: true, enterprise: true },
+        { key: "cosmeticsManagement", trial: true, basic: true, professional: true, enterprise: true },
+        { key: "inventoryTracking", trial: true, basic: true, professional: true, enterprise: true },
+        { key: "batchExpiry", trial: true, basic: true, professional: true, enterprise: true },
       ],
     },
     {
-      category: 'Operations',
+      key: "operations",
       features: [
-        { name: 'Shift Management', trial: true, basic: true, professional: true, enterprise: true },
-        { name: 'Purchasing', trial: true, basic: true, professional: true, enterprise: true },
-        { name: 'Supplier Management', trial: true, basic: true, professional: true, enterprise: true },
-        { name: 'Representative Management', trial: false, basic: false, professional: true, enterprise: true },
-        { name: 'Stock Movements', trial: false, basic: false, professional: true, enterprise: true },
+        { key: "shiftManagement", trial: true, basic: true, professional: true, enterprise: true },
+        { key: "purchasing", trial: true, basic: true, professional: true, enterprise: true },
+        { key: "supplierManagement", trial: true, basic: true, professional: true, enterprise: true },
+        { key: "representativeManagement", trial: false, basic: false, professional: true, enterprise: true },
+        { key: "stockMovements", trial: false, basic: false, professional: true, enterprise: true },
       ],
     },
     {
-      category: 'Advanced Features',
+      key: "advanced",
       features: [
-        { name: 'OCR Invoice Import', trial: false, basic: false, professional: true, enterprise: true },
-        { name: 'Advanced Reports', trial: false, basic: false, professional: true, enterprise: true },
-        { name: 'Branch Comparison Reports', trial: false, basic: false, professional: true, enterprise: true },
-        { name: 'Product Enrichment', trial: false, basic: false, professional: true, enterprise: true },
+        { key: "ocrImport", trial: false, basic: false, professional: true, enterprise: true },
+        { key: "advancedReports", trial: false, basic: false, professional: true, enterprise: true },
+        { key: "branchComparison", trial: false, basic: false, professional: true, enterprise: true },
+        { key: "productEnrichment", trial: false, basic: false, professional: true, enterprise: true },
       ],
     },
     {
-      category: 'Multi-Branch',
+      key: "multiBranch",
       features: [
-        { name: 'Number of Branches', trial: '1', basic: '1', professional: '3', enterprise: 'Unlimited' },
-        { name: 'Number of Users', trial: '2', basic: '3', professional: '10', enterprise: 'Unlimited' },
-        { name: 'Branch Transfer', trial: false, basic: false, professional: true, enterprise: true },
-        { name: 'Centralized Inventory', trial: false, basic: false, professional: true, enterprise: true },
+        { key: "branches", trial: "1", basic: "1", professional: "3", enterprise: "unlimited" },
+        { key: "users", trial: "2", basic: "3", professional: "10", enterprise: "unlimited" },
+        { key: "branchTransfer", trial: false, basic: false, professional: true, enterprise: true },
+        { key: "centralizedInventory", trial: false, basic: false, professional: true, enterprise: true },
       ],
     },
     {
-      category: 'Support',
+      key: "support",
       features: [
-        { name: 'Email Support', trial: true, basic: true, professional: true, enterprise: true },
-        { name: 'Priority Support', trial: false, basic: false, professional: true, enterprise: true },
-        { name: 'Phone Support', trial: false, basic: false, professional: false, enterprise: true },
-        { name: 'Dedicated Account Manager', trial: false, basic: false, professional: false, enterprise: true },
+        { key: "emailSupport", trial: true, basic: true, professional: true, enterprise: true },
+        { key: "prioritySupport", trial: false, basic: false, professional: true, enterprise: true },
+        { key: "phoneSupport", trial: false, basic: false, professional: false, enterprise: true },
+        { key: "accountManager", trial: false, basic: false, professional: false, enterprise: true },
       ],
     },
-  ];
+  ] as const;
+
+  const faqKeys = ["trial", "plans", "payments", "refunds"] as const;
+
+  const renderComparisonValue = (
+    value: boolean | string,
+  ) => {
+    if (typeof value === "boolean") {
+      return value ? (
+        <Check className="w-5 h-5 text-green-600 mx-auto" />
+      ) : (
+        <X className="w-5 h-5 text-gray-300 mx-auto" />
+      );
+    }
+
+    return (
+      <span className="text-sm text-gray-700">
+        {value === "unlimited"
+          ? t("pricingPage:comparison.values.unlimited")
+          : value}
+      </span>
+    );
+  };
 
   return (
     <div className="py-20 bg-gray-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-            Simple, transparent pricing
+            {t("pricingPage:hero.title")}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Start with a 3-day free trial. No credit card required. Choose the plan that fits your pharmacy.
+            {t("pricingPage:hero.subtitle")}
           </p>
 
-          {/* Billing Toggle */}
           <div className="inline-flex items-center bg-white rounded-lg p-1 border border-gray-200">
             <button
-              onClick={() => setBillingCycle('monthly')}
+              onClick={() => setBillingCycle("monthly")}
               className={`px-6 py-2 rounded-lg text-sm font-medium transition-colors ${
-                billingCycle === 'monthly'
-                  ? 'bg-[#0F5C47] text-white'
-                  : 'text-gray-600 hover:text-gray-900'
+                billingCycle === "monthly"
+                  ? "bg-[#0F5C47] text-white"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
-              Monthly
+              {t("pricingPage:billing.monthly")}
             </button>
             <button
-              onClick={() => setBillingCycle('yearly')}
+              onClick={() => setBillingCycle("yearly")}
               className={`px-6 py-2 rounded-lg text-sm font-medium transition-colors ${
-                billingCycle === 'yearly'
-                  ? 'bg-[#0F5C47] text-white'
-                  : 'text-gray-600 hover:text-gray-900'
+                billingCycle === "yearly"
+                  ? "bg-[#0F5C47] text-white"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
-              Yearly
-              <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
-                Save 20%
+              {t("pricingPage:billing.yearly")}
+              <span className={`${isRtl ? "mr-2" : "ml-2"} text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded`}>
+                {t("pricingPage:billing.save")}
               </span>
             </button>
           </div>
         </div>
 
-        {/* Pricing Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
           {plans.map((plan) => (
             <div
-              key={plan.name}
+              key={plan.key}
               className={`bg-white rounded-xl p-8 border-2 transition-all ${
                 plan.popular
-                  ? 'border-[#0F5C47] shadow-xl scale-105'
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
+                  ? "border-[#0F5C47] shadow-xl scale-105"
+                  : "border-gray-200 hover:border-gray-300"
+              } ${textAlignClass}`}
             >
-              {plan.badge && (
+              {"badgeColor" in plan && t(`pricingPage:plans.${plan.key}.badge`) && (
                 <div className="mb-4">
                   <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${plan.badgeColor}`}>
-                    {plan.badge}
+                    {t(`pricingPage:plans.${plan.key}.badge`)}
                   </span>
                 </div>
               )}
 
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-              <p className="text-gray-600 mb-6 h-12">{plan.description}</p>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                {t(`pricingPage:plans.${plan.key}.name`)}
+              </h3>
+              <p className="text-gray-600 mb-6 h-12">
+                {t(`pricingPage:plans.${plan.key}.description`)}
+              </p>
 
               <div className="mb-6">
-                <div className="flex items-baseline gap-2">
+                <div className={`flex items-baseline gap-2 ${isRtl ? "flex-row-reverse justify-end" : ""}`}>
                   <span className="text-4xl font-bold text-gray-900">
                     ${plan.price[billingCycle]}
                   </span>
                   <span className="text-gray-600">
-                    /{billingCycle === 'monthly' ? 'month' : 'year'}
+                    /{t(`pricingPage:billing.${billingCycle === "monthly" ? "month" : "year"}`)}
                   </span>
                 </div>
-                {billingCycle === 'yearly' && plan.price.yearly > 0 && (
+                {billingCycle === "yearly" && plan.price.yearly > 0 && (
                   <div className="text-sm text-gray-500 mt-1">
-                    ${(plan.price.yearly / 12).toFixed(0)}/month billed annually
+                    {t("pricingPage:billing.billedAnnually", {
+                      price: (plan.price.yearly / 12).toFixed(0),
+                    })}
                   </div>
                 )}
               </div>
 
               <button
-                onClick={() => plan.cta === 'Contact Sales' ? navigate('/contact') : navigate('/signup')}
+                onClick={() =>
+                  plan.key === "enterprise"
+                    ? navigate("/contact")
+                    : navigate("/signup")
+                }
                 className={`w-full py-3 rounded-lg font-semibold transition-all mb-6 ${
                   plan.popular
-                    ? 'bg-[#0F5C47] text-white hover:bg-[#0d4a39]'
-                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                    ? "bg-[#0F5C47] text-white hover:bg-[#0d4a39]"
+                    : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                 }`}
               >
-                {plan.cta}
+                {t(`pricingPage:plans.${plan.key}.cta`)}
               </button>
 
               <ul className="space-y-3">
-                {plan.features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
+                {plan.features.map((feature) => (
+                  <li
+                    key={feature.key}
+                    className={`flex items-start gap-3 ${isRtl ? "flex-row-reverse text-right" : ""}`}
+                  >
                     {feature.included ? (
                       <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                     ) : (
                       <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
                     )}
-                    <span className={feature.included ? 'text-gray-700' : 'text-gray-400'}>
-                      {feature.name}
+                    <span className={feature.included ? "text-gray-700" : "text-gray-400"}>
+                      {t(`pricingPage:plans.${plan.key}.features.${feature.key}`)}
                     </span>
                   </li>
                 ))}
@@ -258,154 +284,104 @@ export function PricingPage() {
           ))}
         </div>
 
-        {/* Feature Comparison Table */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <div className="p-8 border-b border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Compare all features</h2>
-            <p className="text-gray-600">See what's included in each plan</p>
+          <div className={`p-8 border-b border-gray-200 ${textAlignClass}`}>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              {t("pricingPage:comparison.title")}
+            </h2>
+            <p className="text-gray-600">{t("pricingPage:comparison.subtitle")}</p>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full min-w-[800px]">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">Features</th>
-                  <th className="text-center py-4 px-6 text-sm font-semibold text-gray-900">Trial</th>
-                  <th className="text-center py-4 px-6 text-sm font-semibold text-gray-900">Basic</th>
-                  <th className="text-center py-4 px-6 text-sm font-semibold text-gray-900">Professional</th>
-                  <th className="text-center py-4 px-6 text-sm font-semibold text-gray-900">Enterprise</th>
+                  <th className={`${isRtl ? "text-right" : "text-left"} py-4 px-6 text-sm font-semibold text-gray-900`}>
+                    {t("pricingPage:comparison.headers.features")}
+                  </th>
+                  <th className="text-center py-4 px-6 text-sm font-semibold text-gray-900">
+                    {t("pricingPage:comparison.headers.trial")}
+                  </th>
+                  <th className="text-center py-4 px-6 text-sm font-semibold text-gray-900">
+                    {t("pricingPage:comparison.headers.basic")}
+                  </th>
+                  <th className="text-center py-4 px-6 text-sm font-semibold text-gray-900">
+                    {t("pricingPage:comparison.headers.professional")}
+                  </th>
+                  <th className="text-center py-4 px-6 text-sm font-semibold text-gray-900">
+                    {t("pricingPage:comparison.headers.enterprise")}
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {allFeatures.map((category, catIndex) => (
-                  <React.Fragment key={catIndex}>
+                {comparisonCategories.map((category) => (
+                  <Fragment key={category.key}>
                     <tr className="bg-gray-50">
-                      <td colSpan={5} className="py-3 px-6 text-sm font-semibold text-gray-900">
-                        {category.category}
+                      <td colSpan={5} className={`${isRtl ? "text-right" : "text-left"} py-3 px-6 text-sm font-semibold text-gray-900`}>
+                        {t(`pricingPage:comparison.categories.${category.key}.title`)}
                       </td>
                     </tr>
-                    {category.features.map((feature, featIndex) => (
-                      <tr key={featIndex} className="border-b border-gray-100 hover:bg-gray-50">
-                        <td className="py-4 px-6 text-sm text-gray-700">{feature.name}</td>
-                        <td className="py-4 px-6 text-center">
-                          {typeof feature.trial === 'boolean' ? (
-                            feature.trial ? (
-                              <Check className="w-5 h-5 text-green-600 mx-auto" />
-                            ) : (
-                              <X className="w-5 h-5 text-gray-300 mx-auto" />
-                            )
-                          ) : (
-                            <span className="text-sm text-gray-700">{feature.trial}</span>
-                          )}
+                    {category.features.map((feature) => (
+                      <tr key={feature.key} className="border-b border-gray-100 hover:bg-gray-50">
+                        <td className={`${isRtl ? "text-right" : "text-left"} py-4 px-6 text-sm text-gray-700`}>
+                          {t(`pricingPage:comparison.categories.${category.key}.items.${feature.key}`)}
                         </td>
                         <td className="py-4 px-6 text-center">
-                          {typeof feature.basic === 'boolean' ? (
-                            feature.basic ? (
-                              <Check className="w-5 h-5 text-green-600 mx-auto" />
-                            ) : (
-                              <X className="w-5 h-5 text-gray-300 mx-auto" />
-                            )
-                          ) : (
-                            <span className="text-sm text-gray-700">{feature.basic}</span>
-                          )}
+                          {renderComparisonValue(feature.trial)}
                         </td>
                         <td className="py-4 px-6 text-center">
-                          {typeof feature.professional === 'boolean' ? (
-                            feature.professional ? (
-                              <Check className="w-5 h-5 text-green-600 mx-auto" />
-                            ) : (
-                              <X className="w-5 h-5 text-gray-300 mx-auto" />
-                            )
-                          ) : (
-                            <span className="text-sm text-gray-700">{feature.professional}</span>
-                          )}
+                          {renderComparisonValue(feature.basic)}
                         </td>
                         <td className="py-4 px-6 text-center">
-                          {typeof feature.enterprise === 'boolean' ? (
-                            feature.enterprise ? (
-                              <Check className="w-5 h-5 text-green-600 mx-auto" />
-                            ) : (
-                              <X className="w-5 h-5 text-gray-300 mx-auto" />
-                            )
-                          ) : (
-                            <span className="text-sm text-gray-700">{feature.enterprise}</span>
-                          )}
+                          {renderComparisonValue(feature.professional)}
+                        </td>
+                        <td className="py-4 px-6 text-center">
+                          {renderComparisonValue(feature.enterprise)}
                         </td>
                       </tr>
                     ))}
-                  </React.Fragment>
+                  </Fragment>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* FAQ Section */}
         <div className="mt-20">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-            Frequently asked questions
+            {t("pricingPage:faq.title")}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div>
-              <div className="flex items-start gap-3">
-                <HelpCircle className="w-6 h-6 text-[#0F5C47] flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">How does the free trial work?</h3>
-                  <p className="text-gray-600">
-                    You get full access to all features for 3 days. No credit card required. After the trial, choose a plan or your account will be paused.
-                  </p>
+            {faqKeys.map((faqKey) => (
+              <div key={faqKey}>
+                <div className={`flex items-start gap-3 ${isRtl ? "flex-row-reverse text-right" : ""}`}>
+                  <HelpCircle className="w-6 h-6 text-[#0F5C47] flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2">
+                      {t(`pricingPage:faq.items.${faqKey}.question`)}
+                    </h3>
+                    <p className="text-gray-600">
+                      {t(`pricingPage:faq.items.${faqKey}.answer`)}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <div className="flex items-start gap-3">
-                <HelpCircle className="w-6 h-6 text-[#0F5C47] flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Can I change plans later?</h3>
-                  <p className="text-gray-600">
-                    Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className="flex items-start gap-3">
-                <HelpCircle className="w-6 h-6 text-[#0F5C47] flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">What payment methods do you accept?</h3>
-                  <p className="text-gray-600">
-                    We accept all major credit cards, debit cards, and bank transfers for annual plans.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className="flex items-start gap-3">
-                <HelpCircle className="w-6 h-6 text-[#0F5C47] flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Do you offer refunds?</h3>
-                  <p className="text-gray-600">
-                    Yes, we offer a 30-day money-back guarantee for all paid plans. No questions asked.
-                  </p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* CTA */}
         <div className="mt-20 text-center bg-gradient-to-br from-[#0F5C47] to-[#0d4a39] rounded-2xl p-12">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Still have questions?
+            {t("pricingPage:cta.title")}
           </h2>
           <p className="text-xl text-white/90 mb-8">
-            Our team is here to help you choose the right plan
+            {t("pricingPage:cta.subtitle")}
           </p>
           <button
-            onClick={() => navigate('/contact')}
+            onClick={() => navigate("/contact")}
             className="px-8 py-4 bg-white text-[#0F5C47] rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all"
           >
-            Contact Sales
+            {t("pricingPage:cta.button")}
           </button>
         </div>
       </div>

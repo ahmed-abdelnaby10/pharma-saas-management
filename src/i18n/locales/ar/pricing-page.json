@@ -1,0 +1,185 @@
+{
+  "hero": {
+    "title": "أسعار بسيطة وواضحة",
+    "subtitle": "ابدأ بتجربة مجانية لمدة 3 أيام. لا حاجة إلى بطاقة ائتمان. اختر الخطة المناسبة لصيدليتك."
+  },
+  "billing": {
+    "monthly": "شهري",
+    "yearly": "سنوي",
+    "save": "وفر 20%",
+    "month": "شهر",
+    "year": "سنة",
+    "billedAnnually": "${{price}}/شهريًا عند الدفع السنوي"
+  },
+  "plans": {
+    "trial": {
+      "name": "تجريبي",
+      "description": "جرّب جميع المزايا مجانًا لمدة 3 أيام",
+      "badge": "مجاني",
+      "cta": "ابدأ التجربة المجانية",
+      "features": {
+        "allFeatures": "جميع المزايا مفعلة",
+        "branches1": "حتى فرع واحد",
+        "users2": "حتى مستخدمين اثنين",
+        "basicPos": "نقاط بيع أساسية",
+        "productManagement": "إدارة المنتجات",
+        "basicReports": "تقارير أساسية",
+        "emailSupport": "دعم عبر البريد الإلكتروني",
+        "ocrImport": "استيراد الفواتير عبر OCR",
+        "advancedReports": "تقارير متقدمة",
+        "multiBranch": "فروع متعددة"
+      }
+    },
+    "basic": {
+      "name": "أساسي",
+      "description": "مثالية لصيدلية واحدة",
+      "cta": "ابدأ الآن",
+      "features": {
+        "branches1": "حتى فرع واحد",
+        "users3": "حتى 3 مستخدمين",
+        "fullPos": "نظام نقاط بيع كامل",
+        "productManagement": "إدارة المنتجات",
+        "inventoryTracking": "تتبع المخزون",
+        "batchExpiry": "تتبع التشغيلات والانتهاء",
+        "basicReports": "تقارير أساسية",
+        "shiftManagement": "إدارة الورديات",
+        "emailSupport": "دعم عبر البريد الإلكتروني",
+        "ocrImport": "استيراد الفواتير عبر OCR",
+        "advancedReports": "تقارير متقدمة",
+        "multiBranch": "فروع متعددة"
+      }
+    },
+    "professional": {
+      "name": "احترافي",
+      "description": "لأعمال الصيدليات النامية",
+      "badge": "الأكثر شيوعًا",
+      "cta": "ابدأ الآن",
+      "features": {
+        "branches3": "حتى 3 فروع",
+        "users10": "حتى 10 مستخدمين",
+        "fullPos": "نظام نقاط بيع كامل",
+        "productManagement": "إدارة المنتجات",
+        "inventoryTracking": "تتبع المخزون",
+        "batchExpiry": "تتبع التشغيلات والانتهاء",
+        "advancedReports": "تقارير متقدمة",
+        "shiftManagement": "إدارة الورديات",
+        "ocrImport": "استيراد الفواتير عبر OCR",
+        "stockMovements": "حركات المخزون",
+        "priorityEmail": "دعم بريد إلكتروني بأولوية",
+        "phoneSupport": "دعم هاتفي"
+      }
+    },
+    "enterprise": {
+      "name": "مؤسسات",
+      "description": "لسلاسل الصيدليات",
+      "badge": "أفضل قيمة",
+      "cta": "تواصل مع المبيعات",
+      "features": {
+        "branchesUnlimited": "فروع غير محدودة",
+        "usersUnlimited": "مستخدمون غير محدودين",
+        "fullPos": "نظام نقاط بيع كامل",
+        "productManagement": "إدارة المنتجات",
+        "inventoryTracking": "تتبع المخزون",
+        "batchExpiry": "تتبع التشغيلات والانتهاء",
+        "advancedReports": "تقارير متقدمة",
+        "shiftManagement": "إدارة الورديات",
+        "ocrImport": "استيراد الفواتير عبر OCR",
+        "stockMovements": "حركات المخزون",
+        "prioritySupport": "دعم بأولوية",
+        "phoneChat": "دعم هاتفي ودردشة",
+        "customIntegrations": "تكاملات مخصصة",
+        "accountManager": "مدير حساب مخصص"
+      }
+    }
+  },
+  "comparison": {
+    "title": "قارن جميع المزايا",
+    "subtitle": "اطلع على ما يتضمنه كل اشتراك",
+    "headers": {
+      "features": "المزايا",
+      "trial": "تجريبي",
+      "basic": "أساسي",
+      "professional": "احترافي",
+      "enterprise": "مؤسسات"
+    },
+    "categories": {
+      "core": {
+        "title": "المزايا الأساسية",
+        "items": {
+          "pos": "نقاط البيع (POS)",
+          "productManagement": "إدارة المنتجات",
+          "medicineManagement": "إدارة الأدوية",
+          "cosmeticsManagement": "إدارة مستحضرات التجميل",
+          "inventoryTracking": "تتبع المخزون",
+          "batchExpiry": "تتبع التشغيلات والانتهاء"
+        }
+      },
+      "operations": {
+        "title": "العمليات",
+        "items": {
+          "shiftManagement": "إدارة الورديات",
+          "purchasing": "المشتريات",
+          "supplierManagement": "إدارة الموردين",
+          "representativeManagement": "إدارة المندوبين",
+          "stockMovements": "حركات المخزون"
+        }
+      },
+      "advanced": {
+        "title": "المزايا المتقدمة",
+        "items": {
+          "ocrImport": "استيراد الفواتير عبر OCR",
+          "advancedReports": "تقارير متقدمة",
+          "branchComparison": "تقارير مقارنة الفروع",
+          "productEnrichment": "إثراء بيانات المنتجات"
+        }
+      },
+      "multiBranch": {
+        "title": "الفروع المتعددة",
+        "items": {
+          "branches": "عدد الفروع",
+          "users": "عدد المستخدمين",
+          "branchTransfer": "التحويل بين الفروع",
+          "centralizedInventory": "مخزون مركزي"
+        }
+      },
+      "support": {
+        "title": "الدعم",
+        "items": {
+          "emailSupport": "دعم عبر البريد الإلكتروني",
+          "prioritySupport": "دعم بأولوية",
+          "phoneSupport": "دعم هاتفي",
+          "accountManager": "مدير حساب مخصص"
+        }
+      }
+    },
+    "values": {
+      "unlimited": "غير محدود"
+    }
+  },
+  "faq": {
+    "title": "الأسئلة الشائعة",
+    "items": {
+      "trial": {
+        "question": "كيف تعمل التجربة المجانية؟",
+        "answer": "تحصل على وصول كامل إلى جميع المزايا لمدة 3 أيام. لا حاجة إلى بطاقة ائتمان. بعد انتهاء التجربة، اختر خطة أو سيتم إيقاف حسابك مؤقتًا."
+      },
+      "plans": {
+        "question": "هل يمكنني تغيير الخطة لاحقًا؟",
+        "answer": "نعم. يمكنك الترقية أو التخفيض في أي وقت، وتصبح التغييرات سارية فورًا."
+      },
+      "payments": {
+        "question": "ما طرق الدفع التي تقبلونها؟",
+        "answer": "نقبل جميع بطاقات الائتمان الرئيسية وبطاقات الخصم والتحويلات البنكية للخطط السنوية."
+      },
+      "refunds": {
+        "question": "هل تقدمون استردادًا للمبالغ؟",
+        "answer": "نعم، نقدم ضمان استرداد لمدة 30 يومًا لجميع الخطط المدفوعة دون أسئلة."
+      }
+    }
+  },
+  "cta": {
+    "title": "هل ما زالت لديك أسئلة؟",
+    "subtitle": "فريقنا هنا لمساعدتك في اختيار الخطة المناسبة",
+    "button": "تواصل مع المبيعات"
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "hero": {
+    "title": "Simple, transparent pricing",
+    "subtitle": "Start with a 3-day free trial. No credit card required. Choose the plan that fits your pharmacy."
+  },
+  "billing": {
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "save": "Save 20%",
+    "month": "month",
+    "year": "year",
+    "billedAnnually": "${{price}}/month billed annually"
+  },
+  "plans": {
+    "trial": {
+      "name": "Trial",
+      "description": "Try all features free for 3 days",
+      "badge": "Free",
+      "cta": "Start Free Trial",
+      "features": {
+        "allFeatures": "All features unlocked",
+        "branches1": "Up to 1 branch",
+        "users2": "Up to 2 users",
+        "basicPos": "Basic POS",
+        "productManagement": "Product management",
+        "basicReports": "Basic reports",
+        "emailSupport": "Email support",
+        "ocrImport": "OCR invoice import",
+        "advancedReports": "Advanced reports",
+        "multiBranch": "Multi-branch"
+      }
+    },
+    "basic": {
+      "name": "Basic",
+      "description": "Perfect for single pharmacy",
+      "cta": "Get Started",
+      "features": {
+        "branches1": "Up to 1 branch",
+        "users3": "Up to 3 users",
+        "fullPos": "Full POS system",
+        "productManagement": "Product management",
+        "inventoryTracking": "Inventory tracking",
+        "batchExpiry": "Batch and expiry tracking",
+        "basicReports": "Basic reports",
+        "shiftManagement": "Shift management",
+        "emailSupport": "Email support",
+        "ocrImport": "OCR invoice import",
+        "advancedReports": "Advanced reports",
+        "multiBranch": "Multi-branch"
+      }
+    },
+    "professional": {
+      "name": "Professional",
+      "description": "For growing pharmacy businesses",
+      "badge": "Popular",
+      "cta": "Get Started",
+      "features": {
+        "branches3": "Up to 3 branches",
+        "users10": "Up to 10 users",
+        "fullPos": "Full POS system",
+        "productManagement": "Product management",
+        "inventoryTracking": "Inventory tracking",
+        "batchExpiry": "Batch and expiry tracking",
+        "advancedReports": "Advanced reports",
+        "shiftManagement": "Shift management",
+        "ocrImport": "OCR invoice import",
+        "stockMovements": "Stock movements",
+        "priorityEmail": "Priority email support",
+        "phoneSupport": "Phone support"
+      }
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "description": "For pharmacy chains",
+      "badge": "Best Value",
+      "cta": "Contact Sales",
+      "features": {
+        "branchesUnlimited": "Unlimited branches",
+        "usersUnlimited": "Unlimited users",
+        "fullPos": "Full POS system",
+        "productManagement": "Product management",
+        "inventoryTracking": "Inventory tracking",
+        "batchExpiry": "Batch and expiry tracking",
+        "advancedReports": "Advanced reports",
+        "shiftManagement": "Shift management",
+        "ocrImport": "OCR invoice import",
+        "stockMovements": "Stock movements",
+        "prioritySupport": "Priority support",
+        "phoneChat": "Phone and chat support",
+        "customIntegrations": "Custom integrations",
+        "accountManager": "Dedicated account manager"
+      }
+    }
+  },
+  "comparison": {
+    "title": "Compare all features",
+    "subtitle": "See what's included in each plan",
+    "headers": {
+      "features": "Features",
+      "trial": "Trial",
+      "basic": "Basic",
+      "professional": "Professional",
+      "enterprise": "Enterprise"
+    },
+    "categories": {
+      "core": {
+        "title": "Core Features",
+        "items": {
+          "pos": "Point of Sale (POS)",
+          "productManagement": "Product Management",
+          "medicineManagement": "Medicine Management",
+          "cosmeticsManagement": "Cosmetics Management",
+          "inventoryTracking": "Inventory Tracking",
+          "batchExpiry": "Batch and Expiry Tracking"
+        }
+      },
+      "operations": {
+        "title": "Operations",
+        "items": {
+          "shiftManagement": "Shift Management",
+          "purchasing": "Purchasing",
+          "supplierManagement": "Supplier Management",
+          "representativeManagement": "Representative Management",
+          "stockMovements": "Stock Movements"
+        }
+      },
+      "advanced": {
+        "title": "Advanced Features",
+        "items": {
+          "ocrImport": "OCR Invoice Import",
+          "advancedReports": "Advanced Reports",
+          "branchComparison": "Branch Comparison Reports",
+          "productEnrichment": "Product Enrichment"
+        }
+      },
+      "multiBranch": {
+        "title": "Multi-Branch",
+        "items": {
+          "branches": "Number of Branches",
+          "users": "Number of Users",
+          "branchTransfer": "Branch Transfer",
+          "centralizedInventory": "Centralized Inventory"
+        }
+      },
+      "support": {
+        "title": "Support",
+        "items": {
+          "emailSupport": "Email Support",
+          "prioritySupport": "Priority Support",
+          "phoneSupport": "Phone Support",
+          "accountManager": "Dedicated Account Manager"
+        }
+      }
+    },
+    "values": {
+      "unlimited": "Unlimited"
+    }
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "items": {
+      "trial": {
+        "question": "How does the free trial work?",
+        "answer": "You get full access to all features for 3 days. No credit card required. After the trial, choose a plan or your account will be paused."
+      },
+      "plans": {
+        "question": "Can I change plans later?",
+        "answer": "Yes. You can upgrade or downgrade your plan at any time. Changes take effect immediately."
+      },
+      "payments": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept all major credit cards, debit cards, and bank transfers for annual plans."
+      },
+      "refunds": {
+        "question": "Do you offer refunds?",
+        "answer": "Yes, we offer a 30-day money-back guarantee for all paid plans. No questions asked."
+      }
+    }
+  },
+  "cta": {
+    "title": "Still have questions?",
+    "subtitle": "Our team is here to help you choose the right plan",
+    "button": "Contact Sales"
+  }
+}

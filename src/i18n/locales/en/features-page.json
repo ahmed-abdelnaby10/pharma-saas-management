@@ -1,0 +1,214 @@
+{
+  "hero": {
+    "title": "Everything your pharmacy needs",
+    "subtitle": "A complete, modern platform designed specifically for pharmacy operations. From POS to inventory, reports to multi-branch management."
+  },
+  "categories": {
+    "pos": {
+      "title": "Point of Sale",
+      "description": "Fast, efficient POS designed for pharmacy operations",
+      "items": {
+        "scanner": {
+          "title": "Barcode Scanner Integration",
+          "description": "Instant product lookup with USB barcode scanners"
+        },
+        "payments": {
+          "title": "Multiple Payment Methods",
+          "description": "Cash, card, and mixed payment support"
+        },
+        "receipts": {
+          "title": "Receipt Printing",
+          "description": "Auto-print receipts with thermal printers"
+        },
+        "quickSale": {
+          "title": "Quick Sale Processing",
+          "description": "Fast checkout optimized for high-volume sales"
+        }
+      }
+    },
+    "inventory": {
+      "title": "Inventory Management",
+      "description": "Complete control over your pharmacy stock",
+      "items": {
+        "tracking": {
+          "title": "Real-time Stock Tracking",
+          "description": "Live inventory updates across all branches"
+        },
+        "alerts": {
+          "title": "Low Stock Alerts",
+          "description": "Automatic notifications when stock runs low"
+        },
+        "expiry": {
+          "title": "Batch and Expiry Tracking",
+          "description": "FEFO/FIFO support with expiry date management"
+        },
+        "movements": {
+          "title": "Stock Movements",
+          "description": "Complete audit trail of all inventory changes"
+        }
+      }
+    },
+    "medicine": {
+      "title": "Medicine Management",
+      "description": "Specialized tools for pharmaceutical products",
+      "items": {
+        "scientificNames": {
+          "title": "Scientific Name Database",
+          "description": "Organize medicines by scientific and trade names"
+        },
+        "prescriptions": {
+          "title": "Prescription Tracking",
+          "description": "Flag prescription-required medications"
+        },
+        "batches": {
+          "title": "Batch Numbers",
+          "description": "Track medicine batches for recall management"
+        },
+        "expiryManagement": {
+          "title": "Expiry Management",
+          "description": "Never sell expired medicines with automatic alerts"
+        }
+      }
+    },
+    "ocr": {
+      "title": "OCR Invoice Import",
+      "description": "AI-powered invoice data extraction",
+      "items": {
+        "upload": {
+          "title": "Upload Invoices",
+          "description": "Scan or upload supplier invoice images and PDFs"
+        },
+        "extraction": {
+          "title": "Automatic Extraction",
+          "description": "AI extracts products, prices, and quantities"
+        },
+        "matching": {
+          "title": "Smart Matching",
+          "description": "Auto-match products to your catalog"
+        },
+        "review": {
+          "title": "Human Review",
+          "description": "Review and confirm before posting to inventory"
+        }
+      }
+    },
+    "purchasing": {
+      "title": "Purchasing",
+      "description": "Streamline supplier orders and receiving",
+      "items": {
+        "suppliers": {
+          "title": "Supplier Management",
+          "description": "Organize suppliers and representatives"
+        },
+        "orders": {
+          "title": "Purchase Orders",
+          "description": "Create and track purchase orders"
+        },
+        "receiving": {
+          "title": "Stock Receiving",
+          "description": "Record received stock with batch and expiry"
+        },
+        "costs": {
+          "title": "Cost Tracking",
+          "description": "Monitor purchase costs and margins"
+        }
+      }
+    },
+    "shifts": {
+      "title": "Shifts and Cash Management",
+      "description": "Control daily operations and cash flow",
+      "items": {
+        "opening": {
+          "title": "Shift Opening and Closing",
+          "description": "Start and end shifts with cash counts"
+        },
+        "cashFlow": {
+          "title": "Cash In and Out",
+          "description": "Track cash additions and withdrawals"
+        },
+        "reports": {
+          "title": "Shift Reports",
+          "description": "Expected versus actual cash reconciliation"
+        },
+        "shortage": {
+          "title": "Shortage Detection",
+          "description": "Identify cash discrepancies automatically"
+        }
+      }
+    },
+    "reports": {
+      "title": "Reports and Analytics",
+      "description": "Make data-driven business decisions",
+      "items": {
+        "sales": {
+          "title": "Sales Reports",
+          "description": "Track sales by day, week, month, and year"
+        },
+        "profit": {
+          "title": "Profit Analysis",
+          "description": "Monitor profit margins and trends"
+        },
+        "stock": {
+          "title": "Stock Reports",
+          "description": "Low stock, near expiry, and valuation reports"
+        },
+        "branches": {
+          "title": "Branch Comparison",
+          "description": "Compare performance across branches"
+        }
+      }
+    },
+    "multiBranch": {
+      "title": "Multi-Branch Management",
+      "description": "Manage multiple locations from one account",
+      "items": {
+        "unlimited": {
+          "title": "Unlimited Branches",
+          "description": "Add and manage all your pharmacy locations"
+        },
+        "centralized": {
+          "title": "Centralized Data",
+          "description": "One database for all branches"
+        },
+        "transfers": {
+          "title": "Branch Transfers",
+          "description": "Move stock between locations"
+        },
+        "permissions": {
+          "title": "Branch Permissions",
+          "description": "Control user access by branch"
+        }
+      }
+    }
+  },
+  "platforms": {
+    "title": "Works where you work",
+    "subtitle": "Choose web or desktop - same account, same data",
+    "web": {
+      "title": "Web Application",
+      "description": "Access from any device with a web browser",
+      "items": {
+        "devices": "Works on desktop, tablet, mobile",
+        "install": "No installation required",
+        "updates": "Automatic updates",
+        "cloud": "Cloud-based"
+      }
+    },
+    "desktop": {
+      "title": "Windows Desktop App",
+      "description": "Native Windows application with offline support",
+      "items": {
+        "hardware": "Better hardware integration",
+        "scanner": "Works with barcode scanners",
+        "printer": "Thermal printer support",
+        "account": "Same account and data"
+      }
+    }
+  },
+  "cta": {
+    "title": "Ready to get started?",
+    "subtitle": "Try all features free for 3 days. No credit card required.",
+    "startTrial": "Start Free Trial",
+    "viewPricing": "View Pricing"
+  }
+}

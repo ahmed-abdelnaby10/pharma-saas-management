@@ -4,241 +4,249 @@ export const ACCESS_TOKEN_EXPIRES_AT_KEY = "pharmacy-access-token-exp";
 export const REFRESH_TOKEN_EXPIRES_AT_KEY = "pharmacy-refresh-token-exp";
 export const TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
 export const USER_KEY = "pharmacy-user";
+export const SUPPORTED_LANGUAGES: readonly Language[] = ["en", "ar"];
+export const DEFAULT_LANGUAGE: Language = "en";
 /** Persisted admin-only branch filter for API query `branchId` (org-wide admin; not used for branch-locked roles). */
 export const PAGE_SIZE = 12;
 
 export const BASE_URL = import.meta.env.VITE_BACKEND_URL ?? "/api";
 export const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
 
-// ─── Tenant API endpoints (/api/tenant/*) ───────────────────────────────────
+// ─── Tenant API endpoints (/api/api/v1/tenant/*) ───────────────────────────────────
 export const TENANT_API = {
   // Auth
   auth: {
-    login: "/tenant/auth/login",
-    refresh: "/tenant/auth/refresh",
-    logout: "/tenant/auth/logout",
-    me: "/tenant/auth/me",
-    heartbeat: "/tenant/auth/heartbeat",
+    login: "/api/v1/tenant/auth/login",
+    refresh: "/api/v1/tenant/auth/refresh",
+    logout: "/api/v1/tenant/auth/logout",
+    me: "/api/v1/tenant/auth/me",
+    heartbeat: "/api/v1/tenant/auth/heartbeat",
   },
 
   // Branches
   branches: {
-    list: "/tenant/branches",
-    create: "/tenant/branches",
-    get: (id: string) => `/tenant/branches/${id}`,
-    update: (id: string) => `/tenant/branches/${id}`,
-    delete: (id: string) => `/tenant/branches/${id}`,
+    list: "/api/v1/tenant/branches",
+    create: "/api/v1/tenant/branches",
+    get: (id: string) => `/api/v1/tenant/branches/${id}`,
+    update: (id: string) => `/api/v1/tenant/branches/${id}`,
+    delete: (id: string) => `/api/v1/tenant/branches/${id}`,
   },
 
   // Users
   users: {
-    list:   "/tenant/users",
-    create: "/tenant/users",
-    get:    (id: string) => `/tenant/users/${id}`,
-    update: (id: string) => `/tenant/users/${id}`,
-    delete: (id: string) => `/tenant/users/${id}`,
-    roles:  "/tenant/users/roles",
+    list: "/api/v1/tenant/users",
+    create: "/api/v1/tenant/users",
+    get: (id: string) => `/api/v1/tenant/users/${id}`,
+    update: (id: string) => `/api/v1/tenant/users/${id}`,
+    delete: (id: string) => `/api/v1/tenant/users/${id}`,
+    roles: "/api/v1/tenant/users/roles",
     // Per-user role assignment
-    assignRole:  (userId: string) => `/tenant/users/${userId}/roles`,
-    removeRole:  (userId: string, roleId: string) => `/tenant/users/${userId}/roles/${roleId}`,
+    assignRole: (userId: string) => `/api/v1/tenant/users/${userId}/roles`,
+    removeRole: (userId: string, roleId: string) =>
+      `/api/v1/tenant/users/${userId}/roles/${roleId}`,
   },
 
   // Roles & Permissions
   roles: {
-    list:   "/tenant/roles",
-    create: "/tenant/roles",
-    get:    (id: string) => `/tenant/roles/${id}`,
-    update: (id: string) => `/tenant/roles/${id}`,
-    delete: (id: string) => `/tenant/roles/${id}`,
+    list: "/api/v1/tenant/roles",
+    create: "/api/v1/tenant/roles",
+    get: (id: string) => `/api/v1/tenant/roles/${id}`,
+    update: (id: string) => `/api/v1/tenant/roles/${id}`,
+    delete: (id: string) => `/api/v1/tenant/roles/${id}`,
   },
 
   permissions: {
-    list: "/tenant/permissions",
+    list: "/api/v1/tenant/permissions",
   },
 
   // Shifts
   shifts: {
-    list: "/tenant/shifts",
-    open: "/tenant/shifts/open",
-    close: (id: string) => `/tenant/shifts/${id}/close`,
-    current: "/tenant/shifts/current",
-    get: (id: string) => `/tenant/shifts/${id}`,
+    list: "/api/v1/tenant/shifts",
+    open: "/api/v1/tenant/shifts/open",
+    close: (id: string) => `/api/v1/tenant/shifts/${id}/close`,
+    current: "/api/v1/tenant/shifts/current",
+    get: (id: string) => `/api/v1/tenant/shifts/${id}`,
   },
 
   // POS
   pos: {
-    finalize: "/tenant/pos",
-    history: "/tenant/pos/history",
-    get: (id: string) => `/tenant/pos/${id}`,
-    refund: (id: string) => `/tenant/pos/${id}/refund`,
+    finalize: "/api/v1/tenant/pos",
+    history: "/api/v1/tenant/pos/history",
+    get: (id: string) => `/api/v1/tenant/pos/${id}`,
+    refund: (id: string) => `/api/v1/tenant/pos/${id}/refund`,
   },
 
   // Inventory / Medicines
   inventory: {
-    list: "/tenant/inventory",
-    create: "/tenant/inventory",
-    get: (id: string) => `/tenant/inventory/${id}`,
-    update: (id: string) => `/tenant/inventory/${id}`,
-    delete: (id: string) => `/tenant/inventory/${id}`,
-    adjustStock: (id: string) => `/tenant/inventory/${id}/adjust`,
-    batches:      (itemId: string)              => `/tenant/inventory/${itemId}/batches`,
-    createBatch:  (itemId: string)              => `/tenant/inventory/${itemId}/batches`,
-    updateBatch:  (itemId: string, batchId: string) => `/tenant/inventory/${itemId}/batches/${batchId}`,
-    deleteBatch:  (itemId: string, batchId: string) => `/tenant/inventory/${itemId}/batches/${batchId}`,
-    movements: "/tenant/inventory/movements",
-    lowStock: "/tenant/inventory/low-stock",
-    expiringSoon: "/tenant/inventory/expiring-soon",
+    list: "/api/v1/tenant/inventory",
+    create: "/api/v1/tenant/inventory",
+    get: (id: string) => `/api/v1/tenant/inventory/${id}`,
+    update: (id: string) => `/api/v1/tenant/inventory/${id}`,
+    delete: (id: string) => `/api/v1/tenant/inventory/${id}`,
+    adjustStock: (id: string) => `/api/v1/tenant/inventory/${id}/adjust`,
+    batches: (itemId: string) => `/api/v1/tenant/inventory/${itemId}/batches`,
+    createBatch: (itemId: string) =>
+      `/api/v1/tenant/inventory/${itemId}/batches`,
+    updateBatch: (itemId: string, batchId: string) =>
+      `/api/v1/tenant/inventory/${itemId}/batches/${batchId}`,
+    deleteBatch: (itemId: string, batchId: string) =>
+      `/api/v1/tenant/inventory/${itemId}/batches/${batchId}`,
+    movements: "/api/v1/tenant/inventory/movements",
+    lowStock: "/api/v1/tenant/inventory/low-stock",
+    expiringSoon: "/api/v1/tenant/inventory/expiring-soon",
   },
 
   // Cosmetics
   cosmetics: {
-    list: "/tenant/cosmetics",
-    create: "/tenant/cosmetics",
-    get: (id: string) => `/tenant/cosmetics/${id}`,
-    update: (id: string) => `/tenant/cosmetics/${id}`,
-    delete: (id: string) => `/tenant/cosmetics/${id}`,
+    list: "/api/v1/tenant/cosmetics",
+    create: "/api/v1/tenant/cosmetics",
+    get: (id: string) => `/api/v1/tenant/cosmetics/${id}`,
+    update: (id: string) => `/api/v1/tenant/cosmetics/${id}`,
+    delete: (id: string) => `/api/v1/tenant/cosmetics/${id}`,
   },
 
   // Catalog (unified product search)
   catalog: {
-    search: "/tenant/catalog/search",
-    barcode: (code: string) => `/tenant/catalog/barcode/${code}`,
+    search: "/api/v1/tenant/catalog/search",
+    barcode: (code: string) => `/api/v1/tenant/catalog/barcode/${code}`,
   },
 
   // Suppliers
   suppliers: {
-    list: "/tenant/suppliers",
-    create: "/tenant/suppliers",
-    get: (id: string) => `/tenant/suppliers/${id}`,
-    update: (id: string) => `/tenant/suppliers/${id}`,
-    delete: (id: string) => `/tenant/suppliers/${id}`,
+    list: "/api/v1/tenant/suppliers",
+    create: "/api/v1/tenant/suppliers",
+    get: (id: string) => `/api/v1/tenant/suppliers/${id}`,
+    update: (id: string) => `/api/v1/tenant/suppliers/${id}`,
+    delete: (id: string) => `/api/v1/tenant/suppliers/${id}`,
   },
 
   // Purchasing Orders
   purchasing: {
-    list: "/tenant/purchasing",
-    create: "/tenant/purchasing",
-    get: (id: string) => `/tenant/purchasing/${id}`,
-    update: (id: string) => `/tenant/purchasing/${id}`,
-    receive: (id: string) => `/tenant/purchasing/${id}/receive`,
-    cancel: (id: string) => `/tenant/purchasing/${id}/cancel`,
-    approve: (id: string) => `/tenant/purchasing/${id}/approve`,
-    status:     (id: string)                  => `/tenant/purchasing/${id}/status`,
-    addItem:    (orderId: string)              => `/tenant/purchasing/${orderId}/items`,
-    updateItem: (orderId: string, itemId: string) => `/tenant/purchasing/${orderId}/items/${itemId}`,
-    deleteItem: (orderId: string, itemId: string) => `/tenant/purchasing/${orderId}/items/${itemId}`,
+    list: "/api/v1/tenant/purchasing",
+    create: "/api/v1/tenant/purchasing",
+    get: (id: string) => `/api/v1/tenant/purchasing/${id}`,
+    update: (id: string) => `/api/v1/tenant/purchasing/${id}`,
+    receive: (id: string) => `/api/v1/tenant/purchasing/${id}/receive`,
+    cancel: (id: string) => `/api/v1/tenant/purchasing/${id}/cancel`,
+    approve: (id: string) => `/api/v1/tenant/purchasing/${id}/approve`,
+    status: (id: string) => `/api/v1/tenant/purchasing/${id}/status`,
+    addItem: (orderId: string) => `/api/v1/tenant/purchasing/${orderId}/items`,
+    updateItem: (orderId: string, itemId: string) =>
+      `/api/v1/tenant/purchasing/${orderId}/items/${itemId}`,
+    deleteItem: (orderId: string, itemId: string) =>
+      `/api/v1/tenant/purchasing/${orderId}/items/${itemId}`,
   },
 
   // Patients
   patients: {
-    list: "/tenant/patients",
-    create: "/tenant/patients",
-    get: (id: string) => `/tenant/patients/${id}`,
-    update: (id: string) => `/tenant/patients/${id}`,
-    delete: (id: string) => `/tenant/patients/${id}`,
+    list: "/api/v1/tenant/patients",
+    create: "/api/v1/tenant/patients",
+    get: (id: string) => `/api/v1/tenant/patients/${id}`,
+    update: (id: string) => `/api/v1/tenant/patients/${id}`,
+    delete: (id: string) => `/api/v1/tenant/patients/${id}`,
   },
 
   // Prescriptions
   prescriptions: {
-    list: "/tenant/prescriptions",
-    create: "/tenant/prescriptions",
-    get: (id: string) => `/tenant/prescriptions/${id}`,
-    update: (id: string) => `/tenant/prescriptions/${id}`,
-    verify: (id: string) => `/tenant/prescriptions/${id}/verify`,
-    dispense: (id: string) => `/tenant/prescriptions/${id}/dispense`,
+    list: "/api/v1/tenant/prescriptions",
+    create: "/api/v1/tenant/prescriptions",
+    get: (id: string) => `/api/v1/tenant/prescriptions/${id}`,
+    update: (id: string) => `/api/v1/tenant/prescriptions/${id}`,
+    verify: (id: string) => `/api/v1/tenant/prescriptions/${id}/verify`,
+    dispense: (id: string) => `/api/v1/tenant/prescriptions/${id}/dispense`,
   },
 
   // Cash drawer / transactions
   cashDrawer: {
-    balance: "/tenant/cash-drawer/balance",
-    transactions: "/tenant/cash-drawer/transactions",
-    open: "/tenant/cash-drawer/open",
-    close: "/tenant/cash-drawer/close",
-    deposit: "/tenant/cash-drawer/deposit",
-    withdraw: "/tenant/cash-drawer/withdraw",
+    balance: "/api/v1/tenant/cash-drawer/balance",
+    transactions: "/api/v1/tenant/cash-drawer/transactions",
+    open: "/api/v1/tenant/cash-drawer/open",
+    close: "/api/v1/tenant/cash-drawer/close",
+    deposit: "/api/v1/tenant/cash-drawer/deposit",
+    withdraw: "/api/v1/tenant/cash-drawer/withdraw",
   },
 
   // Reports
   reports: {
-    sales: "/tenant/reports/sales",
-    inventory: "/tenant/reports/inventory",
-    financial: "/tenant/reports/financial",
-    patients: "/tenant/reports/patients",
-    prescriptions: "/tenant/reports/prescriptions",
-    export: (type: string) => `/tenant/reports/${type}/export`,
+    sales: "/api/v1/tenant/reports/sales",
+    inventory: "/api/v1/tenant/reports/inventory",
+    financial: "/api/v1/tenant/reports/financial",
+    patients: "/api/v1/tenant/reports/patients",
+    prescriptions: "/api/v1/tenant/reports/prescriptions",
+    export: (type: string) => `/api/v1/tenant/reports/${type}/export`,
   },
 
   // Dashboard / Analytics
   dashboard: {
-    summary: "/tenant/dashboard/summary",
-    topProducts: "/tenant/dashboard/top-products",
-    recentSales: "/tenant/dashboard/recent-sales",
-    analytics: "/tenant/dashboard/analytics",
+    summary: "/api/v1/tenant/dashboard/summary",
+    topProducts: "/api/v1/tenant/dashboard/top-products",
+    recentSales: "/api/v1/tenant/dashboard/recent-sales",
+    analytics: "/api/v1/tenant/dashboard/analytics",
   },
 
   // Analytics
   analytics: {
-    salesTrend:       "/tenant/analytics/sales-trend",
-    topProducts:      "/tenant/analytics/top-products",
-    paymentBreakdown: "/tenant/analytics/payment-breakdown",
+    salesTrend: "/api/v1/tenant/analytics/sales-trend",
+    topProducts: "/api/v1/tenant/analytics/top-products",
+    paymentBreakdown: "/api/v1/tenant/analytics/payment-breakdown",
   },
 
   // Alerts
   alerts: {
-    all: "/tenant/alerts",
-    lowStock: "/tenant/alerts/low-stock",
-    expiring: "/tenant/alerts/expiring",
-    notify: "/tenant/alerts/notify",
-    dismiss: (id: string) => `/tenant/alerts/${id}/dismiss`,
-    dismissAll: "/tenant/alerts/dismiss-all",
-    settings: "/tenant/alerts/settings",
+    all: "/api/v1/tenant/alerts",
+    lowStock: "/api/v1/tenant/alerts/low-stock",
+    expiring: "/api/v1/tenant/alerts/expiring",
+    notify: "/api/v1/tenant/alerts/notify",
+    dismiss: (id: string) => `/api/v1/tenant/alerts/${id}/dismiss`,
+    dismissAll: "/api/v1/tenant/alerts/dismiss-all",
+    settings: "/api/v1/tenant/alerts/settings",
   },
 
   // Notifications
   notifications: {
-    list: "/tenant/notifications",
-    unreadCount: "/tenant/notifications/unread-count",
-    markRead: (id: string) => `/tenant/notifications/${id}/read`,
-    markAllRead: "/tenant/notifications/read-all",
+    list: "/api/v1/tenant/notifications",
+    unreadCount: "/api/v1/tenant/notifications/unread-count",
+    markRead: (id: string) => `/api/v1/tenant/notifications/${id}/read`,
+    markAllRead: "/api/v1/tenant/notifications/read-all",
   },
 
   // OCR
   ocr: {
-    documents: "/tenant/ocr/documents",
-    get: (id: string) => `/tenant/ocr/documents/${id}`,
-    process: (id: string) => `/tenant/ocr/documents/${id}/process`,
-    review: (id: string) => `/tenant/ocr/documents/${id}/review`,
+    documents: "/api/v1/tenant/ocr/documents",
+    get: (id: string) => `/api/v1/tenant/ocr/documents/${id}`,
+    process: (id: string) => `/api/v1/tenant/ocr/documents/${id}/process`,
+    review: (id: string) => `/api/v1/tenant/ocr/documents/${id}/review`,
   },
 
   // Tenant-side support tickets
   support: {
-    tickets: "/tenant/support/tickets",
-    get: (id: string) => `/tenant/support/tickets/${id}`,
+    tickets: "/api/v1/tenant/support/tickets",
+    get: (id: string) => `/api/v1/tenant/support/tickets/${id}`,
   },
 
   // Subscription (tenant-facing)
   subscription: {
-    current: "/tenant/subscription",
-    upgrade: "/tenant/subscription/upgrade",
-    invoices: "/tenant/subscription/invoices",
+    current: "/api/v1/tenant/subscription",
+    upgrade: "/api/v1/tenant/subscription/upgrade",
+    invoices: "/api/v1/tenant/subscription/invoices",
   },
 
   // Settings
   settings: {
-    get: "/tenant/settings",
-    update: "/tenant/settings",
-    branchSettings: (id: string) => `/tenant/settings/branches/${id}`,
+    get: "/api/v1/tenant/settings",
+    update: "/api/v1/tenant/settings",
+    branchSettings: (id: string) => `/api/v1/tenant/settings/branches/${id}`,
   },
 
   // POS returns
   posReturns: {
-    create: (saleId: string) => `/tenant/pos/${saleId}/returns`,
+    create: (saleId: string) => `/api/v1/tenant/pos/${saleId}/returns`,
   },
 
   // Offline sync
   sync: {
-    push: "/tenant/sync/push",
-    pull: "/tenant/sync/pull",
+    push: "/api/v1/tenant/sync/push",
+    pull: "/api/v1/tenant/sync/pull",
   },
 } as const;
 
@@ -317,9 +325,9 @@ export const PLATFORM_API = {
 
   // Platform catalog (master product library)
   catalog: {
-    list:   "/platform/catalog",
+    list: "/platform/catalog",
     create: "/platform/catalog",
-    get:    (id: string) => `/platform/catalog/${id}`,
+    get: (id: string) => `/platform/catalog/${id}`,
     update: (id: string) => `/platform/catalog/${id}`,
     delete: (id: string) => `/platform/catalog/${id}`,
   },
@@ -341,10 +349,10 @@ export const PUBLIC_API = {
 // These are appended below into PLATFORM_API.signupRequests where possible,
 // but we export them here so they can be used before PLATFORM_API is extended.
 export const PLATFORM_SIGNUP_API = {
-  list: "/platform/signup-requests",
-  get: (id: string) => `/platform/signup-requests/${id}`,
-  approve: (id: string) => `/platform/signup-requests/${id}/approve`,
-  reject: (id: string) => `/platform/signup-requests/${id}/reject`,
+  list: "/api/v1/platform/signup-requests",
+  get: (id: string) => `/api/v1/platform/signup-requests/${id}`,
+  approve: (id: string) => `/api/v1/platform/signup-requests/${id}/approve`,
+  reject: (id: string) => `/api/v1/platform/signup-requests/${id}/reject`,
 } as const;
 
 // ─── Legacy fallback (kept for backward-compat, prefer TENANT_API / PLATFORM_API) ──
@@ -366,16 +374,16 @@ export const QUERY_KEYS = {
 
   // Users
   users: {
-    all:    ["users"] as const,
-    list:   (params?: object) => ["users", "list", params] as const,
+    all: ["users"] as const,
+    list: (params?: object) => ["users", "list", params] as const,
     detail: (id: string) => ["users", id] as const,
-    roles:  ["users", "roles"] as const,
+    roles: ["users", "roles"] as const,
   },
 
   // Roles
   roles: {
-    all:    ["roles"] as const,
-    list:   (params?: object) => ["roles", "list", params] as const,
+    all: ["roles"] as const,
+    list: (params?: object) => ["roles", "list", params] as const,
     detail: (id: string) => ["roles", id] as const,
   },
 
@@ -475,9 +483,12 @@ export const QUERY_KEYS = {
 
   // Analytics
   analytics: {
-    salesTrend:       (params?: object) => ["analytics", "sales-trend", params] as const,
-    topProducts:      (params?: object) => ["analytics", "top-products", params] as const,
-    paymentBreakdown: (params?: object) => ["analytics", "payment-breakdown", params] as const,
+    salesTrend: (params?: object) =>
+      ["analytics", "sales-trend", params] as const,
+    topProducts: (params?: object) =>
+      ["analytics", "top-products", params] as const,
+    paymentBreakdown: (params?: object) =>
+      ["analytics", "payment-breakdown", params] as const,
   },
 
   // Alerts
@@ -526,7 +537,8 @@ export const QUERY_KEYS = {
   platform: {
     tenants: {
       all: ["platform", "tenants"] as const,
-      list: (params?: object) => ["platform", "tenants", "list", params] as const,
+      list: (params?: object) =>
+        ["platform", "tenants", "list", params] as const,
       detail: (id: string) => ["platform", "tenants", id] as const,
     },
     subscriptions: {
@@ -542,7 +554,8 @@ export const QUERY_KEYS = {
     },
     invoices: {
       all: ["platform", "invoices"] as const,
-      list: (params?: object) => ["platform", "invoices", "list", params] as const,
+      list: (params?: object) =>
+        ["platform", "invoices", "list", params] as const,
       detail: (id: string) => ["platform", "invoices", id] as const,
     },
     metrics: {
@@ -551,29 +564,34 @@ export const QUERY_KEYS = {
       churn: ["platform", "metrics", "churn"] as const,
     },
     audit: (params?: object) => ["platform", "audit", params] as const,
-    usage: (tenantId: string) => ["platform", "tenants", tenantId, "usage"] as const,
-    features: (tenantId: string) => ["platform", "tenants", tenantId, "features"] as const,
+    usage: (tenantId: string) =>
+      ["platform", "tenants", tenantId, "usage"] as const,
+    features: (tenantId: string) =>
+      ["platform", "tenants", tenantId, "features"] as const,
     dashboard: ["platform", "dashboard"] as const,
     support: {
       all: ["platform", "support"] as const,
-      list: (params?: object) => ["platform", "support", "tickets", params] as const,
+      list: (params?: object) =>
+        ["platform", "support", "tickets", params] as const,
       detail: (id: string) => ["platform", "support", "tickets", id] as const,
     },
     catalog: {
-      all:    ["platform", "catalog"] as const,
-      list:   (params?: object) => ["platform", "catalog", "list", params] as const,
+      all: ["platform", "catalog"] as const,
+      list: (params?: object) =>
+        ["platform", "catalog", "list", params] as const,
       detail: (id: string) => ["platform", "catalog", id] as const,
     },
     signupRequests: {
-      all:    ["platform", "signup-requests"] as const,
-      list:   (params?: object) => ["platform", "signup-requests", "list", params] as const,
+      all: ["platform", "signup-requests"] as const,
+      list: (params?: object) =>
+        ["platform", "signup-requests", "list", params] as const,
       detail: (id: string) => ["platform", "signup-requests", id] as const,
     },
   },
 
   // Public (unauthenticated)
   public: {
-    plans:     ["public", "plans"] as const,
+    plans: (locale: Language) => ["public", "plans", { locale }] as const,
     downloads: ["public", "downloads"] as const,
   },
 };
