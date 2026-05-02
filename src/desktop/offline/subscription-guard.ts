@@ -9,8 +9,7 @@
  * it only acts when `window.__TAURI__` is present (or the caller checks itself).
  */
 
-import { getAccessToken } from "@/shared/services/auth";
-import { decodeAccessToken } from "@/shared/services/auth";
+import { getAccessToken, decodeAccessToken } from "@/shared/services/auth";
 import useSubscription from "@/shared/store/useSubscription";
 
 const OFFLINE_VALID_UNTIL_KEY = "pharma-offline-valid-until";
@@ -37,6 +36,10 @@ export function persistOfflineValidUntil(date: string | null | undefined): void 
  * This runs before any network call, so the user sees the blocker immediately
  * if their cached offline period has expired.
  */
+function isDateExpired(isoDate: string): boolean {
+  return new Date(isoDate).getTime() < Date.now();
+}
+
 export function checkOfflineSubscription(): void {
   // Only relevant on desktop (Tauri)
   if (typeof window === "undefined") return;
@@ -46,22 +49,22 @@ export function checkOfflineSubscription(): void {
     typeof (window as any).__TAURI_IPC__ !== "undefined";
   if (!isTauri) return;
 
-  // First, try to get offlineValidUntil from the stored access token
+  const { setSubscriptionBlocked } = useSubscription.getState();
+
   const token = getAccessToken();
   if (token) {
     const { subscription } = decodeAccessToken(token);
     if (subscription?.offlineValidUntil) {
       persistOfflineValidUntil(subscription.offlineValidUntil);
-      if (new Date(subscription.offlineValidUntil).getTime() < Date.now()) {
-        useSubscription.getState().setSubscriptionBlocked("offline_expired");
+      if (isDateExpired(subscription.offlineValidUntil)) {
+        setSubscriptionBlocked("offline_expired");
       }
       return;
     }
   }
 
-  // Fallback: read from localStorage cache
   const stored = localStorage.getItem(OFFLINE_VALID_UNTIL_KEY);
-  if (stored && new Date(stored).getTime() < Date.now()) {
-    useSubscription.getState().setSubscriptionBlocked("offline_expired");
+  if (stored && isDateExpired(stored)) {
+    setSubscriptionBlocked("offline_expired");
   }
 }

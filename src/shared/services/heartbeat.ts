@@ -1,23 +1,16 @@
-/**
- * Subscription heartbeat — keeps the server informed the session is active
- * and refreshes the subscription claim so the UI stays in sync.
- *
- * Usage: call `startHeartbeat()` once on app mount (after authentication).
- * Returns a cleanup function that clears the interval.
- */
-
 import { apiClient } from "@/shared/api/client";
 import { TENANT_API } from "@/shared/utils/constants";
-import { decodeAccessToken } from "@/shared/services/auth";
-import { getAccessToken } from "@/shared/services/auth";
+import { decodeAccessToken, getAccessToken } from "@/shared/services/auth";
 import useSubscription from "@/shared/store/useSubscription";
 
 const HEARTBEAT_INTERVAL_MS = 30 * 60 * 1_000; // 30 minutes
 
+// Guards against multiple concurrent intervals if isAuthenticated toggles rapidly.
+let activeIntervalId: ReturnType<typeof setInterval> | null = null;
+
 async function sendHeartbeat(): Promise<void> {
   try {
     const res = await apiClient.post(TENANT_API.auth.heartbeat);
-    // If the backend rotates and returns a fresh access token, decode its claims
     const newToken: string | undefined =
       res.data?.data?.accessToken ?? res.data?.accessToken;
     if (newToken) {
@@ -32,17 +25,31 @@ async function sendHeartbeat(): Promise<void> {
       }
     }
   } catch {
-    // Heartbeat failures are silent — the 402 interceptor in client.ts
-    // will surface subscription-blocked state if the server returns 402.
+    // Failures are silent — the 402 interceptor in client.ts surfaces
+    // subscription-blocked state when the server returns 402.
   }
 }
 
 export function startHeartbeat(): () => void {
-  // Only run when there's an active token
   if (!getAccessToken()) return () => undefined;
 
-  // Fire immediately on start, then every 30 min
+  // Prevent duplicate intervals if called again before cleanup
+  if (activeIntervalId !== null) {
+    return () => {
+      if (activeIntervalId !== null) {
+        clearInterval(activeIntervalId);
+        activeIntervalId = null;
+      }
+    };
+  }
+
   sendHeartbeat();
-  const id = setInterval(sendHeartbeat, HEARTBEAT_INTERVAL_MS);
-  return () => clearInterval(id);
+  activeIntervalId = setInterval(sendHeartbeat, HEARTBEAT_INTERVAL_MS);
+
+  return () => {
+    if (activeIntervalId !== null) {
+      clearInterval(activeIntervalId);
+      activeIntervalId = null;
+    }
+  };
 }

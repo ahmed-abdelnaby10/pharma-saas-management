@@ -12,6 +12,7 @@ import {
 } from "../utils/constants";
 import axios from "axios";
 import { getCookie, setCookie, deleteCookie } from "./cookies";
+import useSubscription from "@/shared/store/useSubscription";
 
 type RequestLanguage = "en" | "ar";
 
@@ -138,16 +139,12 @@ export async function storeTokens(params: {
   // user stays in localStorage
   if (user) localStorage.setItem(USER_KEY, JSON.stringify(user));
 
-  // Persist subscription claims to global store
   if (subscription) {
-    // Lazy import avoids circular dep during initialisation
-    import("@/shared/store/useSubscription").then(({ default: useSubscription }) => {
-      useSubscription.getState().setClaims({
-        id: subscription.id,
-        status: subscription.status as any,
-        trialEndsAt: subscription.trialEndsAt,
-        offlineValidUntil: subscription.offlineValidUntil,
-      });
+    useSubscription.getState().setClaims({
+      id: subscription.id,
+      status: subscription.status as any,
+      trialEndsAt: subscription.trialEndsAt,
+      offlineValidUntil: subscription.offlineValidUntil,
     });
   }
 

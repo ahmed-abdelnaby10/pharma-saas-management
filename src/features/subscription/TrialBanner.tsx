@@ -1,39 +1,33 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Link } from "react-router";
-import { Clock, X } from "lucide-react";
+import { Clock } from "lucide-react";
 import { toast } from "sonner";
 import useSubscription from "@/shared/store/useSubscription";
+import { daysUntil } from "@/shared/utils/format";
 
 const TRIAL_TOAST_KEY = "pharma-trial-toast-shown";
 
-function daysUntil(isoDate: string): number {
-  const diff = new Date(isoDate).getTime() - Date.now();
-  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
-}
-
 /**
- * Sticky trial-expiry banner. Rules:
+ * Sticky trial-expiry banner. Visibility rules:
  * - Hidden when >7 days remain
  * - Yellow (warning) when 4–7 days remain
  * - Orange (urgent) when 1–3 days remain
- * - Also fires a one-per-session toast when ≤3 days remain
+ * Also fires a one-per-session toast when ≤3 days remain.
  */
 export function TrialBanner() {
   const { claims } = useSubscription();
-  const toastFiredRef = useRef(false);
 
   const trialEndsAt = claims?.status === "TRIALING" ? claims.trialEndsAt : null;
-  const days = trialEndsAt ? daysUntil(trialEndsAt) : null;
 
-  // Fire toast once per session when ≤3 days
+  // Recompute only when trialEndsAt changes, not on every render
+  const days = useMemo(
+    () => (trialEndsAt ? daysUntil(trialEndsAt) : null),
+    [trialEndsAt],
+  );
+
+  // One-per-session warning toast when ≤3 days
   useEffect(() => {
-    if (
-      days !== null &&
-      days <= 3 &&
-      !toastFiredRef.current &&
-      !sessionStorage.getItem(TRIAL_TOAST_KEY)
-    ) {
-      toastFiredRef.current = true;
+    if (days !== null && days <= 3 && !sessionStorage.getItem(TRIAL_TOAST_KEY)) {
       sessionStorage.setItem(TRIAL_TOAST_KEY, "1");
       toast.warning(
         `Your free trial expires in ${days} day${days !== 1 ? "s" : ""}. Upgrade to keep access.`,
@@ -42,7 +36,6 @@ export function TrialBanner() {
     }
   }, [days]);
 
-  // Hide when not trialing or >7 days remain
   if (days === null || days > 7) return null;
 
   const isUrgent = days <= 3;

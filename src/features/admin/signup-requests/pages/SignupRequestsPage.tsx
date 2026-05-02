@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Search,
   UserPlus,
@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { EmptyState } from "@/shared/components/EmptyState";
-import { ConfirmModal } from "@/shared/components/ConfirmModal";
 import { Modal } from "@/app/components/modals/Modal";
 import {
   useSignupRequestsQuery,
@@ -194,10 +193,13 @@ export function SignupRequestsPage() {
   const [rejectState, setRejectState] = useState<RejectState | null>(null);
   const [rejectReason, setRejectReason] = useState("");
 
-  const params = {
-    search: search || undefined,
-    status: statusFilter !== "ALL" ? statusFilter : undefined,
-  };
+  const params = useMemo(
+    () => ({
+      search: search || undefined,
+      status: statusFilter !== "ALL" ? statusFilter : undefined,
+    }),
+    [search, statusFilter],
+  );
 
   const { data: requests = [], isLoading } = useSignupRequestsQuery(params);
 

@@ -83,6 +83,17 @@ export function formatDateTime(
   }).format(date);
 }
 
+// ─── Days until ──────────────────────────────────────────────────────────────
+
+/**
+ * Return the number of whole days remaining until `isoDate`.
+ * Returns 0 if the date is in the past.
+ */
+export function daysUntil(isoDate: string): number {
+  const diff = new Date(isoDate).getTime() - Date.now();
+  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+}
+
 // ─── Relative time ────────────────────────────────────────────────────────────
 
 /**
