@@ -7,7 +7,9 @@ export default function TokenRefreshSubscriber() {
 
   useEffect(() => {
     const unsubscribe = onTokensRefreshed(() => {
-      qc.invalidateQueries({ predicate: () => true });
+      // Token refresh should not blow away the whole cache.
+      // Keep data queries cached and only refresh user identity state.
+      qc.invalidateQueries({ queryKey: ["me"] });
     });
     return unsubscribe;
   }, [qc]);

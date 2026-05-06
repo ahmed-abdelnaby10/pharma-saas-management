@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { CheckCircle, Pill } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { useLanguage } from "@/app/contexts/useLanguage";
 
 export function SignupSuccessPage() {
@@ -8,11 +8,12 @@ export function SignupSuccessPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
       <div className="max-w-md w-full text-center">
-        <Link to="/" className="inline-flex items-center gap-2 mb-10">
-          <div className="w-10 h-10 bg-[#0F5C47] rounded-lg flex items-center justify-center">
-            <Pill className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-xl font-bold text-gray-900">Yomdix</span>
+        <Link to="/" className="inline-flex items-center gap-2 mb-0">
+          <img
+            src="/images/yomdix-main-logo.webp"
+            alt="Yomdix"
+            className="w-40 h-auto"
+          />
         </Link>
 
         <div className="flex justify-center mb-6">

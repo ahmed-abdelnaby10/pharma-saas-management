@@ -6,7 +6,6 @@ import {
   User,
   Building2,
   Phone,
-  Globe,
   ArrowRight,
   Loader2,
   Check,
@@ -29,18 +28,29 @@ interface PublicPlan {
   name: string;
   price: number;
   currency: string;
-  interval: "MONTHLY" | "YEARLY";
+  interval?: "MONTHLY" | "YEARLY" | "monthly" | "yearly" | null;
   trialDays: number;
 }
 
 interface SignupFormValues {
-  tenantName: string;
-  contactName: string;
-  contactEmail: string;
-  contactPhone: string;
-  country: string;
-  requestedPlanId: string;
+  pharmacyNameEn: string;
+  pharmacyNameAr: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  planId: string;
   notes: string;
+}
+
+interface SignupSubmitPayload {
+  planId: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  pharmacyNameEn: string;
+  pharmacyNameAr: string;
+  preferredLanguage?: "en" | "ar";
+  notes?: string;
 }
 
 const publicConfig = {
@@ -62,12 +72,12 @@ export function SignupPage() {
     formState: { errors },
   } = useForm<SignupFormValues>({
     defaultValues: {
-      tenantName: "",
-      contactName: "",
-      contactEmail: "",
-      contactPhone: "",
-      country: "",
-      requestedPlanId: "",
+      pharmacyNameEn: "",
+      pharmacyNameAr: "",
+      fullName: "",
+      email: "",
+      phone: "",
+      planId: "",
       notes: "",
     },
   });
@@ -77,9 +87,9 @@ export function SignupPage() {
     queryFn: () => get<PublicPlan[]>(PUBLIC_API.plans, publicConfig),
   });
 
-  const submitMutation = useMutation<unknown, Error, SignupFormValues>({
+  const submitMutation = useMutation<unknown, Error, SignupSubmitPayload>({
     mutationFn: (payload) =>
-      post<unknown, SignupFormValues>(
+      post<unknown, SignupSubmitPayload>(
         PUBLIC_API.signupRequests,
         payload,
         publicConfig,
@@ -95,7 +105,17 @@ export function SignupPage() {
   });
 
   const onSubmit = (values: SignupFormValues) => {
-    submitMutation.mutate(values);
+    const payload: SignupSubmitPayload = {
+      planId: values.planId,
+      fullName: values.fullName.trim(),
+      email: values.email.trim(),
+      pharmacyNameEn: values.pharmacyNameEn.trim(),
+      pharmacyNameAr: values.pharmacyNameAr.trim(),
+      preferredLanguage: language,
+      ...(values.phone.trim() ? { phone: values.phone.trim() } : {}),
+      ...(values.notes.trim() ? { notes: values.notes.trim() } : {}),
+    };
+    submitMutation.mutate(payload);
   };
 
   const trialBenefitKeys = [
@@ -105,8 +125,14 @@ export function SignupPage() {
     "auth:signup.benefits.items.webAndDesktop",
   ] as const;
 
-  const planIntervalLabel = (interval: PublicPlan["interval"]) =>
-    t(`auth:signup.planIntervals.${interval.toLowerCase()}`);
+  const planIntervalLabel = (interval?: PublicPlan["interval"]) => {
+    if (!interval) return t("auth:signup.planIntervals.monthly");
+    const normalized = String(interval).toLowerCase();
+    if (normalized !== "monthly" && normalized !== "yearly") {
+      return t("auth:signup.planIntervals.monthly");
+    }
+    return t(`auth:signup.planIntervals.${normalized}`);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -136,16 +162,41 @@ export function SignupPage() {
                   className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 ${iconPositionClass}`}
                 />
                 <input
-                  {...register("tenantName", {
+                  {...register("pharmacyNameEn", {
                     required: t("auth:signup.validation.tenantNameRequired"),
                   })}
+                  dir="ltr"
                   placeholder={t("auth:signup.fields.tenantName.placeholder")}
                   className={`w-full ${inputPaddingClass} py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm`}
                 />
               </div>
-              {errors.tenantName && (
+              {errors.pharmacyNameEn && (
                 <p className="mt-1 text-xs text-red-600">
-                  {errors.tenantName.message}
+                  {errors.pharmacyNameEn.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                {t("auth:signup.fields.tenantNameAr.label")}
+              </label>
+              <div className={`relative text-right`}>
+                <Building2
+                  className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 right-3`}
+                />
+                <input
+                  dir="rtl"
+                  {...register("pharmacyNameAr", {
+                    required: t("auth:signup.validation.tenantNameRequired"),
+                  })}
+                  placeholder={t("auth:signup.fields.tenantNameAr.placeholder")}
+                  className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm"
+                />
+              </div>
+              {errors.pharmacyNameAr && (
+                <p className="mt-1 text-xs text-red-600">
+                  {errors.pharmacyNameAr.message}
                 </p>
               )}
             </div>
@@ -159,16 +210,16 @@ export function SignupPage() {
                   className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 ${iconPositionClass}`}
                 />
                 <input
-                  {...register("contactName", {
+                  {...register("fullName", {
                     required: t("auth:signup.validation.contactNameRequired"),
                   })}
                   placeholder={t("auth:signup.fields.contactName.placeholder")}
                   className={`w-full ${inputPaddingClass} py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm`}
                 />
               </div>
-              {errors.contactName && (
+              {errors.fullName && (
                 <p className="mt-1 text-xs text-red-600">
-                  {errors.contactName.message}
+                  {errors.fullName.message}
                 </p>
               )}
             </div>
@@ -182,21 +233,22 @@ export function SignupPage() {
                   className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 ${iconPositionClass}`}
                 />
                 <input
-                  {...register("contactEmail", {
+                  {...register("email", {
                     required: t("auth:signup.validation.contactEmailRequired"),
                     pattern: {
                       value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                       message: t("auth:signup.validation.contactEmailInvalid"),
                     },
                   })}
+                  dir="ltr"
                   type="email"
                   placeholder={t("auth:signup.fields.contactEmail.placeholder")}
                   className={`w-full ${inputPaddingClass} py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm`}
                 />
               </div>
-              {errors.contactEmail && (
+              {errors.email && (
                 <p className="mt-1 text-xs text-red-600">
-                  {errors.contactEmail.message}
+                  {errors.email.message}
                 </p>
               )}
             </div>
@@ -210,35 +262,12 @@ export function SignupPage() {
                   className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 ${iconPositionClass}`}
                 />
                 <input
-                  {...register("contactPhone")}
+                  {...register("phone")}
                   type="tel"
                   placeholder={t("auth:signup.fields.contactPhone.placeholder")}
                   className={`w-full ${inputPaddingClass} py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm`}
                 />
               </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                {t("auth:signup.fields.country.label")}
-              </label>
-              <div className={`relative ${textAlignClass}`}>
-                <Globe
-                  className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 ${iconPositionClass}`}
-                />
-                <input
-                  {...register("country", {
-                    required: t("auth:signup.validation.countryRequired"),
-                  })}
-                  placeholder={t("auth:signup.fields.country.placeholder")}
-                  className={`w-full ${inputPaddingClass} py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm`}
-                />
-              </div>
-              {errors.country && (
-                <p className="mt-1 text-xs text-red-600">
-                  {errors.country.message}
-                </p>
-              )}
             </div>
 
             <div>
@@ -252,10 +281,12 @@ export function SignupPage() {
                 </div>
               ) : (
                 <Controller
-                  name="requestedPlanId"
+                  name="planId"
                   control={control}
                   rules={{
-                    required: t("auth:signup.validation.requestedPlanIdRequired"),
+                    required: t(
+                      "auth:signup.validation.requestedPlanIdRequired",
+                    ),
                   }}
                   render={({ field }) => (
                     <Select
@@ -265,7 +296,7 @@ export function SignupPage() {
                     >
                       <SelectTrigger
                         className="w-full !h-12 rounded-lg border-gray-300 !bg-transparent px-4 text-sm focus-visible:ring-2 focus-visible:ring-[#0F5C47] focus-visible:border-transparent"
-                        aria-invalid={!!errors.requestedPlanId}
+                        aria-invalid={!!errors.planId}
                       >
                         <SelectValue
                           placeholder={t(
@@ -288,9 +319,9 @@ export function SignupPage() {
                   )}
                 />
               )}
-              {errors.requestedPlanId && (
+              {errors.planId && (
                 <p className="mt-1 text-xs text-red-600">
-                  {errors.requestedPlanId.message}
+                  {errors.planId.message}
                 </p>
               )}
             </div>

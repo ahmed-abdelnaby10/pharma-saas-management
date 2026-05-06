@@ -18,10 +18,9 @@
   "status": {
     "all": "جميع الحالات",
     "active": "نشط",
-    "trial": "تجريبي",
     "trialing": "تجريبي",
     "suspended": "موقوف",
-    "churned": "ملغى"
+    "inactive": "غير نشط"
   },
   "table": {
     "tenant": "المستأجر",
@@ -43,22 +42,35 @@
     "suspend": "إيقاف",
     "activated": "تم تفعيل المستأجر",
     "suspended": "تم إيقاف المستأجر",
+    "updated": "تم تحديث المستأجر",
     "failed": "فشل الإجراء"
   },
   "modal": {
     "createTitle": "إنشاء مستأجر",
+    "editTitle": "تعديل المستأجر",
     "fields": {
-      "name": { "label": "اسم المستأجر *", "placeholder": "صيدلية الأمل" },
-      "slug": { "label": "المعرّف *", "placeholder": "amal-pharmacy" },
-      "email": { "label": "البريد الإلكتروني *", "placeholder": "admin@amalpharmacy.com" },
-      "phone": { "label": "الهاتف", "placeholder": "+966 5X XXX XXXX" },
-      "address": { "label": "العنوان", "placeholder": "شارع الملك فهد" },
-      "plan": { "label": "الخطة", "placeholder": "اختر خطة..." }
+      "nameEn": { "label": "اسم المستأجر (إنجليزي) *", "placeholder": "Al Amal Pharmacy" },
+      "nameAr": { "label": "اسم المستأجر (عربي) *", "placeholder": "صيدلية الأمل" },
+      "preferredLanguage": {
+        "label": "اللغة المفضلة",
+        "en": "الإنجليزية",
+        "ar": "العربية"
+      },
+      "status": { "label": "الحالة" },
+      "plan": { "label": "الخطة *", "placeholder": "اختر خطة..." }
+    },
+    "validation": {
+      "nameEnRequired": "اسم المستأجر بالإنجليزية مطلوب.",
+      "nameArRequired": "اسم المستأجر بالعربية مطلوب.",
+      "preferredLanguageRequired": "اللغة المفضلة مطلوبة.",
+      "planRequired": "يرجى اختيار خطة."
     },
     "actions": {
       "cancel": "إلغاء",
       "create": "إنشاء مستأجر",
-      "creating": "جارٍ الإنشاء..."
+      "creating": "جارٍ الإنشاء...",
+      "save": "حفظ",
+      "saving": "جارٍ الحفظ..."
     }
   },
   "tabs": {

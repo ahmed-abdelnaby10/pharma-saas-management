@@ -1,6 +1,10 @@
 import { apiClient } from "@/shared/api/client";
 import { TENANT_API } from "@/shared/utils/constants";
-import { decodeAccessToken, getAccessToken } from "@/shared/services/auth";
+import {
+  decodeAccessToken,
+  getAccessToken,
+  getAccessTokenScope,
+} from "@/shared/services/auth";
 import useSubscription from "@/shared/store/useSubscription";
 
 const HEARTBEAT_INTERVAL_MS = 30 * 60 * 1_000; // 30 minutes
@@ -31,7 +35,13 @@ async function sendHeartbeat(): Promise<void> {
 }
 
 export function startHeartbeat(): () => void {
-  if (!getAccessToken()) return () => undefined;
+  const accessToken = getAccessToken();
+  if (!accessToken) return () => undefined;
+
+  // Heartbeat endpoint is tenant-scoped only. Skip for platform/admin tokens.
+  if (getAccessTokenScope(accessToken) !== "tenant") {
+    return () => undefined;
+  }
 
   // Prevent duplicate intervals if called again before cleanup
   if (activeIntervalId !== null) {

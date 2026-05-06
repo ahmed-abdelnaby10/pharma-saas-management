@@ -1,9 +1,20 @@
-import React, { useState } from "react";
-import { Search, Filter, MoreVertical, Plus, Download, RefreshCw, Loader2, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import {
+  Search,
+  Filter,
+  MoreVertical,
+  Plus,
+  Download,
+  RefreshCw,
+  Loader2,
+  X,
+} from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
 import { useLanguage } from "@/app/contexts/useLanguage";
 import {
   useTenantsQuery,
   useCreateTenantMutation,
+  useUpdateTenantMutation,
   usePlansQuery,
   useSuspendTenantMutation,
   useActivateTenantMutation,
@@ -11,19 +22,25 @@ import {
   type CreateTenantPayload,
 } from "@/features/admin/api";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/components/ui/select";
 
 const STATUS_COLORS: Record<string, string> = {
   active: "bg-green-50 text-green-700 border-green-200",
-  trial: "bg-blue-50 text-blue-700 border-blue-200",
   trialing: "bg-blue-50 text-blue-700 border-blue-200",
   suspended: "bg-red-50 text-red-700 border-red-200",
-  churned: "bg-gray-50 text-gray-700 border-gray-200",
+  inactive: "bg-gray-50 text-gray-700 border-gray-200",
 };
 
 function StatusBadge({ status }: { status: string }) {
   const { t } = useLanguage();
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${STATUS_COLORS[status] ?? STATUS_COLORS.churned}`}>
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${STATUS_COLORS[status] ?? STATUS_COLORS.inactive}`}>
       {t(`adminTenants:status.${status}`)}
     </span>
   );
@@ -49,36 +66,37 @@ function StatCard({ label, value, color }: { label: string; value: number | stri
 interface CreateTenantModalProps {
   onClose: () => void;
 }
+interface EditTenantModalProps {
+  tenant: {
+    id: string;
+    nameEn?: string;
+    nameAr?: string;
+    preferredLanguage?: "en" | "ar";
+    status: TenantStatus;
+  };
+  onClose: () => void;
+}
 
 function CreateTenantModal({ onClose }: CreateTenantModalProps) {
   const { t } = useLanguage();
   const { data: plans = [], isLoading: plansLoading } = usePlansQuery();
   const createMutation = useCreateTenantMutation();
-
-  const [form, setForm] = useState<CreateTenantPayload>({
-    name: "",
-    slug: "",
-    email: "",
-    phone: "",
-    address: "",
-    planId: "",
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreateTenantPayload>({
+    defaultValues: {
+      nameEn: "",
+      nameAr: "",
+      preferredLanguage: "en",
+      planId: "",
+    },
   });
 
-  const set = (key: keyof CreateTenantPayload) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-      setForm((prev) => ({ ...prev, [key]: e.target.value }));
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const payload: CreateTenantPayload = {
-      name: form.name,
-      slug: form.slug,
-      email: form.email,
-      ...(form.phone && { phone: form.phone }),
-      ...(form.address && { address: form.address }),
-      ...(form.planId && { planId: form.planId }),
-    };
-    createMutation.mutate(payload, {
+  function onSubmit(values: CreateTenantPayload) {
+    createMutation.mutate(values, {
       onSuccess: () => {
         toast.success(t("adminTenants:actions.activated"));
         onClose();
@@ -89,7 +107,23 @@ function CreateTenantModal({ onClose }: CreateTenantModalProps) {
     });
   }
 
-  const inputCls = "w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500";
+  const inputCls =
+    "w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500";
+
+  function planOptionLabel(plan: {
+    name: string;
+    billingInterval?: "monthly" | "yearly";
+    price?: number | string;
+    monthlyPrice?: number;
+    currency?: string;
+  }) {
+    const rawPrice = plan.price ?? plan.monthlyPrice ?? 0;
+    const price =
+      typeof rawPrice === "string" ? Number(rawPrice || 0) : rawPrice;
+    const cycle = plan.billingInterval === "yearly" ? "year" : "month";
+    const currency = plan.currency ?? "EGP";
+    return `${plan.name} -- ${price} ${currency} / ${cycle}`;
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
@@ -103,58 +137,71 @@ function CreateTenantModal({ onClose }: CreateTenantModalProps) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">
-              {t("adminTenants:modal.fields.name.label")}
+              {t("adminTenants:modal.fields.nameEn.label")}
             </label>
             <input
-              value={form.name}
-              onChange={set("name")}
-              required
+              {...register("nameEn", {
+                required: t("adminTenants:modal.validation.nameEnRequired"),
+              })}
               className={inputCls}
-              placeholder={t("adminTenants:modal.fields.name.placeholder")}
+              placeholder={t("adminTenants:modal.fields.nameEn.placeholder")}
             />
+            {errors.nameEn && (
+              <p className="text-red-500 text-[10px] mt-1">{errors.nameEn.message}</p>
+            )}
           </div>
 
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">
-              {t("adminTenants:modal.fields.slug.label")}
+              {t("adminTenants:modal.fields.nameAr.label")}
             </label>
             <input
-              value={form.slug}
-              onChange={set("slug")}
-              required
+              {...register("nameAr", {
+                required: t("adminTenants:modal.validation.nameArRequired"),
+              })}
               className={inputCls}
-              placeholder={t("adminTenants:modal.fields.slug.placeholder")}
+              placeholder={t("adminTenants:modal.fields.nameAr.placeholder")}
             />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              {t("adminTenants:modal.fields.email.label")}
-            </label>
-            <input
-              type="email"
-              value={form.email}
-              onChange={set("email")}
-              required
-              className={inputCls}
-              placeholder={t("adminTenants:modal.fields.email.placeholder")}
-            />
+            {errors.nameAr && (
+              <p className="text-red-500 text-[10px] mt-1">{errors.nameAr.message}</p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
-                {t("adminTenants:modal.fields.phone.label")}
+                {t("adminTenants:modal.fields.preferredLanguage.label")}
               </label>
-              <input
-                value={form.phone ?? ""}
-                onChange={set("phone")}
-                className={inputCls}
-                placeholder={t("adminTenants:modal.fields.phone.placeholder")}
+              <Controller
+                name="preferredLanguage"
+                control={control}
+                rules={{
+                  required: t("adminTenants:modal.validation.preferredLanguageRequired"),
+                }}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">
+                        {t("adminTenants:modal.fields.preferredLanguage.en")}
+                      </SelectItem>
+                      <SelectItem value="ar">
+                        {t("adminTenants:modal.fields.preferredLanguage.ar")}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
               />
+              {errors.preferredLanguage && (
+                <p className="text-red-500 text-[10px] mt-1">
+                  {errors.preferredLanguage.message}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -165,28 +212,32 @@ function CreateTenantModal({ onClose }: CreateTenantModalProps) {
                   <Loader2 className="w-4 h-4 animate-spin" />
                 </div>
               ) : (
-                <select value={form.planId ?? ""} onChange={set("planId")} className={inputCls}>
-                  <option value="">{t("adminTenants:modal.fields.plan.placeholder")}</option>
-                  {plans.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.name}
-                    </option>
-                  ))}
-                </select>
+                <Controller
+                  name="planId"
+                  control={control}
+                  rules={{ required: t("adminTenants:modal.validation.planRequired") }}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue
+                          placeholder={t("adminTenants:modal.fields.plan.placeholder")}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {plans.map((p) => (
+                          <SelectItem key={p.id} value={p.id}>
+                            {planOptionLabel(p)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              )}
+              {errors.planId && (
+                <p className="text-red-500 text-[10px] mt-1">{errors.planId.message}</p>
               )}
             </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              {t("adminTenants:modal.fields.address.label")}
-            </label>
-            <input
-              value={form.address ?? ""}
-              onChange={set("address")}
-              className={inputCls}
-              placeholder={t("adminTenants:modal.fields.address.placeholder")}
-            />
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
@@ -214,6 +265,194 @@ function CreateTenantModal({ onClose }: CreateTenantModalProps) {
   );
 }
 
+type EditTenantFormValues = {
+  nameEn: string;
+  nameAr: string;
+  preferredLanguage: "en" | "ar";
+  status: TenantStatus;
+};
+
+function EditTenantModal({ tenant, onClose }: EditTenantModalProps) {
+  const { t } = useLanguage();
+  const updateMutation = useUpdateTenantMutation();
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<EditTenantFormValues>({
+    defaultValues: {
+      nameEn: tenant.nameEn ?? "",
+      nameAr: tenant.nameAr ?? "",
+      preferredLanguage: tenant.preferredLanguage ?? "en",
+      status: tenant.status,
+    },
+  });
+
+  useEffect(() => {
+    reset({
+      nameEn: tenant.nameEn ?? "",
+      nameAr: tenant.nameAr ?? "",
+      preferredLanguage: tenant.preferredLanguage ?? "en",
+      status: tenant.status,
+    });
+  }, [tenant, reset]);
+
+  const inputCls =
+    "w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500";
+
+  function onSubmit(values: EditTenantFormValues) {
+    updateMutation.mutate(
+      { id: tenant.id, ...values },
+      {
+        onSuccess: () => {
+          toast.success(t("adminTenants:actions.updated"));
+          onClose();
+        },
+        onError: (err: any) => {
+          toast.error(err?.response?.data?.message ?? t("adminTenants:actions.failed"));
+        },
+      },
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6">
+        <div className="flex items-center justify-between mb-5">
+          <h3 className="text-lg font-semibold text-gray-900">
+            {t("adminTenants:modal.editTitle")}
+          </h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">
+              {t("adminTenants:modal.fields.nameEn.label")}
+            </label>
+            <input
+              {...register("nameEn", {
+                required: t("adminTenants:modal.validation.nameEnRequired"),
+              })}
+              className={inputCls}
+              placeholder={t("adminTenants:modal.fields.nameEn.placeholder")}
+            />
+            {errors.nameEn && (
+              <p className="text-red-500 text-[10px] mt-1">{errors.nameEn.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">
+              {t("adminTenants:modal.fields.nameAr.label")}
+            </label>
+            <input
+              {...register("nameAr", {
+                required: t("adminTenants:modal.validation.nameArRequired"),
+              })}
+              className={inputCls}
+              placeholder={t("adminTenants:modal.fields.nameAr.placeholder")}
+            />
+            {errors.nameAr && (
+              <p className="text-red-500 text-[10px] mt-1">{errors.nameAr.message}</p>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                {t("adminTenants:modal.fields.preferredLanguage.label")}
+              </label>
+              <Controller
+                name="preferredLanguage"
+                control={control}
+                rules={{
+                  required: t("adminTenants:modal.validation.preferredLanguageRequired"),
+                }}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">
+                        {t("adminTenants:modal.fields.preferredLanguage.en")}
+                      </SelectItem>
+                      <SelectItem value="ar">
+                        {t("adminTenants:modal.fields.preferredLanguage.ar")}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              {errors.preferredLanguage && (
+                <p className="text-red-500 text-[10px] mt-1">
+                  {errors.preferredLanguage.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                {t("adminTenants:modal.fields.status.label")}
+              </label>
+              <Controller
+                name="status"
+                control={control}
+                rules={{ required: t("adminTenants:modal.fields.status.label") }}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">{t("adminTenants:status.active")}</SelectItem>
+                      <SelectItem value="suspended">
+                        {t("adminTenants:status.suspended")}
+                      </SelectItem>
+                      <SelectItem value="inactive">
+                        {t("adminTenants:status.inactive")}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              {errors.status && (
+                <p className="text-red-500 text-[10px] mt-1">
+                  {t("adminTenants:modal.fields.status.label")}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              {t("adminTenants:modal.actions.cancel")}
+            </button>
+            <button
+              type="submit"
+              disabled={updateMutation.isPending}
+              className="px-4 py-2 text-sm text-white bg-teal-600 rounded-lg hover:bg-teal-700 disabled:opacity-60 flex items-center gap-2"
+            >
+              {updateMutation.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
+              {updateMutation.isPending
+                ? t("adminTenants:modal.actions.saving")
+                : t("adminTenants:modal.actions.save")}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export function TenantsPage() {
@@ -222,16 +461,28 @@ export function TenantsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [createOpen, setCreateOpen] = useState(false);
+  const [editTenant, setEditTenant] = useState<{
+    id: string;
+    nameEn?: string;
+    nameAr?: string;
+    preferredLanguage?: "en" | "ar";
+    status: TenantStatus;
+  } | null>(null);
 
   const { data: tenants = [], isLoading, refetch } = useTenantsQuery();
   const suspendMutation = useSuspendTenantMutation();
   const activateMutation = useActivateTenantMutation();
 
   const filtered = tenants.filter((t) => {
+    const displayName = (language === "ar" ? t.nameAr : t.nameEn) ?? t.name ?? "";
+    const email = t.email ?? t.settings?.email ?? "";
+    const derivedStatus =
+      t.subscription?.status === "trialing" ? "trialing" : t.status;
     const matchesSearch =
-      t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = selectedStatus === "all" || t.status === selectedStatus;
+      displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus =
+      selectedStatus === "all" || derivedStatus === selectedStatus;
     return matchesSearch && matchesStatus;
   });
 
@@ -294,17 +545,26 @@ export function TenantsPage() {
               <Filter className="w-4 h-4 text-gray-500" />
               <span className="text-sm text-gray-600">{t("adminTenants:filters.status")}</span>
             </div>
-            <select
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-            >
-              <option value="all">{t("adminTenants:status.all")}</option>
-              <option value="active">{t("adminTenants:status.active")}</option>
-              <option value="trial">{t("adminTenants:status.trialing")}</option>
-              <option value="suspended">{t("adminTenants:status.suspended")}</option>
-              <option value="churned">{t("adminTenants:status.churned")}</option>
-            </select>
+            <div className="w-[170px]">
+              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t("adminTenants:status.all")}</SelectItem>
+                  <SelectItem value="active">{t("adminTenants:status.active")}</SelectItem>
+                  <SelectItem value="trialing">
+                    {t("adminTenants:status.trialing")}
+                  </SelectItem>
+                  <SelectItem value="suspended">
+                    {t("adminTenants:status.suspended")}
+                  </SelectItem>
+                  <SelectItem value="inactive">
+                    {t("adminTenants:status.inactive")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             <button
               onClick={() => refetch()}
               className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
@@ -329,7 +589,7 @@ export function TenantsPage() {
         />
         <StatCard
           label={t("adminTenants:stats.trialing")}
-          value={isLoading ? "—" : tenants.filter((t) => t.status === "trial").length}
+          value={isLoading ? "—" : tenants.filter((t) => t.subscription?.status === "trialing").length}
           color="blue"
         />
         <StatCard
@@ -386,15 +646,29 @@ export function TenantsPage() {
                   <tr key={tenant.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{tenant.name}</div>
-                        <div className="text-xs text-gray-500">{tenant.email}</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {(language === "ar" ? tenant.nameAr : tenant.nameEn) ??
+                            tenant.name ??
+                            tenant.id}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {tenant.email ?? tenant.settings?.email ?? t("adminTenants:table.emptyValue")}
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {tenant.plan?.name ?? t("adminTenants:table.emptyValue")}
+                      {tenant.subscription?.plan?.name ??
+                        tenant.plan?.name ??
+                        t("adminTenants:table.emptyValue")}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <StatusBadge status={tenant.status} />
+                      <StatusBadge
+                        status={
+                          tenant.subscription?.status === "trialing"
+                            ? "trialing"
+                            : tenant.status
+                        }
+                      />
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                       {tenant.branchCount ?? t("adminTenants:table.emptyValue")}
@@ -414,7 +688,18 @@ export function TenantsPage() {
                           ? t("adminTenants:actions.activate")
                           : t("adminTenants:actions.suspend")}
                       </button>
-                      <button className="p-1 text-gray-400 hover:text-gray-600 rounded">
+                      <button
+                        onClick={() =>
+                          setEditTenant({
+                            id: tenant.id,
+                            nameEn: tenant.nameEn,
+                            nameAr: tenant.nameAr,
+                            preferredLanguage: tenant.preferredLanguage,
+                            status: tenant.status,
+                          })
+                        }
+                        className="p-1 text-gray-400 hover:text-gray-600 rounded"
+                      >
                         <MoreVertical className="w-5 h-5" />
                       </button>
                     </td>
@@ -447,6 +732,12 @@ export function TenantsPage() {
       </div>
 
       {createOpen && <CreateTenantModal onClose={() => setCreateOpen(false)} />}
+      {editTenant && (
+        <EditTenantModal
+          tenant={editTenant}
+          onClose={() => setEditTenant(null)}
+        />
+      )}
     </div>
   );
 }

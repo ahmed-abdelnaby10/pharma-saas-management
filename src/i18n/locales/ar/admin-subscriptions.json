@@ -5,18 +5,39 @@
     "refresh": "تحديث"
   },
   "filters": {
-    "searchPlaceholder": "البحث في المستأجرين..."
+    "searchPlaceholder": "البحث في الاشتراكات...",
+    "statusLabel": "الحالة:",
+    "allStatuses": "الكل",
+    "allPlans": "كل الخطط"
+  },
+  "summary": {
+    "total": "الإجمالي",
+    "active": "نشط",
+    "trialing": "تجريبي",
+    "pastDue": "متأخر السداد",
+    "canceled": "ملغى"
   },
   "table": {
+    "id": "المعرف",
     "tenant": "المستأجر",
-    "subscriptions": "الاشتراكات",
+    "plan": "الخطة",
+    "cycle": "الدورة",
+    "status": "الحالة",
+    "renewal": "التجديد",
+    "amount": "المبلغ",
     "actions": "الإجراءات",
-    "empty": "لا يوجد مستأجرون.",
-    "loading": "جارٍ تحميل المستأجرين..."
+    "empty": "لا توجد اشتراكات.",
+    "loading": "جارٍ تحميل الاشتراكات...",
+    "emptyValue": "-"
+  },
+  "cycle": {
+    "monthly": "شهري",
+    "yearly": "سنوي"
   },
   "row": {
     "subscriptionCount": "{{count}} اشتراك",
     "subscriptionCount_other": "{{count}} اشتراكات",
+    "current": "الحالي: {{plan}}",
     "periodEnds": "تنتهي الفترة في {{date}}",
     "noSubscriptions": "لا توجد اشتراكات بعد.",
     "loading": "جارٍ تحميل الاشتراكات...",
@@ -37,6 +58,9 @@
       "status": { "label": "الحالة الأولية" },
       "trialEndsAt": { "label": "تاريخ انتهاء التجربة" }
     },
+    "validation": {
+      "planRequired": "يرجى اختيار خطة."
+    },
     "actions": {
       "cancel": "إلغاء",
       "create": "إنشاء",
@@ -45,6 +69,19 @@
     }
   },
   "footer": {
-    "showing": "{{filtered}} من {{total}} مستأجر"
+    "showing": "{{filtered}} من {{total}} اشتراك"
+  },
+  "actions": {
+    "create": "إنشاء اشتراك"
+  },
+  "cancelModal": {
+    "title": "إلغاء الاشتراك",
+    "message": "هل أنت متأكد أنك تريد إلغاء الاشتراك الحالي للمستأجر {{tenantName}}؟",
+    "success": "تم إلغاء الاشتراك بنجاح.",
+    "actions": {
+      "keep": "الإبقاء على الاشتراك",
+      "confirm": "نعم، إلغاء",
+      "canceling": "جارٍ الإلغاء..."
+    }
   }
 }

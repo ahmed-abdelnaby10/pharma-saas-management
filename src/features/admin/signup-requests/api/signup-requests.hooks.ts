@@ -10,7 +10,6 @@ import type {
   SignupRequest,
   SignupRequestListParams,
   ApproveSignupRequestPayload,
-  ApproveSignupRequestResponse,
   RejectSignupRequestPayload,
 } from "./signup-requests.types";
 
@@ -23,7 +22,9 @@ export function useSignupRequestsQuery(
   return useQuery<SignupRequest[]>({
     queryKey: QUERY_KEYS.platform.signupRequests.list(params),
     queryFn: () =>
-      get<SignupRequest[]>(PLATFORM_SIGNUP_API.list, { params }),
+      get<SignupRequest[]>(PLATFORM_SIGNUP_API.list, {
+        params,
+      }),
     ...options,
   });
 }
@@ -47,12 +48,12 @@ export function useSignupRequestQuery(
 export function useApproveSignupRequestMutation() {
   const qc = useQueryClient();
   return useMutation<
-    ApproveSignupRequestResponse,
+    SignupRequest,
     Error,
     { id: string; payload: ApproveSignupRequestPayload }
   >({
     mutationFn: ({ id, payload }) =>
-      post<ApproveSignupRequestResponse, ApproveSignupRequestPayload>(
+      post<SignupRequest, ApproveSignupRequestPayload>(
         PLATFORM_SIGNUP_API.approve(id),
         payload,
       ),

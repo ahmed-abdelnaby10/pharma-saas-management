@@ -42,6 +42,7 @@ export function useTenantsQuery(
   return useQuery<Tenant[]>({
     queryKey: QUERY_KEYS.platform.tenants.list(params),
     queryFn: () => get<Tenant[]>(PLATFORM_API.tenants.list, { params }),
+    staleTime: 5 * 60_000,
     ...options,
   });
 }
@@ -76,7 +77,9 @@ export function useUpdateTenantMutation() {
       patch<Tenant>(PLATFORM_API.tenants.update(id), payload),
     onSuccess: (_d, vars) => {
       qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.tenants.all });
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.tenants.detail(vars.id) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.platform.tenants.detail(vars.id),
+      });
     },
   });
 }
@@ -84,10 +87,15 @@ export function useUpdateTenantMutation() {
 export function useSuspendTenantMutation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => post<Tenant>(PLATFORM_API.tenants.suspend(id)),
+    mutationFn: (id: string) =>
+      patch<Tenant, UpdateTenantPayload>(PLATFORM_API.tenants.update(id), {
+        status: "suspended",
+      }),
     onSuccess: (_d, id) => {
       qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.tenants.all });
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.tenants.detail(id) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.platform.tenants.detail(id),
+      });
     },
   });
 }
@@ -95,10 +103,15 @@ export function useSuspendTenantMutation() {
 export function useActivateTenantMutation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => post<Tenant>(PLATFORM_API.tenants.activate(id)),
+    mutationFn: (id: string) =>
+      patch<Tenant, UpdateTenantPayload>(PLATFORM_API.tenants.update(id), {
+        status: "active",
+      }),
     onSuccess: (_d, id) => {
       qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.tenants.all });
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.tenants.detail(id) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.platform.tenants.detail(id),
+      });
     },
   });
 }
@@ -112,6 +125,7 @@ export function usePlansQuery(
   return useQuery<Plan[]>({
     queryKey: QUERY_KEYS.platform.plans.list(params),
     queryFn: () => get<Plan[]>(PLATFORM_API.plans.list, { params }),
+    staleTime: 5 * 60_000,
     ...options,
   });
 }
@@ -189,7 +203,10 @@ export function useCreateInvoiceMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (payload: CreateInvoicePayload) =>
-      post<Invoice, CreateInvoicePayload>(PLATFORM_API.invoices.create, payload),
+      post<Invoice, CreateInvoicePayload>(
+        PLATFORM_API.invoices.create,
+        payload,
+      ),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.invoices.all });
     },
@@ -211,7 +228,10 @@ export function useMarkInvoicePaidMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) =>
-      post<Invoice, Record<string, never>>(PLATFORM_API.invoices.markPaid(id), {}),
+      post<Invoice, Record<string, never>>(
+        PLATFORM_API.invoices.markPaid(id),
+        {},
+      ),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.invoices.all });
     },
@@ -309,7 +329,9 @@ export function useUpdateFeatureOverrideMutation() {
         payload,
       ),
     onSuccess: (_d, { tenantId }) => {
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.features(tenantId) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.platform.features(tenantId),
+      });
     },
   });
 }
@@ -322,7 +344,8 @@ export function usePlatformSupportTicketsQuery(
 ) {
   return useQuery<SupportTicket[]>({
     queryKey: QUERY_KEYS.platform.support.list(params),
-    queryFn: () => get<SupportTicket[]>(PLATFORM_API.support.tickets, { params }),
+    queryFn: () =>
+      get<SupportTicket[]>(PLATFORM_API.support.tickets, { params }),
     ...options,
   });
 }
@@ -353,7 +376,9 @@ export function useUpdateSupportTicketStatusMutation() {
       ),
     onSuccess: (_, { id }) => {
       qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.support.all });
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.support.detail(id) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.platform.support.detail(id),
+      });
     },
   });
 }
@@ -366,8 +391,10 @@ export function useSubscriptionsQuery(
 ) {
   return useQuery<TenantSubscription[]>({
     queryKey: QUERY_KEYS.platform.subscriptions.list(tenantId),
-    queryFn: () => get<TenantSubscription[]>(PLATFORM_API.subscriptions.list(tenantId)),
+    queryFn: () =>
+      get<TenantSubscription[]>(PLATFORM_API.subscriptions.list(tenantId)),
     enabled: !!tenantId,
+    staleTime: 2 * 60_000,
     ...options,
   });
 }
@@ -375,10 +402,18 @@ export function useSubscriptionsQuery(
 export function useCreateSubscriptionMutation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ tenantId, ...payload }: CreateSubscriptionPayload & { tenantId: string }) =>
-      post<TenantSubscription>(PLATFORM_API.subscriptions.create(tenantId), payload),
+    mutationFn: ({
+      tenantId,
+      ...payload
+    }: CreateSubscriptionPayload & { tenantId: string }) =>
+      post<TenantSubscription>(
+        PLATFORM_API.subscriptions.create(tenantId),
+        payload,
+      ),
     onSuccess: (_d, vars) => {
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.subscriptions.list(vars.tenantId) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.platform.subscriptions.list(vars.tenantId),
+      });
       qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.tenants.all });
     },
   });
@@ -389,15 +424,16 @@ export function useUpdateSubscriptionMutation() {
   return useMutation({
     mutationFn: ({
       tenantId,
-      subscriptionId,
       ...payload
-    }: UpdateSubscriptionPayload & { tenantId: string; subscriptionId: string }) =>
-      patch<TenantSubscription>(
-        PLATFORM_API.subscriptions.update(tenantId, subscriptionId),
+    }: UpdateSubscriptionPayload & { tenantId: string }) =>
+      post<TenantSubscription>(
+        PLATFORM_API.subscriptions.changePlan(tenantId),
         payload,
       ),
     onSuccess: (_d, vars) => {
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.subscriptions.list(vars.tenantId) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.platform.subscriptions.list(vars.tenantId),
+      });
       qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.tenants.all });
     },
   });
@@ -406,10 +442,14 @@ export function useUpdateSubscriptionMutation() {
 export function useCancelSubscriptionMutation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ tenantId, subscriptionId }: { tenantId: string; subscriptionId: string }) =>
-      post<TenantSubscription>(PLATFORM_API.subscriptions.cancel(tenantId, subscriptionId)),
+    mutationFn: ({ tenantId }: { tenantId: string }) =>
+      post<TenantSubscription>(
+        PLATFORM_API.subscriptions.cancelCurrent(tenantId),
+      ),
     onSuccess: (_d, vars) => {
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.subscriptions.list(vars.tenantId) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.platform.subscriptions.list(vars.tenantId),
+      });
       qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.tenants.all });
     },
   });
@@ -429,7 +469,9 @@ export function useAssignSupportTicketMutation() {
       ),
     onSuccess: (_, { id }) => {
       qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.support.all });
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.support.detail(id) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.platform.support.detail(id),
+      });
     },
   });
 }

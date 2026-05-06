@@ -1,7 +1,17 @@
-export const ACCESS_TOKEN_KEY = "pharmacy-access-token";
-export const REFRESH_TOKEN_KEY = "pharmacy-refresh-token";
-export const ACCESS_TOKEN_EXPIRES_AT_KEY = "pharmacy-access-token-exp";
-export const REFRESH_TOKEN_EXPIRES_AT_KEY = "pharmacy-refresh-token-exp";
+export const TENANT_ACCESS_TOKEN_KEY = "pharmacy-tenant-access-token";
+export const TENANT_REFRESH_TOKEN_KEY = "pharmacy-tenant-refresh-token";
+export const TENANT_ACCESS_TOKEN_EXPIRES_AT_KEY = "pharmacy-tenant-access-token-exp";
+export const TENANT_REFRESH_TOKEN_EXPIRES_AT_KEY = "pharmacy-tenant-refresh-token-exp";
+export const PLATFORM_ACCESS_TOKEN_KEY = "pharmacy-platform-access-token";
+export const PLATFORM_REFRESH_TOKEN_KEY = "pharmacy-platform-refresh-token";
+export const PLATFORM_ACCESS_TOKEN_EXPIRES_AT_KEY = "pharmacy-platform-access-token-exp";
+export const PLATFORM_REFRESH_TOKEN_EXPIRES_AT_KEY = "pharmacy-platform-refresh-token-exp";
+export const AUTH_SCOPE_KEY = "pharmacy-auth-scope";
+// Backward-compatible aliases (tenant scope)
+export const ACCESS_TOKEN_KEY = TENANT_ACCESS_TOKEN_KEY;
+export const REFRESH_TOKEN_KEY = TENANT_REFRESH_TOKEN_KEY;
+export const ACCESS_TOKEN_EXPIRES_AT_KEY = TENANT_ACCESS_TOKEN_EXPIRES_AT_KEY;
+export const REFRESH_TOKEN_EXPIRES_AT_KEY = TENANT_REFRESH_TOKEN_EXPIRES_AT_KEY;
 export const TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
 export const USER_KEY = "pharmacy-user";
 export const SUPPORTED_LANGUAGES: readonly Language[] = ["en", "ar"];
@@ -18,6 +28,7 @@ export const TENANT_API = {
   auth: {
     login: "/api/v1/tenant/auth/login",
     refresh: "/api/v1/tenant/auth/refresh",
+    deviceRefresh: "/api/v1/tenant/auth/device-refresh",
     logout: "/api/v1/tenant/auth/logout",
     me: "/api/v1/tenant/auth/me",
     heartbeat: "/api/v1/tenant/auth/heartbeat",
@@ -275,12 +286,12 @@ export const PLATFORM_API = {
       `/api/v1/platform/tenants/${tenantId}/subscriptions`,
     create: (tenantId: string) =>
       `/api/v1/platform/tenants/${tenantId}/subscriptions`,
-    get: (tenantId: string, subId: string) =>
-      `/api/v1/platform/tenants/${tenantId}/subscriptions/${subId}`,
-    update: (tenantId: string, subId: string) =>
-      `/api/v1/platform/tenants/${tenantId}/subscriptions/${subId}`,
-    cancel: (tenantId: string, subId: string) =>
-      `/api/v1/platform/tenants/${tenantId}/subscriptions/${subId}/cancel`,
+    current: (tenantId: string) =>
+      `/api/v1/platform/tenants/${tenantId}/subscriptions/current`,
+    changePlan: (tenantId: string) =>
+      `/api/v1/platform/tenants/${tenantId}/subscriptions/current/change-plan`,
+    cancelCurrent: (tenantId: string) =>
+      `/api/v1/platform/tenants/${tenantId}/subscriptions/current/cancel`,
   },
 
   // Plans
@@ -355,18 +366,20 @@ export const PLATFORM_API = {
 export const PUBLIC_API = {
   plans: "/api/v1/plans",
   downloads: "/api/v1/public/downloads",
-  signupRequests: "/api/v1/public/signup-requests",
+  signupRequests: "/api/v1/signups",
 } as const;
 
 // ─── Platform Admin: signup requests ─────────────────────────────────────────
 // These are appended below into PLATFORM_API.signupRequests where possible,
 // but we export them here so they can be used before PLATFORM_API is extended.
 export const PLATFORM_SIGNUP_API = {
-  list: "/api/v1/platform/signup-requests",
-  get: (id: string) => `/api/v1/platform/signup-requests/${id}`,
-  approve: (id: string) => `/api/v1/platform/signup-requests/${id}/approve`,
-  reject: (id: string) => `/api/v1/platform/signup-requests/${id}/reject`,
+  list: "/api/v1/platform/signups",
+  get: (id: string) => `/api/v1/platform/signups/${id}`,
+  approve: (id: string) => `/api/v1/platform/signups/${id}/approve`,
+  reject: (id: string) => `/api/v1/platform/signups/${id}/reject`,
 } as const;
+
+export const PLATFORM_FEATURES = "/platform/features" as const;
 
 // ─── Legacy fallback (kept for backward-compat, prefer TENANT_API / PLATFORM_API) ──
 export const API_ENDPOINTS = {
@@ -600,6 +613,7 @@ export const QUERY_KEYS = {
         ["platform", "signup-requests", "list", params] as const,
       detail: (id: string) => ["platform", "signup-requests", id] as const,
     },
+    featureDefinitions: ["platform", "feature-definitions"] as const,
   },
 
   // Public (unauthenticated)

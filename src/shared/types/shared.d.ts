@@ -32,12 +32,9 @@ interface PaginatedResponse<T> {
   };
 }
 
-/** Generic list params shared across list endpoints */
-interface ListParams {
-  page?: number;
-  limit?: number;
-  search?: string;
-  sortBy?: string;
-  sortOrder?: "asc" | "desc";
-  branchId?: string;
+interface GlobalRequestResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+  requestId: string;
 }

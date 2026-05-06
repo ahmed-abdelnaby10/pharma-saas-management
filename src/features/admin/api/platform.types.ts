@@ -1,17 +1,49 @@
 // ─── Tenants ──────────────────────────────────────────────────────────────────
 
-export type TenantStatus = "active" | "suspended" | "trial" | "churned";
+export type TenantStatus = "active" | "suspended" | "inactive";
 
 export interface Tenant {
   id: string;
-  name: string;
-  slug: string;
-  email: string;
+  name?: string;
+  nameEn?: string;
+  nameAr?: string;
+  preferredLanguage?: "en" | "ar";
+  slug?: string;
+  email?: string | null;
   phone?: string;
   address?: string;
   status: TenantStatus;
   planId?: string;
   plan?: { id: string; name: string };
+  isTrialActive?: boolean;
+  trialEndsAt?: string | null;
+  settings?: {
+    organizationName?: string | null;
+    taxId?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    vatPercentage?: string;
+    defaultLanguage?: "en" | "ar";
+    lowStockAlerts?: boolean;
+    expiryAlerts?: boolean;
+    purchaseOrderUpdates?: boolean;
+  };
+  subscription?: {
+    id: string;
+    status: "trialing" | "active" | "past_due" | "canceled" | "paused";
+    startsAt?: string;
+    endsAt?: string | null;
+    trialEndsAt?: string | null;
+    plan?: {
+      id: string;
+      code: string;
+      name: string;
+      billingInterval?: "monthly" | "yearly";
+      price?: string | number;
+      currency?: string;
+      trialDays?: number;
+    };
+  };
   branchCount?: number;
   userCount?: number;
   createdAt: string;
@@ -19,20 +51,17 @@ export interface Tenant {
 }
 
 export interface CreateTenantPayload {
-  name: string;
-  slug: string;
-  email: string;
-  phone?: string;
-  address?: string;
-  planId?: string;
+  nameEn: string;
+  nameAr: string;
+  preferredLanguage: "en" | "ar";
+  planId: string;
 }
 
 export interface UpdateTenantPayload {
-  name?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  planId?: string;
+  nameEn?: string;
+  nameAr?: string;
+  preferredLanguage?: "en" | "ar";
+  status?: TenantStatus;
 }
 
 export interface TenantListParams {
@@ -54,11 +83,7 @@ export interface Plan {
   price?: number;
   currency?: string;
   trialDays?: number;
-  features?: Array<{
-    featureKey: string;
-    enabled: boolean;
-    limitValue?: number;
-  }>;
+  features?: PlanFeature[];
   // Legacy fields kept for compatibility with old responses.
   monthlyPrice?: number;
   yearlyPrice?: number;
@@ -67,6 +92,43 @@ export interface Plan {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface PlanFeature {
+  id?: string;
+  featureKey: string;
+  enabled: boolean;
+  limitValue: number | null;
+  type: "boolean" | "limit";
+  module: string;
+  requiresKeys: string[];
+  isActive: boolean;
+  label: string;
+  description: string;
+  labelEn: string;
+  labelAr: string;
+  descriptionEn: string;
+  descriptionAr: string;
+}
+
+export interface FeatureDefinition {
+  key: string;
+  type: "boolean" | "limit";
+  label: string;
+  description: string;
+  labelEn: string;
+  labelAr: string;
+  descriptionEn: string;
+  descriptionAr: string;
+  module: string;
+  requiresKeys: string[];
+  isActive: boolean;
+}
+
+export interface PlanFeatureFormRow {
+  featureKey: string;
+  enabled: boolean;
+  limitValue?: number | null;
 }
 
 export interface CreatePlanPayload {
@@ -78,11 +140,7 @@ export interface CreatePlanPayload {
   currency: string;
   trialDays: number;
   isActive: boolean;
-  features: Array<{
-    featureKey: string;
-    enabled: boolean;
-    limitValue?: number;
-  }>;
+  features: PlanFeatureFormRow[];
 }
 
 export type UpdatePlanPayload = Partial<CreatePlanPayload> & { isActive?: boolean };
@@ -134,11 +192,20 @@ export interface TenantSubscription {
   id: string;
   tenantId: string;
   planId: string;
-  plan?: { id: string; name: string; monthlyPrice: number };
+  plan?: {
+    id: string;
+    code?: string;
+    name: string;
+    billingInterval?: "monthly" | "yearly";
+    price?: string | number;
+    currency?: string;
+    trialDays?: number;
+    monthlyPrice?: number;
+  };
   status: TenantSubscriptionStatus;
+  startsAt?: string;
+  endsAt?: string | null;
   trialEndsAt?: string | null;
-  currentPeriodStart?: string;
-  currentPeriodEnd?: string;
   canceledAt?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -146,13 +213,10 @@ export interface TenantSubscription {
 
 export interface CreateSubscriptionPayload {
   planId: string;
-  status?: TenantSubscriptionStatus;
-  trialEndsAt?: string;
 }
 
 export interface UpdateSubscriptionPayload {
-  planId?: string;
-  status?: TenantSubscriptionStatus;
+  planId: string;
 }
 
 // ─── Metrics ──────────────────────────────────────────────────────────────────

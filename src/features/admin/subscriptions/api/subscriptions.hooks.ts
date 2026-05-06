@@ -25,16 +25,15 @@ export function useAdminSubscriptionsListQuery(
 
 export function useAdminSubscriptionDetailQuery(
   tenantId: string,
-  subscriptionId: string,
   enabled = false,
 ) {
   return useQuery<SubscriptionRecord>({
-    queryKey: adminSubscriptionsApi.queryKeys.detail(tenantId, subscriptionId),
+    queryKey: adminSubscriptionsApi.queryKeys.detail(tenantId),
     queryFn: () =>
       get<SubscriptionRecord>(
-        adminSubscriptionsApi.endpoints.detail(tenantId, subscriptionId),
+        adminSubscriptionsApi.endpoints.detail(tenantId),
       ),
-    enabled: enabled && !!tenantId && !!subscriptionId,
+    enabled: enabled && !!tenantId,
   });
 }
 
@@ -43,13 +42,11 @@ export function useCancelSubscriptionMutation() {
   return useMutation({
     mutationFn: ({
       tenantId,
-      subscriptionId,
     }: {
       tenantId: string;
-      subscriptionId: string;
     }) =>
       post<SubscriptionRecord>(
-        adminSubscriptionsApi.endpoints.cancel(tenantId, subscriptionId),
+        adminSubscriptionsApi.endpoints.cancel(tenantId),
       ),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["platform", "tenants"] });

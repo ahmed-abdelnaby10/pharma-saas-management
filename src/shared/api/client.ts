@@ -66,9 +66,9 @@ apiClient.interceptors.request.use(
     const requestConfig = config as InternalAxiosRequestConfig & AppRequestConfig;
     const method = requestConfig.method?.toUpperCase();
 
-    if (method === "GET") {
-      setHeader(requestConfig, "Accept-Language", getStoredLanguage());
-    }
+    // Always force API locale to the app language ("en" | "ar"),
+    // overriding browser-provided language negotiation lists.
+    setHeader(requestConfig, "Accept-Language", getStoredLanguage());
 
     if (method && MUTATING_METHODS.has(method)) {
       setHeader(requestConfig, "Idempotency-Key", generateIdempotencyKey());

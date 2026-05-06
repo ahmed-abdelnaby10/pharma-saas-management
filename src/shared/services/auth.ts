@@ -1,9 +1,13 @@
 // src/services/auth.ts
 import { NavigateFunction } from "react-router";
 import {
-  ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_KEY,
-  ACCESS_TOKEN_EXPIRES_AT_KEY,
+  TENANT_ACCESS_TOKEN_KEY,
+  TENANT_REFRESH_TOKEN_KEY,
+  TENANT_ACCESS_TOKEN_EXPIRES_AT_KEY,
+  PLATFORM_ACCESS_TOKEN_KEY,
+  PLATFORM_REFRESH_TOKEN_KEY,
+  PLATFORM_ACCESS_TOKEN_EXPIRES_AT_KEY,
+  AUTH_SCOPE_KEY,
   USER_KEY,
   TOKEN_TTL_MS,
   TENANT_API,
@@ -15,6 +19,7 @@ import { getCookie, setCookie, deleteCookie } from "./cookies";
 import useSubscription from "@/shared/store/useSubscription";
 
 type RequestLanguage = "en" | "ar";
+export type AuthScope = "tenant" | "platform";
 
 function resolveRequestLanguage(): RequestLanguage {
   if (typeof document !== "undefined") {
@@ -76,6 +81,7 @@ export interface SubscriptionClaimsFromToken {
 export function decodeAccessToken(token: string): {
   exp: number | null;
   subscription: SubscriptionClaimsFromToken | null;
+  scope: string | null;
 } {
   try {
     const payload = token.split(".")[1];
@@ -85,6 +91,7 @@ export function decodeAccessToken(token: string): {
     const exp =
       typeof json?.exp === "number" ? json.exp * 1000 : null;
     const sub = json?.subscription ?? null;
+    const scope = typeof json?.scope === "string" ? json.scope : null;
     const subscription: SubscriptionClaimsFromToken | null =
       sub && typeof sub === "object" && typeof sub.id === "string"
         ? {
@@ -94,25 +101,73 @@ export function decodeAccessToken(token: string): {
             offlineValidUntil: sub.offlineValidUntil ?? null,
           }
         : null;
-    return { exp, subscription };
+    return { exp, subscription, scope };
   } catch {
-    return { exp: null, subscription: null };
+    return { exp: null, subscription: null, scope: null };
   }
 }
 
+export function getAccessTokenScope(token: string): string | null {
+  return decodeAccessToken(token).scope;
+}
+
+function normalizeScope(scope: string | null | undefined): AuthScope | null {
+  if (scope === "tenant" || scope === "platform") return scope;
+  return null;
+}
+
+export function getActiveAuthScope(): AuthScope | null {
+  const stored = localStorage.getItem(AUTH_SCOPE_KEY);
+  const normalizedStored = normalizeScope(stored);
+  if (normalizedStored) return normalizedStored;
+
+  const platformToken = getCookie(PLATFORM_ACCESS_TOKEN_KEY);
+  if (platformToken) return "platform";
+  const tenantToken = getCookie(TENANT_ACCESS_TOKEN_KEY);
+  if (tenantToken) return "tenant";
+  // Fallback for sessions where access token expired but refresh token still exists.
+  const platformRefresh = getCookie(PLATFORM_REFRESH_TOKEN_KEY);
+  if (platformRefresh) return "platform";
+  const tenantRefresh = getCookie(TENANT_REFRESH_TOKEN_KEY);
+  if (tenantRefresh) return "tenant";
+  return null;
+}
+
 // ---- Getters (from cookies)
-export function getAccessToken(): string | null {
-  return getCookie(ACCESS_TOKEN_KEY);
+export function getAccessToken(scope?: AuthScope): string | null {
+  const resolvedScope = scope ?? getActiveAuthScope();
+  if (resolvedScope === "platform") {
+    return getCookie(PLATFORM_ACCESS_TOKEN_KEY);
+  }
+  if (resolvedScope === "tenant") {
+    return getCookie(TENANT_ACCESS_TOKEN_KEY);
+  }
+  return null;
 }
-export function getRefreshToken(): string | null {
-  return getCookie(REFRESH_TOKEN_KEY);
+export function getRefreshToken(scope?: AuthScope): string | null {
+  const resolvedScope = scope ?? getActiveAuthScope();
+  if (resolvedScope === "platform") {
+    return getCookie(PLATFORM_REFRESH_TOKEN_KEY);
+  }
+  if (resolvedScope === "tenant") {
+    return getCookie(TENANT_REFRESH_TOKEN_KEY);
+  }
+  return null;
 }
-export function getAccessExp(): number | null {
-  const raw = localStorage.getItem(ACCESS_TOKEN_EXPIRES_AT_KEY);
+export function getAccessExp(scope?: AuthScope): number | null {
+  const resolvedScope = scope ?? getActiveAuthScope();
+  const key =
+    resolvedScope === "platform"
+      ? PLATFORM_ACCESS_TOKEN_EXPIRES_AT_KEY
+      : resolvedScope === "tenant"
+        ? TENANT_ACCESS_TOKEN_EXPIRES_AT_KEY
+        : null;
+  if (!key) return null;
+  const raw = localStorage.getItem(key);
   return raw ? Number(raw) : null;
 }
-export function isAccessExpired(leewayMs = 30_000): boolean {
-  const exp = getAccessExp();
+export function isAccessExpired(leewayMs = 30_000, scope?: AuthScope): boolean {
+  const exp = getAccessExp(scope);
   if (!exp) return true;
   return Date.now() + leewayMs >= exp;
 }
@@ -127,14 +182,28 @@ export async function storeTokens(params: {
 }): Promise<void> {
   const { accessToken, refreshToken, user, navigate, setIsAuthenticated } = params;
 
-  const { exp, subscription } = decodeAccessToken(accessToken);
+  const { exp, subscription, scope } = decodeAccessToken(accessToken);
+  const authScope = normalizeScope(scope);
+  if (!authScope) {
+    throw new Error("Unknown access token scope");
+  }
   const resolvedExp =
     exp ?? Date.now() + (typeof TOKEN_TTL_MS === "number" ? TOKEN_TTL_MS : 0);
 
+  const accessTokenKey =
+    authScope === "platform" ? PLATFORM_ACCESS_TOKEN_KEY : TENANT_ACCESS_TOKEN_KEY;
+  const refreshTokenKey =
+    authScope === "platform" ? PLATFORM_REFRESH_TOKEN_KEY : TENANT_REFRESH_TOKEN_KEY;
+  const expKey =
+    authScope === "platform"
+      ? PLATFORM_ACCESS_TOKEN_EXPIRES_AT_KEY
+      : TENANT_ACCESS_TOKEN_EXPIRES_AT_KEY;
+
   // 1-day cookie for both tokens
-  setCookie(ACCESS_TOKEN_KEY, accessToken, { days: 1 });
-  setCookie(REFRESH_TOKEN_KEY, refreshToken, { days: 1 });
-  localStorage.setItem(ACCESS_TOKEN_EXPIRES_AT_KEY, String(resolvedExp));
+  setCookie(accessTokenKey, accessToken, { days: 1 });
+  setCookie(refreshTokenKey, refreshToken, { days: 1 });
+  localStorage.setItem(expKey, String(resolvedExp));
+  localStorage.setItem(AUTH_SCOPE_KEY, authScope);
 
   // user stays in localStorage
   if (user) localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -156,9 +225,13 @@ export async function removeTokens(
   navigate?: NavigateFunction,
   setIsAuthenticated?: (v: boolean) => void,
 ): Promise<void> {
-  deleteCookie(ACCESS_TOKEN_KEY);
-  deleteCookie(REFRESH_TOKEN_KEY);
-  localStorage.removeItem(ACCESS_TOKEN_EXPIRES_AT_KEY);
+  deleteCookie(TENANT_ACCESS_TOKEN_KEY);
+  deleteCookie(TENANT_REFRESH_TOKEN_KEY);
+  deleteCookie(PLATFORM_ACCESS_TOKEN_KEY);
+  deleteCookie(PLATFORM_REFRESH_TOKEN_KEY);
+  localStorage.removeItem(TENANT_ACCESS_TOKEN_EXPIRES_AT_KEY);
+  localStorage.removeItem(PLATFORM_ACCESS_TOKEN_EXPIRES_AT_KEY);
+  localStorage.removeItem(AUTH_SCOPE_KEY);
   localStorage.removeItem(USER_KEY);
 
   if (setIsAuthenticated) setIsAuthenticated(false);
@@ -212,16 +285,26 @@ export async function platformLogin(credentials: {
 let refreshingPromise: Promise<string | null> | null = null;
 
 export async function refreshAccessToken(): Promise<string | null> {
-  const refreshToken = getRefreshToken();
+  const scope = getActiveAuthScope();
+  if (!scope) return null;
+  const refreshToken = getRefreshToken(scope);
   if (!refreshToken) return null;
 
   if (!refreshingPromise) {
-    refreshingPromise = axios
-      .post(
-        BASE_URL + TENANT_API.auth.refresh,
-        { refreshToken },
-        { headers: { "Accept-Language": resolveRequestLanguage() } },
-      )
+    const refreshRequest =
+      scope === "platform"
+        ? axios.post(
+            BASE_URL + PLATFORM_API.auth.refresh,
+            { refreshToken },
+            { headers: { "Accept-Language": resolveRequestLanguage() } },
+          )
+        : axios.post(
+            BASE_URL + TENANT_API.auth.deviceRefresh,
+            { deviceToken: refreshToken },
+            { headers: { "Accept-Language": resolveRequestLanguage() } },
+          );
+
+    refreshingPromise = refreshRequest
       .then((res) => {
         const root = res.data?.data ?? res.data ?? {};
         const newAccess: string = root.accessToken;
@@ -231,17 +314,31 @@ export async function refreshAccessToken(): Promise<string | null> {
 
         const exp = decodeJwtExp(newAccess) ?? Date.now() + 5 * 60_000;
 
-        setCookie(ACCESS_TOKEN_KEY, newAccess, { days: 1 });
-        if (newRefresh) setCookie(REFRESH_TOKEN_KEY, newRefresh, { days: 1 });
-        localStorage.setItem(ACCESS_TOKEN_EXPIRES_AT_KEY, String(exp));
+        const accessTokenKey =
+          scope === "platform" ? PLATFORM_ACCESS_TOKEN_KEY : TENANT_ACCESS_TOKEN_KEY;
+        const refreshTokenKey =
+          scope === "platform" ? PLATFORM_REFRESH_TOKEN_KEY : TENANT_REFRESH_TOKEN_KEY;
+        const expKey =
+          scope === "platform"
+            ? PLATFORM_ACCESS_TOKEN_EXPIRES_AT_KEY
+            : TENANT_ACCESS_TOKEN_EXPIRES_AT_KEY;
+
+        setCookie(accessTokenKey, newAccess, { days: 1 });
+        if (newRefresh) setCookie(refreshTokenKey, newRefresh, { days: 1 });
+        localStorage.setItem(expKey, String(exp));
+        localStorage.setItem(AUTH_SCOPE_KEY, scope);
 
         notifyTokensRefreshed();
 
         return newAccess;
       })
-      .catch(() => {
-        // Refresh failed → force logout
-        removeTokens();
+      .catch((err) => {
+        // Force logout only when refresh token is truly invalid/forbidden.
+        // For transient failures (network, timeout), keep current session state.
+        const status = axios.isAxiosError(err) ? err.response?.status : undefined;
+        if (status === 401 || status === 403) {
+          removeTokens();
+        }
         return null;
       })
       .finally(() => {
@@ -252,9 +349,12 @@ export async function refreshAccessToken(): Promise<string | null> {
 }
 
 export function isAuthenticated(): boolean {
-  const access = getAccessToken();
-  if (!access) return false;
-  return !isAccessExpired(0);
+  const scope = getActiveAuthScope();
+  if (!scope) return false;
+  const access = getAccessToken(scope);
+  if (access && !isAccessExpired(0, scope)) return true;
+  // Allow app to proceed and let interceptor perform silent refresh.
+  return !!getRefreshToken(scope);
 }
 
 export function readUserFromStorage(): any | null {

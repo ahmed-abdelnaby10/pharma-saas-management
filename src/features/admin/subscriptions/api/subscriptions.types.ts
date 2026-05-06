@@ -10,24 +10,28 @@ export type SubscriptionStatus =
 export interface SubscriptionRecord {
   id: string;
   tenantId: string;
-  tenant?: { id: string; name: string };
+  tenant?: { id: string; nameEn?: string; nameAr?: string };
   planId: string;
-  plan?: { id: string; name: string };
-  billingCycle: SubscriptionBillingCycle;
+  plan?: {
+    id: string;
+    code?: string;
+    name: string;
+    billingInterval?: SubscriptionBillingCycle;
+    price?: string | number;
+    currency?: string;
+    trialDays?: number;
+  };
   status: SubscriptionStatus;
+  startsAt?: string;
+  endsAt?: string | null;
   trialEndsAt: string | null;
-  currentPeriodEnd: string;
-  amount: number;
-  cancelAtPeriodEnd: boolean;
+  canceledAt?: string | null;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface AdminSubscriptionsListParams {
-  search?: string;
   status?: SubscriptionStatus;
-  page?: number;
-  limit?: number;
 }
 
 export type AdminSubscriptionsListResponse = SubscriptionRecord[];

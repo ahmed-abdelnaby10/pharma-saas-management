@@ -5,18 +5,39 @@
     "refresh": "Refresh"
   },
   "filters": {
-    "searchPlaceholder": "Search tenants..."
+    "searchPlaceholder": "Search subscriptions...",
+    "statusLabel": "Status:",
+    "allStatuses": "All",
+    "allPlans": "All Plans"
+  },
+  "summary": {
+    "total": "Total",
+    "active": "Active",
+    "trialing": "Trialing",
+    "pastDue": "Past Due",
+    "canceled": "Canceled"
   },
   "table": {
+    "id": "ID",
     "tenant": "Tenant",
-    "subscriptions": "Subscriptions",
+    "plan": "Plan",
+    "cycle": "Cycle",
+    "status": "Status",
+    "renewal": "Renewal",
+    "amount": "Amount",
     "actions": "Actions",
-    "empty": "No tenants found.",
-    "loading": "Loading tenants..."
+    "empty": "No subscriptions found.",
+    "loading": "Loading subscriptions...",
+    "emptyValue": "-"
+  },
+  "cycle": {
+    "monthly": "Monthly",
+    "yearly": "Yearly"
   },
   "row": {
     "subscriptionCount": "{{count}} subscription",
     "subscriptionCount_other": "{{count}} subscriptions",
+    "current": "Current: {{plan}}",
     "periodEnds": "Period ends {{date}}",
     "noSubscriptions": "No subscriptions yet.",
     "loading": "Loading subscriptions...",
@@ -37,6 +58,9 @@
       "status": { "label": "Initial status" },
       "trialEndsAt": { "label": "Trial ends at" }
     },
+    "validation": {
+      "planRequired": "Please select a plan."
+    },
     "actions": {
       "cancel": "Cancel",
       "create": "Create",
@@ -45,6 +69,19 @@
     }
   },
   "footer": {
-    "showing": "{{filtered}} of {{total}} tenants"
+    "showing": "{{filtered}} of {{total}} subscriptions"
+  },
+  "actions": {
+    "create": "Create Subscription"
+  },
+  "cancelModal": {
+    "title": "Cancel subscription",
+    "message": "Are you sure you want to cancel the current subscription for {{tenantName}}?",
+    "success": "Subscription canceled successfully.",
+    "actions": {
+      "keep": "Keep subscription",
+      "confirm": "Yes, cancel",
+      "canceling": "Canceling..."
+    }
   }
 }

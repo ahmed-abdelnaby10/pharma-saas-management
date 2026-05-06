@@ -18,10 +18,9 @@
   "status": {
     "all": "All Statuses",
     "active": "Active",
-    "trial": "Trialing",
     "trialing": "Trialing",
     "suspended": "Suspended",
-    "churned": "Churned"
+    "inactive": "Inactive"
   },
   "table": {
     "tenant": "Tenant",
@@ -43,22 +42,35 @@
     "suspend": "Suspend",
     "activated": "Tenant activated",
     "suspended": "Tenant suspended",
+    "updated": "Tenant updated",
     "failed": "Action failed"
   },
   "modal": {
     "createTitle": "Create Tenant",
+    "editTitle": "Edit Tenant",
     "fields": {
-      "name": { "label": "Tenant Name *", "placeholder": "Acme Pharmacy" },
-      "slug": { "label": "Slug *", "placeholder": "acme-pharmacy" },
-      "email": { "label": "Email *", "placeholder": "admin@acmepharmacy.com" },
-      "phone": { "label": "Phone", "placeholder": "+1 555 000 0000" },
-      "address": { "label": "Address", "placeholder": "123 Main St" },
-      "plan": { "label": "Plan", "placeholder": "Select a plan..." }
+      "nameEn": { "label": "Tenant Name (English) *", "placeholder": "Acme Pharmacy" },
+      "nameAr": { "label": "Tenant Name (Arabic) *", "placeholder": "صيدلية الأمل" },
+      "preferredLanguage": {
+        "label": "Preferred Language",
+        "en": "English",
+        "ar": "Arabic"
+      },
+      "status": { "label": "Status" },
+      "plan": { "label": "Plan *", "placeholder": "Select a plan..." }
+    },
+    "validation": {
+      "nameEnRequired": "Tenant name in English is required.",
+      "nameArRequired": "Tenant name in Arabic is required.",
+      "preferredLanguageRequired": "Preferred language is required.",
+      "planRequired": "Please select a plan."
     },
     "actions": {
       "cancel": "Cancel",
       "create": "Create Tenant",
-      "creating": "Creating..."
+      "creating": "Creating...",
+      "save": "Save",
+      "saving": "Saving..."
     }
   },
   "tabs": {
