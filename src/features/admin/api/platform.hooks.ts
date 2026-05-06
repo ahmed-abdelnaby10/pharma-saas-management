@@ -16,6 +16,7 @@ import type {
   UpdatePlanPayload,
   Invoice,
   InvoiceListParams,
+  CreateInvoicePayload,
   PlatformMetricsOverview,
   AuditLogEntry,
   AuditLogParams,
@@ -184,6 +185,50 @@ export function useInvoiceQuery(
   });
 }
 
+export function useCreateInvoiceMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateInvoicePayload) =>
+      post<Invoice, CreateInvoicePayload>(PLATFORM_API.invoices.create, payload),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.invoices.all });
+    },
+  });
+}
+
+export function useIssueInvoiceMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      post<Invoice, Record<string, never>>(PLATFORM_API.invoices.issue(id), {}),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.invoices.all });
+    },
+  });
+}
+
+export function useMarkInvoicePaidMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      post<Invoice, Record<string, never>>(PLATFORM_API.invoices.markPaid(id), {}),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.invoices.all });
+    },
+  });
+}
+
+export function useVoidInvoiceMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      post<Invoice, Record<string, never>>(PLATFORM_API.invoices.void(id), {}),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QUERY_KEYS.platform.invoices.all });
+    },
+  });
+}
+
 // ─── Platform Metrics ─────────────────────────────────────────────────────────
 
 export function usePlatformMetricsQuery(
@@ -231,7 +276,7 @@ export function usePlatformDashboardQuery(
 ) {
   return useQuery<PlatformDashboard>({
     queryKey: QUERY_KEYS.platform.dashboard,
-    queryFn: () => get<PlatformDashboard>(PLATFORM_API.metrics.overview),
+    queryFn: () => get<PlatformDashboard>(PLATFORM_API.dashboard),
     staleTime: 60_000,
     ...options,
   });
@@ -303,7 +348,7 @@ export function useUpdateSupportTicketStatusMutation() {
   >({
     mutationFn: ({ id, payload }) =>
       patch<SupportTicket, UpdateSupportTicketStatusPayload>(
-        PLATFORM_API.support.get(id),
+        PLATFORM_API.support.updateStatus(id),
         payload,
       ),
     onSuccess: (_, { id }) => {
@@ -379,7 +424,7 @@ export function useAssignSupportTicketMutation() {
   >({
     mutationFn: ({ id, payload }) =>
       patch<SupportTicket, AssignSupportTicketPayload>(
-        PLATFORM_API.support.get(id),
+        PLATFORM_API.support.assign(id),
         payload,
       ),
     onSuccess: (_, { id }) => {

@@ -1,0 +1,10 @@
+{
+  "header": {
+    "title": "Usage & Limits",
+    "subtitle": "Monitor tenant resource consumption and quota risks"
+  },
+  "chart": {
+    "title": "Usage Monitoring",
+    "description": "Track branch usage, user limits, OCR consumption, and identify tenants approaching their quotas"
+  }
+}

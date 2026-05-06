@@ -25,23 +25,23 @@ import { useLanguage } from "@/app/contexts/useLanguage";
 import { cn } from "../../../lib/utils";
 
 const navigationItems = [
-  { key: "dashboard",     icon: LayoutDashboard, path: "/app" },
-  { key: "pos",           icon: ShoppingCart,    path: "/app/pos" },
-  { key: "medicines",     icon: Pill,            path: "/app/medicines" },
-  { key: "cosmetics",     icon: Sparkles,        path: "/app/cosmetics" },
-  { key: "inventory",     icon: Package,         path: "/app/inventory" },
-  { key: "purchasing",    icon: ShoppingBag,     path: "/app/purchasing" },
-  { key: "shifts",        icon: Clock,           path: "/app/shifts" },
-  { key: "reports",       icon: BarChart3,       path: "/app/reports" },
-  { key: "salesHistory",  icon: Receipt,         path: "/app/sales/history" },
-  { key: "patients",      icon: UserCheck,       path: "/app/patients" },
-  { key: "prescriptions", icon: FileText,        path: "/app/prescriptions" },
-  { key: "ocrDocuments",  icon: ScanLine,        path: "/app/ocr" },
-  { key: "branches",      icon: Building2,       path: "/app/branches" },
-  { key: "users",         icon: Users,           path: "/app/users" },
-  { key: "support",       icon: HelpCircle,      path: "/app/support" },
-  { key: "subscription",  icon: CreditCard,      path: "/app/subscription" },
-  { key: "settings",      icon: Settings,        path: "/app/settings" },
+  { key: "dashboard", icon: LayoutDashboard, path: "/app" },
+  { key: "pos", icon: ShoppingCart, path: "/app/pos" },
+  { key: "medicines", icon: Pill, path: "/app/medicines" },
+  { key: "cosmetics", icon: Sparkles, path: "/app/cosmetics" },
+  { key: "inventory", icon: Package, path: "/app/inventory" },
+  { key: "purchasing", icon: ShoppingBag, path: "/app/purchasing" },
+  { key: "shifts", icon: Clock, path: "/app/shifts" },
+  { key: "reports", icon: BarChart3, path: "/app/reports" },
+  { key: "salesHistory", icon: Receipt, path: "/app/sales/history" },
+  { key: "patients", icon: UserCheck, path: "/app/patients" },
+  { key: "prescriptions", icon: FileText, path: "/app/prescriptions" },
+  { key: "ocrDocuments", icon: ScanLine, path: "/app/ocr" },
+  { key: "branches", icon: Building2, path: "/app/branches" },
+  { key: "users", icon: Users, path: "/app/users" },
+  { key: "support", icon: HelpCircle, path: "/app/support" },
+  { key: "subscription", icon: CreditCard, path: "/app/subscription" },
+  { key: "settings", icon: Settings, path: "/app/settings" },
 ];
 
 export function Sidebar() {
@@ -57,7 +57,7 @@ export function Sidebar() {
             <Pill className="w-6 h-6" />
           </div>
           <div className={direction === "rtl" ? "text-right" : "text-left"}>
-            <h1 className="text-xl font-semibold">PharmaSaaS</h1>
+            <h1 className="text-xl font-semibold">Yomdix</h1>
             <p className="text-xs text-white/70">Pharmacy Platform</p>
           </div>
         </div>
@@ -107,7 +107,7 @@ export function Sidebar() {
       {/* Footer */}
       <div className="p-4 border-t border-[#0d4a39]">
         <div className="text-xs text-white/50 text-center">
-          Ã‚Â© 2026 PharmaSaaS
+          &copy; 2026 Yomdix
         </div>
       </div>
     </>

@@ -47,26 +47,42 @@ export interface TenantListParams {
 
 export interface Plan {
   id: string;
+  code?: string;
   name: string;
   description?: string;
-  monthlyPrice: number;
-  yearlyPrice: number;
-  maxBranches: number;
-  maxUsers: number;
-  features: string[];
+  billingInterval?: "monthly" | "yearly";
+  price?: number;
+  currency?: string;
+  trialDays?: number;
+  features?: Array<{
+    featureKey: string;
+    enabled: boolean;
+    limitValue?: number;
+  }>;
+  // Legacy fields kept for compatibility with old responses.
+  monthlyPrice?: number;
+  yearlyPrice?: number;
+  maxBranches?: number;
+  maxUsers?: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CreatePlanPayload {
+  code: string;
   name: string;
   description?: string;
-  monthlyPrice: number;
-  yearlyPrice: number;
-  maxBranches: number;
-  maxUsers: number;
-  features?: string[];
+  billingInterval: "monthly" | "yearly";
+  price: number;
+  currency: string;
+  trialDays: number;
+  isActive: boolean;
+  features: Array<{
+    featureKey: string;
+    enabled: boolean;
+    limitValue?: number;
+  }>;
 }
 
 export type UpdatePlanPayload = Partial<CreatePlanPayload> & { isActive?: boolean };
@@ -95,6 +111,14 @@ export interface InvoiceListParams {
   status?: InvoiceStatus;
   from?: string;
   to?: string;
+}
+
+export interface CreateInvoicePayload {
+  tenantId: string;
+  subscriptionId: string;
+  amount: number;
+  currency?: string;
+  dueDate?: string;
 }
 
 // ─── Tenant Subscriptions ─────────────────────────────────────────────────────

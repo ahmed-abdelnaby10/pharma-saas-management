@@ -1,0 +1,59 @@
+{
+  "header": {
+    "title": "Signup Requests",
+    "subtitle": "Review and manage incoming trial requests from the public signup form."
+  },
+  "filters": {
+    "searchPlaceholder": "Search by name, email…",
+    "tabs": {
+      "all": "All",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    }
+  },
+  "status": {
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected"
+  },
+  "table": {
+    "loading": "Loading…",
+    "business": "Business",
+    "contact": "Contact",
+    "plan": "Plan",
+    "submitted": "Submitted",
+    "status": "Status",
+    "emptyValue": "—"
+  },
+  "empty": {
+    "heading": "No signup requests",
+    "subline": "New requests from the public signup form will appear here."
+  },
+  "actions": {
+    "approve": "Approve",
+    "reject": "Reject",
+    "done": "Done",
+    "cancel": "Cancel"
+  },
+  "approveModal": {
+    "title": "Approve Request",
+    "successTitle": "Tenant Created",
+    "successMessage": "The tenant <strong>{{name}}</strong> has been created. Share the temporary password below — it will only be shown once.",
+    "approveMessage": "Approving <strong>{{name}}</strong> will create a new tenant and email credentials to <strong>{{email}}</strong>.",
+    "adminEmailLabel": "Admin Email",
+    "adminEmailNote": "(optional override)",
+    "tempPasswordLabel": "Temporary Password",
+    "approving": "Approving…",
+    "copyTitle": "Copy password"
+  },
+  "rejectModal": {
+    "title": "Reject Request",
+    "message": "Rejecting <strong>{{name}}</strong> will permanently close this request. Please provide a reason.",
+    "reasonLabel": "Reason *",
+    "reasonPlaceholder": "Why is this request being rejected?",
+    "rejecting": "Rejecting…",
+    "rejected": "Request from {{name}} has been rejected.",
+    "reasonRequired": "Please enter a rejection reason."
+  }
+}

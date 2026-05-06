@@ -9,6 +9,7 @@
 
 import { redirect } from "react-router";
 import type { RouteObject } from "react-router";
+import { isAuthenticated } from "@/shared/services/auth";
 
 import { DashboardLayout } from "@/app/components/layouts/DashboardLayout";
 import { PublicLayout } from "@/app/components/layouts/PublicLayout";
@@ -165,6 +166,12 @@ export const clientRoute: RouteObject = {
 // ---------------------------------------------------------------------------
 export const adminRoute: RouteObject = {
   path: "/admin",
+  loader: () => {
+    if (!isAuthenticated()) {
+      return redirect("/login?mode=admin");
+    }
+    return null;
+  },
   Component: AdminLayout,
   children: [
     { index: true,                Component: PlatformDashboardPage },

@@ -1,0 +1,38 @@
+{
+  "header": {
+    "title": "Audit Logs",
+    "subtitle": "Review sensitive platform actions across tenant administration."
+  },
+  "stats": {
+    "eventsToday": "Events Today",
+    "securityAlerts": "Security Alerts",
+    "retentionWindow": "Retention Window",
+    "retentionValue": "90 days"
+  },
+  "recentEvents": {
+    "title": "Recent Events",
+    "columns": {
+      "actor": "Actor",
+      "action": "Action",
+      "target": "Target",
+      "timestamp": "Timestamp"
+    },
+    "items": {
+      "audit1": {
+        "actor": "System Admin",
+        "action": "Updated tenant plan",
+        "target": "Green Valley Pharmacy"
+      },
+      "audit2": {
+        "actor": "Support Agent",
+        "action": "Reset tenant owner password",
+        "target": "Al Noor Pharmacy"
+      },
+      "audit3": {
+        "actor": "System",
+        "action": "Applied usage-limit override",
+        "target": "Demo Workspace"
+      }
+    }
+  }
+}

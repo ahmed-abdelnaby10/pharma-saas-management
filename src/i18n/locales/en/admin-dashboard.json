@@ -1,0 +1,59 @@
+{
+  "status": {
+    "active": "Active",
+    "trialing": "Trialing",
+    "pastDue": "Past Due",
+    "suspended": "Suspended"
+  },
+  "loading": "Loading dashboard...",
+  "header": {
+    "title": "Platform Dashboard",
+    "subtitle": "Monitor your SaaS platform performance and health",
+    "exportReport": "Export Report",
+    "createTenant": "Create Tenant"
+  },
+  "kpis": {
+    "totalTenants": "Total Tenants",
+    "activeTenants": "Active Tenants",
+    "mrr": "MRR",
+    "pastDue": "Past Due",
+    "trialingTenants": "Trialing Tenants",
+    "suspended": "Suspended",
+    "arr": "ARR",
+    "overdueInvoices": "Overdue Invoices",
+    "churn": "{{value}}% churn",
+    "empty": "-"
+  },
+  "charts": {
+    "revenueTrend": {
+      "title": "Revenue Trend",
+      "subtitle": "Last 6 months",
+      "options": {
+        "last6Months": "Last 6 months",
+        "last12Months": "Last 12 months",
+        "thisYear": "This year"
+      }
+    },
+    "subscriptionGrowth": {
+      "title": "Subscription Growth",
+      "subtitle": "New subscriptions per month"
+    }
+  },
+  "sections": {
+    "tenantStatus": "Tenant Status",
+    "subscriptionHealth": "Subscription Health",
+    "recentActivity": "Recent Activity",
+    "quickActions": "Quick Actions"
+  },
+  "recentActivity": {
+    "empty": "No recent activity"
+  },
+  "quickActions": {
+    "createTenant": "Create Tenant",
+    "startTrial": "Start Trial",
+    "createInvoice": "Create Invoice",
+    "assignPlan": "Assign Plan",
+    "suspendTenant": "Suspend Tenant",
+    "viewReports": "View Reports"
+  }
+}

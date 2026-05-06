@@ -1,0 +1,33 @@
+{
+  "navigation": {
+    "dashboard": "لوحة التحكم",
+    "tenants": "المستأجرون",
+    "signup-requests": "طلبات التسجيل",
+    "subscriptions": "الاشتراكات",
+    "plans": "الباقات",
+    "catalog": "كتالوج المنتجات",
+    "invoices": "الفواتير",
+    "features": "تجاوزات الميزات",
+    "usage": "الاستخدام والحدود",
+    "support": "الدعم",
+    "audit": "سجلات التدقيق",
+    "metrics": "مقاييس النظام",
+    "settings": "الإعدادات"
+  },
+  "actions": {
+    "signOut": "تسجيل الخروج"
+  },
+  "branding": {
+    "productName": "يومدكس",
+    "logoInitials": "PS",
+    "platformAdmin": "إدارة المنصة"
+  },
+  "search": {
+    "placeholder": "ابحث في المستأجرين والفواتير..."
+  },
+  "profile": {
+    "name": "مستخدم الإدارة",
+    "role": "مدير عام",
+    "initials": "AU"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "categories": {
+    "medicine": "دواء",
+    "cosmetic": "تجميلي",
+    "supplement": "مكمل",
+    "equipment": "معدات",
+    "other": "أخرى",
+    "all": "كل الفئات"
+  },
+  "status": {
+    "active": "نشط",
+    "inactive": "غير نشط"
+  },
+  "toasts": {
+    "created": "تم إنشاء العنصر",
+    "createFailed": "فشل إنشاء العنصر",
+    "updated": "تم تحديث العنصر",
+    "updateFailed": "فشل تحديث العنصر",
+    "deleted": "تم حذف العنصر",
+    "deleteFailed": "فشل حذف العنصر"
+  },
+  "modal": {
+    "editTitle": "تعديل عنصر الكتالوج",
+    "newTitle": "عنصر كتالوج جديد",
+    "fields": {
+      "nameEn": {
+        "label": "الاسم (EN) *",
+        "placeholder": "Paracetamol 500mg"
+      },
+      "nameAr": {
+        "label": "الاسم (AR)",
+        "placeholder": "باراسيتامول"
+      },
+      "category": {
+        "label": "الفئة *"
+      },
+      "unit": {
+        "label": "الوحدة",
+        "placeholder": "قرص، زجاجة..."
+      },
+      "sku": {
+        "label": "SKU",
+        "placeholder": "SKU-001"
+      },
+      "barcode": {
+        "label": "الباركود",
+        "placeholder": "6123456789"
+      },
+      "manufacturer": {
+        "label": "الشركة المصنعة"
+      },
+      "description": {
+        "label": "الوصف"
+      }
+    },
+    "actions": {
+      "cancel": "إلغاء",
+      "save": "حفظ التغييرات",
+      "create": "إنشاء"
+    }
+  },
+  "page": {
+    "title": "كتالوج المنتجات",
+    "subtitle": "المكتبة الرئيسية لجميع المنتجات المتاحة للمستأجرين",
+    "newItem": "عنصر جديد",
+    "searchPlaceholder": "ابحث بالاسم أو SKU أو الباركود...",
+    "loading": "جارٍ تحميل الكتالوج...",
+    "empty": "لم يتم العثور على عناصر",
+    "deleteConfirm": "حذف \"{{name}}\" من الكتالوج؟",
+    "table": {
+      "name": "الاسم",
+      "category": "الفئة",
+      "sku": "SKU",
+      "barcode": "الباركود",
+      "unit": "الوحدة",
+      "manufacturer": "الشركة المصنعة",
+      "status": "الحالة",
+      "actions": "الإجراءات",
+      "itemsCount_one": "{{count}} عنصر",
+      "itemsCount_other": "{{count}} عناصر"
+    },
+    "placeholder": {
+      "emptyValue": "-"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   Pill,
   Mail,
@@ -14,6 +14,13 @@ import {
 import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useLanguage } from "@/app/contexts/useLanguage";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/components/ui/select";
 import { get, post } from "@/shared/api/request";
 import { PUBLIC_API, QUERY_KEYS } from "@/shared/utils/constants";
 
@@ -49,6 +56,7 @@ export function SignupPage() {
   const textAlignClass = isRtl ? "text-right" : "text-left";
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -108,7 +116,7 @@ export function SignupPage() {
             <div className="w-10 h-10 bg-[#0F5C47] rounded-lg flex items-center justify-center">
               <Pill className="w-6 h-6 text-white" />
             </div>
-            <span className="text-xl font-bold text-gray-900">PharmaSaaS</span>
+            <span className="text-xl font-bold text-gray-900">Yomdix</span>
           </Link>
 
           <h2 className="text-3xl font-bold text-gray-900">
@@ -243,27 +251,42 @@ export function SignupPage() {
                   {t("auth:signup.states.loadingPlans")}
                 </div>
               ) : (
-                <select
-                  {...register("requestedPlanId", {
-                    required: t(
-                      "auth:signup.validation.requestedPlanIdRequired",
-                    ),
-                  })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none text-sm bg-white"
-                >
-                  <option value="">
-                    {t("auth:signup.fields.requestedPlanId.placeholder")}
-                  </option>
-                  {plans.map((plan) => (
-                    <option key={plan.id} value={plan.id}>
-                      {plan.name} - {plan.currency} {plan.price}/
-                      {planIntervalLabel(plan.interval)}
-                      {plan.trialDays > 0
-                        ? ` - ${t("auth:signup.planTrialDays", { count: plan.trialDays })}`
-                        : ""}
-                    </option>
-                  ))}
-                </select>
+                <Controller
+                  name="requestedPlanId"
+                  control={control}
+                  rules={{
+                    required: t("auth:signup.validation.requestedPlanIdRequired"),
+                  }}
+                  render={({ field }) => (
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger
+                        className="w-full !h-12 rounded-lg border-gray-300 !bg-transparent px-4 text-sm focus-visible:ring-2 focus-visible:ring-[#0F5C47] focus-visible:border-transparent"
+                        aria-invalid={!!errors.requestedPlanId}
+                      >
+                        <SelectValue
+                          placeholder={t(
+                            "auth:signup.fields.requestedPlanId.placeholder",
+                          )}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {plans.map((plan) => (
+                          <SelectItem key={plan.id} value={plan.id}>
+                            {plan.name} - {plan.currency} {plan.price}/
+                            {planIntervalLabel(plan.interval)}
+                            {plan.trialDays > 0
+                              ? ` - ${t("auth:signup.planTrialDays", { count: plan.trialDays })}`
+                              : ""}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
               )}
               {errors.requestedPlanId && (
                 <p className="mt-1 text-xs text-red-600">

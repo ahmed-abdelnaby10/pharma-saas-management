@@ -1,0 +1,33 @@
+{
+  "navigation": {
+    "dashboard": "Dashboard",
+    "tenants": "Tenants",
+    "signup-requests": "Signup Requests",
+    "subscriptions": "Subscriptions",
+    "plans": "Plans",
+    "catalog": "Product Catalog",
+    "invoices": "Invoices",
+    "features": "Feature Overrides",
+    "usage": "Usage & Limits",
+    "support": "Support",
+    "audit": "Audit Logs",
+    "metrics": "System Metrics",
+    "settings": "Settings"
+  },
+  "actions": {
+    "signOut": "Sign Out"
+  },
+  "branding": {
+    "productName": "Yomdix",
+    "logoInitials": "PS",
+    "platformAdmin": "Platform Admin"
+  },
+  "search": {
+    "placeholder": "Search tenants, invoices..."
+  },
+  "profile": {
+    "name": "Admin User",
+    "role": "Super Admin",
+    "initials": "AU"
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import {
   Search,
   Plus,
@@ -8,6 +8,8 @@ import {
   X,
   Package,
 } from "lucide-react";
+import { toast } from "sonner";
+import { useLanguage } from "@/app/contexts/useLanguage";
 import {
   useCatalogQuery,
   useCreateCatalogItemMutation,
@@ -19,9 +21,6 @@ import type {
   CatalogItemCategory,
   CreateCatalogItemPayload,
 } from "../api";
-import { toast } from "sonner";
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const CATEGORIES: CatalogItemCategory[] = [
   "medicine",
@@ -31,15 +30,12 @@ const CATEGORIES: CatalogItemCategory[] = [
   "other",
 ];
 
-const CAT_LABELS: Record<CatalogItemCategory, string> = {
-  medicine:    "Medicine",
-  cosmetic:    "Cosmetic",
-  supplement:  "Supplement",
-  equipment:   "Equipment",
-  other:       "Other",
-};
-
-// ─── Form modal ───────────────────────────────────────────────────────────────
+function getCategoryLabel(
+  category: CatalogItemCategory,
+  t: (key: string, options?: Record<string, unknown>) => any,
+) {
+  return t(`adminCatalog:categories.${category}`);
+}
 
 interface FormState {
   nameEn: string;
@@ -65,14 +61,14 @@ const EMPTY: FormState = {
 
 function itemToForm(item: CatalogItem): FormState {
   return {
-    nameEn:       item.nameEn,
-    nameAr:       item.nameAr ?? "",
-    sku:          item.sku ?? "",
-    barcode:      item.barcode ?? "",
-    category:     item.category,
-    unit:         item.unit ?? "",
+    nameEn: item.nameEn,
+    nameAr: item.nameAr ?? "",
+    sku: item.sku ?? "",
+    barcode: item.barcode ?? "",
+    category: item.category,
+    unit: item.unit ?? "",
     manufacturer: item.manufacturer ?? "",
-    description:  item.description ?? "",
+    description: item.description ?? "",
   };
 }
 
@@ -82,47 +78,55 @@ interface CatalogFormModalProps {
 }
 
 function CatalogFormModal({ item, onClose }: CatalogFormModalProps) {
+  const { t } = useLanguage();
   const create = useCreateCatalogItemMutation();
   const update = useUpdateCatalogItemMutation();
   const isEdit = !!item;
 
   const [form, setForm] = useState<FormState>(item ? itemToForm(item) : EMPTY);
 
-  const set = (key: keyof FormState) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-  ) => setForm((prev) => ({ ...prev, [key]: e.target.value }));
+  const set =
+    (key: keyof FormState) =>
+    (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+      setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const payload: CreateCatalogItemPayload = {
-      nameEn:   form.nameEn,
-      ...(form.nameAr       && { nameAr:       form.nameAr }),
-      ...(form.sku          && { sku:          form.sku }),
-      ...(form.barcode      && { barcode:      form.barcode }),
+      nameEn: form.nameEn,
+      ...(form.nameAr && { nameAr: form.nameAr }),
+      ...(form.sku && { sku: form.sku }),
+      ...(form.barcode && { barcode: form.barcode }),
       category: form.category,
-      ...(form.unit         && { unit:         form.unit }),
+      ...(form.unit && { unit: form.unit }),
       ...(form.manufacturer && { manufacturer: form.manufacturer }),
-      ...(form.description  && { description:  form.description }),
+      ...(form.description && { description: form.description }),
     };
 
     if (isEdit) {
       update.mutate(
         { id: item.id, ...payload },
         {
-          onSuccess: () => { toast.success("Item updated"); onClose(); },
-          onError: () => toast.error("Failed to update"),
+          onSuccess: () => {
+            toast.success(t("adminCatalog:toasts.updated"));
+            onClose();
+          },
+          onError: () => toast.error(t("adminCatalog:toasts.updateFailed")),
         },
       );
-    } else {
-      create.mutate(payload, {
-        onSuccess: () => { toast.success("Item created"); onClose(); },
-        onError: () => toast.error("Failed to create"),
-      });
+      return;
     }
+
+    create.mutate(payload, {
+      onSuccess: () => {
+        toast.success(t("adminCatalog:toasts.created"));
+        onClose();
+      },
+      onError: () => toast.error(t("adminCatalog:toasts.createFailed")),
+    });
   }
 
   const isPending = create.isPending || update.isPending;
-
   const inputCls =
     "w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500";
 
@@ -131,9 +135,14 @@ function CatalogFormModal({ item, onClose }: CatalogFormModalProps) {
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-5">
           <h3 className="text-lg font-semibold text-gray-900">
-            {isEdit ? "Edit catalog item" : "New catalog item"}
+            {isEdit
+              ? t("adminCatalog:modal.editTitle")
+              : t("adminCatalog:modal.newTitle")}
           </h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -141,39 +150,92 @@ function CatalogFormModal({ item, onClose }: CatalogFormModalProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <label className="block text-xs font-medium text-gray-600 mb-1">Name (EN) *</label>
-              <input value={form.nameEn} onChange={set("nameEn")} required className={inputCls} placeholder="Paracetamol 500mg" />
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                {t("adminCatalog:modal.fields.nameEn.label")}
+              </label>
+              <input
+                value={form.nameEn}
+                onChange={set("nameEn")}
+                required
+                className={inputCls}
+                placeholder={t("adminCatalog:modal.fields.nameEn.placeholder")}
+              />
             </div>
             <div className="col-span-2">
-              <label className="block text-xs font-medium text-gray-600 mb-1">Name (AR)</label>
-              <input value={form.nameAr} onChange={set("nameAr")} className={inputCls} dir="rtl" placeholder="باراسيتامول" />
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                {t("adminCatalog:modal.fields.nameAr.label")}
+              </label>
+              <input
+                value={form.nameAr}
+                onChange={set("nameAr")}
+                className={inputCls}
+                dir="rtl"
+                placeholder={t("adminCatalog:modal.fields.nameAr.placeholder")}
+              />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Category *</label>
-              <select value={form.category} onChange={set("category")} className={inputCls}>
-                {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>{CAT_LABELS[c]}</option>
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                {t("adminCatalog:modal.fields.category.label")}
+              </label>
+              <select
+                value={form.category}
+                onChange={set("category")}
+                className={inputCls}
+              >
+                {CATEGORIES.map((category) => (
+                  <option key={category} value={category}>
+                    {getCategoryLabel(category, t)}
+                  </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Unit</label>
-              <input value={form.unit} onChange={set("unit")} className={inputCls} placeholder="tablet, bottle…" />
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                {t("adminCatalog:modal.fields.unit.label")}
+              </label>
+              <input
+                value={form.unit}
+                onChange={set("unit")}
+                className={inputCls}
+                placeholder={t("adminCatalog:modal.fields.unit.placeholder")}
+              />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">SKU</label>
-              <input value={form.sku} onChange={set("sku")} className={inputCls} placeholder="SKU-001" />
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                {t("adminCatalog:modal.fields.sku.label")}
+              </label>
+              <input
+                value={form.sku}
+                onChange={set("sku")}
+                className={inputCls}
+                placeholder={t("adminCatalog:modal.fields.sku.placeholder")}
+              />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Barcode</label>
-              <input value={form.barcode} onChange={set("barcode")} className={inputCls} placeholder="6123456789" />
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                {t("adminCatalog:modal.fields.barcode.label")}
+              </label>
+              <input
+                value={form.barcode}
+                onChange={set("barcode")}
+                className={inputCls}
+                placeholder={t("adminCatalog:modal.fields.barcode.placeholder")}
+              />
             </div>
             <div className="col-span-2">
-              <label className="block text-xs font-medium text-gray-600 mb-1">Manufacturer</label>
-              <input value={form.manufacturer} onChange={set("manufacturer")} className={inputCls} />
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                {t("adminCatalog:modal.fields.manufacturer.label")}
+              </label>
+              <input
+                value={form.manufacturer}
+                onChange={set("manufacturer")}
+                className={inputCls}
+              />
             </div>
             <div className="col-span-2">
-              <label className="block text-xs font-medium text-gray-600 mb-1">Description</label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                {t("adminCatalog:modal.fields.description.label")}
+              </label>
               <textarea
                 value={form.description}
                 onChange={set("description")}
@@ -184,8 +246,12 @@ function CatalogFormModal({ item, onClose }: CatalogFormModalProps) {
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
-              Cancel
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              {t("adminCatalog:modal.actions.cancel")}
             </button>
             <button
               type="submit"
@@ -193,7 +259,9 @@ function CatalogFormModal({ item, onClose }: CatalogFormModalProps) {
               className="px-4 py-2 text-sm text-white bg-teal-600 rounded-lg hover:bg-teal-700 disabled:opacity-60 flex items-center gap-2"
             >
               {isPending && <Loader2 className="w-4 h-4 animate-spin" />}
-              {isEdit ? "Save changes" : "Create"}
+              {isEdit
+                ? t("adminCatalog:modal.actions.save")
+                : t("adminCatalog:modal.actions.create")}
             </button>
           </div>
         </form>
@@ -202,11 +270,12 @@ function CatalogFormModal({ item, onClose }: CatalogFormModalProps) {
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
 export function CatalogPage() {
+  const { t } = useLanguage();
   const [search, setSearch] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState<CatalogItemCategory | "all">("all");
+  const [categoryFilter, setCategoryFilter] = useState<
+    CatalogItemCategory | "all"
+  >("all");
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<CatalogItem | null>(null);
 
@@ -217,39 +286,42 @@ export function CatalogPage() {
   const deleteItem = useDeleteCatalogItemMutation();
 
   function handleDelete(id: string, name: string) {
-    if (!confirm(`Delete "${name}" from catalog?`)) return;
+    if (!confirm(t("adminCatalog:page.deleteConfirm", { name }))) return;
     deleteItem.mutate(id, {
-      onSuccess: () => toast.success("Item deleted"),
-      onError: () => toast.error("Failed to delete"),
+      onSuccess: () => toast.success(t("adminCatalog:toasts.deleted")),
+      onError: () => toast.error(t("adminCatalog:toasts.deleteFailed")),
     });
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-gray-900">Product Catalog</h1>
+          <h1 className="text-3xl font-semibold text-gray-900">
+            {t("adminCatalog:page.title")}
+          </h1>
           <p className="mt-1 text-sm text-gray-500">
-            Master library of all products available to tenants
+            {t("adminCatalog:page.subtitle")}
           </p>
         </div>
         <button
-          onClick={() => { setEditing(null); setModalOpen(true); }}
+          onClick={() => {
+            setEditing(null);
+            setModalOpen(true);
+          }}
           className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700"
         >
           <Plus className="w-4 h-4" />
-          New item
+          {t("adminCatalog:page.newItem")}
         </button>
       </div>
 
-      {/* Filters */}
       <div className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col md:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search by name, SKU, barcode…"
+            placeholder={t("adminCatalog:page.searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -257,36 +329,55 @@ export function CatalogPage() {
         </div>
         <select
           value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value as CatalogItemCategory | "all")}
+          onChange={(e) =>
+            setCategoryFilter(e.target.value as CatalogItemCategory | "all")
+          }
           className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
         >
-          <option value="all">All categories</option>
-          {CATEGORIES.map((c) => (
-            <option key={c} value={c}>{CAT_LABELS[c]}</option>
+          <option value="all">{t("adminCatalog:categories.all")}</option>
+          {CATEGORIES.map((category) => (
+            <option key={category} value={category}>
+              {getCategoryLabel(category, t)}
+            </option>
           ))}
         </select>
       </div>
 
-      {/* Table */}
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center py-16 text-gray-500">
             <Loader2 className="w-5 h-5 animate-spin mr-2" />
-            Loading catalog…
+            {t("adminCatalog:page.loading")}
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">SKU</th>
-                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Barcode</th>
-                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
-                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Manufacturer</th>
-                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("adminCatalog:page.table.name")}
+                  </th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("adminCatalog:page.table.category")}
+                  </th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("adminCatalog:page.table.sku")}
+                  </th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("adminCatalog:page.table.barcode")}
+                  </th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("adminCatalog:page.table.unit")}
+                  </th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("adminCatalog:page.table.manufacturer")}
+                  </th>
+                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("adminCatalog:page.table.status")}
+                  </th>
+                  <th className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("adminCatalog:page.table.actions")}
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -295,7 +386,7 @@ export function CatalogPage() {
                     <td colSpan={8} className="py-12 text-center">
                       <div className="flex flex-col items-center gap-2 text-gray-400">
                         <Package className="w-10 h-10" />
-                        <p className="text-sm">No items found</p>
+                        <p className="text-sm">{t("adminCatalog:page.empty")}</p>
                       </div>
                     </td>
                   </tr>
@@ -305,27 +396,48 @@ export function CatalogPage() {
                     <td className="px-6 py-4">
                       <div className="font-medium text-gray-900">{item.nameEn}</div>
                       {item.nameAr && (
-                        <div className="text-xs text-gray-500 mt-0.5" dir="rtl">{item.nameAr}</div>
+                        <div className="text-xs text-gray-500 mt-0.5" dir="rtl">
+                          {item.nameAr}
+                        </div>
                       )}
                     </td>
-                    <td className="px-6 py-4 capitalize text-gray-600">{item.category}</td>
-                    <td className="px-6 py-4 font-mono text-gray-600">{item.sku ?? "—"}</td>
-                    <td className="px-6 py-4 font-mono text-gray-600">{item.barcode ?? "—"}</td>
-                    <td className="px-6 py-4 text-gray-600">{item.unit ?? "—"}</td>
-                    <td className="px-6 py-4 text-gray-600">{item.manufacturer ?? "—"}</td>
+                    <td className="px-6 py-4 text-gray-600">
+                      {getCategoryLabel(item.category, t)}
+                    </td>
+                    <td className="px-6 py-4 font-mono text-gray-600">
+                      {item.sku ?? t("adminCatalog:page.placeholder.emptyValue")}
+                    </td>
+                    <td className="px-6 py-4 font-mono text-gray-600">
+                      {item.barcode ??
+                        t("adminCatalog:page.placeholder.emptyValue")}
+                    </td>
+                    <td className="px-6 py-4 text-gray-600">
+                      {item.unit ?? t("adminCatalog:page.placeholder.emptyValue")}
+                    </td>
+                    <td className="px-6 py-4 text-gray-600">
+                      {item.manufacturer ??
+                        t("adminCatalog:page.placeholder.emptyValue")}
+                    </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
-                        item.isActive
-                          ? "bg-green-50 text-green-700 border-green-200"
-                          : "bg-gray-50 text-gray-500 border-gray-200"
-                      }`}>
-                        {item.isActive ? "Active" : "Inactive"}
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
+                          item.isActive
+                            ? "bg-green-50 text-green-700 border-green-200"
+                            : "bg-gray-50 text-gray-500 border-gray-200"
+                        }`}
+                      >
+                        {item.isActive
+                          ? t("adminCatalog:status.active")
+                          : t("adminCatalog:status.inactive")}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-1">
                         <button
-                          onClick={() => { setEditing(item); setModalOpen(true); }}
+                          onClick={() => {
+                            setEditing(item);
+                            setModalOpen(true);
+                          }}
                           className="p-1.5 text-gray-400 hover:text-teal-600 rounded"
                         >
                           <Edit2 className="w-4 h-4" />
@@ -346,15 +458,17 @@ export function CatalogPage() {
           </div>
         )}
         <div className="px-6 py-3 border-t border-gray-200 text-sm text-gray-500">
-          {items.length} item{items.length !== 1 ? "s" : ""}
+          {t("adminCatalog:page.table.itemsCount", { count: items.length })}
         </div>
       </div>
 
-      {/* Form modal */}
       {modalOpen && (
         <CatalogFormModal
           item={editing ?? undefined}
-          onClose={() => { setModalOpen(false); setEditing(null); }}
+          onClose={() => {
+            setModalOpen(false);
+            setEditing(null);
+          }}
         />
       )}
     </div>

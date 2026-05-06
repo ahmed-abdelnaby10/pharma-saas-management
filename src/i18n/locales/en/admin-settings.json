@@ -1,0 +1,24 @@
+{
+  "header": {
+    "title": "Platform Settings",
+    "subtitle": "Configure platform-wide settings and preferences"
+  },
+  "cards": {
+    "adminUsers": {
+      "title": "Admin Users",
+      "description": "Manage platform administrators and their permissions"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Configure system alerts and notification preferences"
+    },
+    "security": {
+      "title": "Security",
+      "description": "Security policies, 2FA, and access controls"
+    },
+    "platformConfig": {
+      "title": "Platform Configuration",
+      "description": "General platform settings and configurations"
+    }
+  }
+}

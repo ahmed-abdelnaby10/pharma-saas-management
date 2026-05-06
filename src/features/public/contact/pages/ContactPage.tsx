@@ -7,6 +7,7 @@ import {
   MessageSquare,
   HelpCircle,
 } from "lucide-react";
+import { toast } from "sonner";
 import { useLanguage } from "@/app/contexts/useLanguage";
 
 export function ContactPage() {
@@ -24,7 +25,7 @@ export function ContactPage() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    alert(t("contact:form.success"));
+    toast.success(t("contact:form.success"));
   };
 
   const contactMethods = [
@@ -32,8 +33,8 @@ export function ContactPage() {
       icon: Mail,
       title: t("contact:methods.email.title"),
       description: t("contact:methods.email.description"),
-      value: "support@pharmasaas.com",
-      action: "mailto:support@pharmasaas.com",
+      value: "support@Yomdix.com",
+      action: "mailto:support@Yomdix.com",
     },
     {
       icon: Phone,
@@ -85,7 +86,9 @@ export function ContactPage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {method.title}
                 </h3>
-                <p className="text-sm text-gray-600 mb-3">{method.description}</p>
+                <p className="text-sm text-gray-600 mb-3">
+                  {method.description}
+                </p>
                 <p className="text-[#0F5C47] font-medium">{method.value}</p>
               </a>
             );
@@ -225,9 +228,15 @@ export function ContactPage() {
               ))}
             </div>
 
-            <div className={`mt-8 bg-gradient-to-br from-[#0F5C47] to-[#0d4a39] rounded-xl p-8 text-white ${textAlignClass}`}>
-              <h3 className="text-xl font-bold mb-2">{t("contact:cta.title")}</h3>
-              <p className="text-white/90 mb-4">{t("contact:cta.description")}</p>
+            <div
+              className={`mt-8 bg-gradient-to-br from-[#0F5C47] to-[#0d4a39] rounded-xl p-8 text-white ${textAlignClass}`}
+            >
+              <h3 className="text-xl font-bold mb-2">
+                {t("contact:cta.title")}
+              </h3>
+              <p className="text-white/90 mb-4">
+                {t("contact:cta.description")}
+              </p>
               <a
                 href="tel:+15551234567"
                 className={`inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0F5C47] rounded-lg font-semibold hover:bg-gray-100 transition-all ${isRtl ? "flex-row-reverse" : ""}`}

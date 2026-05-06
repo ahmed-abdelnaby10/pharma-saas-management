@@ -1,0 +1,65 @@
+{
+  "status": {
+    "draft": "Draft",
+    "open": "Open",
+    "paid": "Paid",
+    "uncollectible": "Uncollectible",
+    "void": "Void",
+    "all": "All Statuses"
+  },
+  "header": {
+    "title": "Invoices and Billing",
+    "subtitle": "Manage invoicing and payment operations",
+    "export": "Export",
+    "createInvoice": "Create Invoice"
+  },
+  "summary": {
+    "totalBilled": "Total Billed",
+    "totalPaid": "Total Paid",
+    "overdue": "Overdue",
+    "openInvoices": "Open Invoices"
+  },
+  "filters": {
+    "searchPlaceholder": "Search invoices...",
+    "status": "Status:"
+  },
+  "table": {
+    "loading": "Loading invoices...",
+    "invoiceId": "Invoice ID",
+    "tenant": "Tenant",
+    "date": "Date",
+    "dueDate": "Due Date",
+    "amount": "Amount",
+    "status": "Status",
+    "actions": "Actions",
+    "empty": "No invoices found.",
+    "showing": "Showing {{filtered}} of {{total}} invoices",
+    "previous": "Previous",
+    "next": "Next",
+    "emptyValue": "-"
+  },
+  "actions": {
+    "issue": "Issue",
+    "markPaid": "Mark as Paid",
+    "void": "Void",
+    "issued": "Invoice issued",
+    "markedPaid": "Invoice marked as paid",
+    "voided": "Invoice voided",
+    "failed": "Action failed"
+  },
+  "modal": {
+    "createTitle": "Create Invoice",
+    "fields": {
+      "tenant": { "label": "Tenant *", "placeholder": "Select a tenant..." },
+      "subscription": { "label": "Subscription *", "placeholder": "Select a subscription..." },
+      "amount": { "label": "Amount *", "placeholder": "0.00" },
+      "currency": { "label": "Currency", "placeholder": "USD" },
+      "dueDate": { "label": "Due Date", "placeholder": "" }
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "create": "Create Invoice",
+      "creating": "Creating..."
+    }
+  }
+}

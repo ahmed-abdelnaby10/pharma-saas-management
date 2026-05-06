@@ -12,7 +12,7 @@ export function SignupSuccessPage() {
           <div className="w-10 h-10 bg-[#0F5C47] rounded-lg flex items-center justify-center">
             <Pill className="w-6 h-6 text-white" />
           </div>
-          <span className="text-xl font-bold text-gray-900">PharmaSaaS</span>
+          <span className="text-xl font-bold text-gray-900">Yomdix</span>
         </Link>
 
         <div className="flex justify-center mb-6">

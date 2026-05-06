@@ -11,6 +11,7 @@ import {
 import { toast } from "sonner";
 import { EmptyState } from "@/shared/components/EmptyState";
 import { Modal } from "@/app/components/modals/Modal";
+import { useLanguage } from "@/app/contexts/useLanguage";
 import {
   useSignupRequestsQuery,
   useApproveSignupRequestMutation,
@@ -25,33 +26,22 @@ import { formatDateTime } from "@/shared/utils/format";
 // ─── Status badge ─────────────────────────────────────────────────────────────
 
 function StatusBadge({ status }: { status: SignupRequestStatus }) {
-  const map: Record<
-    SignupRequestStatus,
-    { label: string; className: string; icon: React.ElementType }
-  > = {
-    PENDING: {
-      label: "Pending",
-      className: "bg-yellow-100 text-yellow-800",
-      icon: Clock,
-    },
-    APPROVED: {
-      label: "Approved",
-      className: "bg-green-100 text-green-800",
-      icon: CheckCircle,
-    },
-    REJECTED: {
-      label: "Rejected",
-      className: "bg-red-100 text-red-800",
-      icon: XCircle,
-    },
+  const { t } = useLanguage();
+
+  const styleMap: Record<SignupRequestStatus, { className: string; icon: React.ElementType }> = {
+    PENDING: { className: "bg-yellow-100 text-yellow-800", icon: Clock },
+    APPROVED: { className: "bg-green-100 text-green-800", icon: CheckCircle },
+    REJECTED: { className: "bg-red-100 text-red-800", icon: XCircle },
   };
-  const { label, className, icon: Icon } = map[status];
+
+  const { className, icon: Icon } = styleMap[status];
+
   return (
     <span
       className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${className}`}
     >
       <Icon className="w-3.5 h-3.5" />
-      {label}
+      {t(`adminSignupRequests:status.${status.toLowerCase()}`)}
     </span>
   );
 }
@@ -64,6 +54,7 @@ interface ApproveModalProps {
 }
 
 function ApproveModal({ request, onClose }: ApproveModalProps) {
+  const { t } = useLanguage();
   const [adminEmail, setAdminEmail] = useState("");
   const [tempPassword, setTempPassword] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -88,18 +79,16 @@ function ApproveModal({ request, onClose }: ApproveModalProps) {
     });
   };
 
-  // ── One-time password reveal ──────────────────────────────────────────────
   if (tempPassword) {
     return (
-      <Modal isOpen onClose={onClose} title="Tenant Created" size="sm">
+      <Modal isOpen onClose={onClose} title={t("adminSignupRequests:approveModal.successTitle")} size="sm">
         <div className="space-y-4">
           <p className="text-sm text-gray-600">
-            The tenant <strong>{request.tenantName}</strong> has been created.
-            Share the temporary password below — it will only be shown once.
+            {t("adminSignupRequests:approveModal.successMessage", { name: request.tenantName })}
           </p>
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">
-              Temporary Password
+              {t("adminSignupRequests:approveModal.tempPasswordLabel")}
             </label>
             <div className="flex items-center gap-2">
               <code className="flex-1 px-3 py-2 bg-gray-100 rounded-lg text-sm font-mono break-all">
@@ -108,7 +97,7 @@ function ApproveModal({ request, onClose }: ApproveModalProps) {
               <button
                 onClick={handleCopy}
                 className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
-                title="Copy password"
+                title={t("adminSignupRequests:approveModal.copyTitle")}
               >
                 {copied ? (
                   <Check className="w-4 h-4 text-green-600" />
@@ -123,7 +112,7 @@ function ApproveModal({ request, onClose }: ApproveModalProps) {
               onClick={onClose}
               className="w-full px-4 py-2 bg-[#0F5C47] text-white rounded-lg text-sm font-medium hover:bg-[#0d4a39] transition-colors"
             >
-              Done
+              {t("adminSignupRequests:actions.done")}
             </button>
           </div>
         </div>
@@ -131,19 +120,21 @@ function ApproveModal({ request, onClose }: ApproveModalProps) {
     );
   }
 
-  // ── Approval form ─────────────────────────────────────────────────────────
   return (
-    <Modal isOpen onClose={onClose} title="Approve Request" size="sm">
+    <Modal isOpen onClose={onClose} title={t("adminSignupRequests:approveModal.title")} size="sm">
       <div className="space-y-4">
         <p className="text-sm text-gray-600">
-          Approving <strong>{request.tenantName}</strong> will create a new
-          tenant and email credentials to{" "}
-          <strong>{request.contactEmail}</strong>.
+          {t("adminSignupRequests:approveModal.approveMessage", {
+            name: request.tenantName,
+            email: request.contactEmail,
+          })}
         </p>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Admin Email{" "}
-            <span className="text-gray-400 font-normal">(optional override)</span>
+            {t("adminSignupRequests:approveModal.adminEmailLabel")}{" "}
+            <span className="text-gray-400 font-normal">
+              {t("adminSignupRequests:approveModal.adminEmailNote")}
+            </span>
           </label>
           <input
             type="email"
@@ -159,14 +150,16 @@ function ApproveModal({ request, onClose }: ApproveModalProps) {
             disabled={approveMutation.isPending}
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
           >
-            Cancel
+            {t("adminSignupRequests:actions.cancel")}
           </button>
           <button
             onClick={handleApprove}
             disabled={approveMutation.isPending}
             className="flex-1 px-4 py-2 bg-[#0F5C47] text-white rounded-lg text-sm font-medium hover:bg-[#0d4a39] disabled:opacity-50 transition-colors"
           >
-            {approveMutation.isPending ? "Approving…" : "Approve"}
+            {approveMutation.isPending
+              ? t("adminSignupRequests:approveModal.approving")
+              : t("adminSignupRequests:actions.approve")}
           </button>
         </div>
       </div>
@@ -174,7 +167,7 @@ function ApproveModal({ request, onClose }: ApproveModalProps) {
   );
 }
 
-// ─── Reject confirm ───────────────────────────────────────────────────────────
+// ─── Reject state type ────────────────────────────────────────────────────────
 
 interface RejectState {
   id: string;
@@ -184,12 +177,10 @@ interface RejectState {
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export function SignupRequestsPage() {
+  const { t, language } = useLanguage();
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<SignupRequestStatus | "ALL">(
-    "ALL",
-  );
-  const [approvingRequest, setApprovingRequest] =
-    useState<SignupRequest | null>(null);
+  const [statusFilter, setStatusFilter] = useState<SignupRequestStatus | "ALL">("ALL");
+  const [approvingRequest, setApprovingRequest] = useState<SignupRequest | null>(null);
   const [rejectState, setRejectState] = useState<RejectState | null>(null);
   const [rejectReason, setRejectReason] = useState("");
 
@@ -202,19 +193,20 @@ export function SignupRequestsPage() {
   );
 
   const { data: requests = [], isLoading } = useSignupRequestsQuery(params);
-
   const rejectMutation = useRejectSignupRequestMutation();
 
   const handleRejectConfirm = () => {
     if (!rejectState || !rejectReason.trim()) {
-      toast.error("Please enter a rejection reason.");
+      toast.error(t("adminSignupRequests:rejectModal.reasonRequired"));
       return;
     }
     rejectMutation.mutate(
       { id: rejectState.id, payload: { reason: rejectReason } },
       {
         onSuccess: () => {
-          toast.success(`Request from ${rejectState.name} has been rejected.`);
+          toast.success(
+            t("adminSignupRequests:rejectModal.rejected", { name: rejectState.name }),
+          );
           setRejectState(null);
           setRejectReason("");
         },
@@ -222,24 +214,24 @@ export function SignupRequestsPage() {
     );
   };
 
-  const statusTabs: { value: SignupRequestStatus | "ALL"; label: string }[] = [
-    { value: "ALL", label: "All" },
-    { value: "PENDING", label: "Pending" },
-    { value: "APPROVED", label: "Approved" },
-    { value: "REJECTED", label: "Rejected" },
+  const statusTabs: { value: SignupRequestStatus | "ALL"; labelKey: string }[] = [
+    { value: "ALL", labelKey: "adminSignupRequests:filters.tabs.all" },
+    { value: "PENDING", labelKey: "adminSignupRequests:filters.tabs.pending" },
+    { value: "APPROVED", labelKey: "adminSignupRequests:filters.tabs.approved" },
+    { value: "REJECTED", labelKey: "adminSignupRequests:filters.tabs.rejected" },
   ];
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Signup Requests</h1>
+        <h1 className="text-2xl font-bold text-gray-900">
+          {t("adminSignupRequests:header.title")}
+        </h1>
         <p className="text-sm text-gray-500 mt-1">
-          Review and manage incoming trial requests from the public signup form.
+          {t("adminSignupRequests:header.subtitle")}
         </p>
       </div>
 
-      {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -247,7 +239,7 @@ export function SignupRequestsPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name, email…"
+            placeholder={t("adminSignupRequests:filters.searchPlaceholder")}
             className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F5C47] focus:border-transparent outline-none"
           />
         </div>
@@ -263,22 +255,21 @@ export function SignupRequestsPage() {
                   : "text-gray-600 hover:text-gray-900"
               }`}
             >
-              {tab.label}
+              {t(tab.labelKey)}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Table */}
       {isLoading ? (
         <div className="flex justify-center py-16 text-gray-400 text-sm">
-          Loading…
+          {t("adminSignupRequests:table.loading")}
         </div>
       ) : requests.length === 0 ? (
         <EmptyState
           icon={UserPlus}
-          heading="No signup requests"
-          subline="New requests from the public signup form will appear here."
+          heading={t("adminSignupRequests:empty.heading")}
+          subline={t("adminSignupRequests:empty.subline")}
         />
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -286,19 +277,19 @@ export function SignupRequestsPage() {
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Business
+                  {t("adminSignupRequests:table.business")}
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Contact
+                  {t("adminSignupRequests:table.contact")}
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider hidden md:table-cell">
-                  Plan
+                  {t("adminSignupRequests:table.plan")}
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider hidden lg:table-cell">
-                  Submitted
+                  {t("adminSignupRequests:table.submitted")}
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Status
+                  {t("adminSignupRequests:table.status")}
                 </th>
                 <th className="px-4 py-3" />
               </tr>
@@ -317,10 +308,10 @@ export function SignupRequestsPage() {
                     <p className="text-xs text-gray-500">{req.contactEmail}</p>
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell text-gray-600">
-                    {req.requestedPlanName ?? req.requestedPlanId ?? "—"}
+                    {req.requestedPlanName ?? req.requestedPlanId ?? t("adminSignupRequests:table.emptyValue")}
                   </td>
                   <td className="px-4 py-3 hidden lg:table-cell text-gray-500">
-                    {formatDateTime(req.createdAt, "en")}
+                    {formatDateTime(req.createdAt, language)}
                   </td>
                   <td className="px-4 py-3">
                     <StatusBadge status={req.status} />
@@ -332,18 +323,13 @@ export function SignupRequestsPage() {
                           onClick={() => setApprovingRequest(req)}
                           className="px-3 py-1.5 text-xs font-medium text-white bg-[#0F5C47] rounded-lg hover:bg-[#0d4a39] transition-colors"
                         >
-                          Approve
+                          {t("adminSignupRequests:actions.approve")}
                         </button>
                         <button
-                          onClick={() =>
-                            setRejectState({
-                              id: req.id,
-                              name: req.tenantName,
-                            })
-                          }
+                          onClick={() => setRejectState({ id: req.id, name: req.tenantName })}
                           className="px-3 py-1.5 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
                         >
-                          Reject
+                          {t("adminSignupRequests:actions.reject")}
                         </button>
                       </div>
                     )}
@@ -355,7 +341,6 @@ export function SignupRequestsPage() {
         </div>
       )}
 
-      {/* Approve modal */}
       {approvingRequest && (
         <ApproveModal
           request={approvingRequest}
@@ -363,7 +348,6 @@ export function SignupRequestsPage() {
         />
       )}
 
-      {/* Reject confirm — custom reason input embedded in ConfirmModal description */}
       {rejectState && (
         <Modal
           isOpen
@@ -371,24 +355,22 @@ export function SignupRequestsPage() {
             setRejectState(null);
             setRejectReason("");
           }}
-          title="Reject Request"
+          title={t("adminSignupRequests:rejectModal.title")}
           size="sm"
         >
           <div className="space-y-4">
             <p className="text-sm text-gray-600">
-              Rejecting{" "}
-              <strong>{rejectState.name}</strong> will permanently close this
-              request. Please provide a reason.
+              {t("adminSignupRequests:rejectModal.message", { name: rejectState.name })}
             </p>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Reason *
+                {t("adminSignupRequests:rejectModal.reasonLabel")}
               </label>
               <textarea
                 rows={3}
                 value={rejectReason}
                 onChange={(e) => setRejectReason(e.target.value)}
-                placeholder="Why is this request being rejected?"
+                placeholder={t("adminSignupRequests:rejectModal.reasonPlaceholder")}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:border-transparent outline-none resize-none"
               />
             </div>
@@ -401,14 +383,16 @@ export function SignupRequestsPage() {
                 disabled={rejectMutation.isPending}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
               >
-                Cancel
+                {t("adminSignupRequests:actions.cancel")}
               </button>
               <button
                 onClick={handleRejectConfirm}
                 disabled={rejectMutation.isPending || !rejectReason.trim()}
                 className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 transition-colors"
               >
-                {rejectMutation.isPending ? "Rejecting…" : "Reject"}
+                {rejectMutation.isPending
+                  ? t("adminSignupRequests:rejectModal.rejecting")
+                  : t("adminSignupRequests:actions.reject")}
               </button>
             </div>
           </div>

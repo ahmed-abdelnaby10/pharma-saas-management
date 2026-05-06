@@ -1,0 +1,86 @@
+{
+  "header": {
+    "title": "المستأجرون",
+    "subtitle": "إدارة جميع عملاء الصيدليات واشتراكاتهم",
+    "export": "تصدير",
+    "createTenant": "إنشاء مستأجر"
+  },
+  "stats": {
+    "total": "الإجمالي",
+    "active": "النشطون",
+    "trialing": "التجريبيون",
+    "suspended": "الموقوفون"
+  },
+  "filters": {
+    "searchPlaceholder": "البحث في المستأجرين...",
+    "status": "الحالة:"
+  },
+  "status": {
+    "all": "جميع الحالات",
+    "active": "نشط",
+    "trial": "تجريبي",
+    "trialing": "تجريبي",
+    "suspended": "موقوف",
+    "churned": "ملغى"
+  },
+  "table": {
+    "tenant": "المستأجر",
+    "plan": "الخطة",
+    "status": "الحالة",
+    "branches": "الفروع",
+    "users": "المستخدمون",
+    "created": "تاريخ الإنشاء",
+    "actions": "الإجراءات",
+    "empty": "لا يوجد مستأجرون.",
+    "loading": "جارٍ تحميل المستأجرين...",
+    "emptyValue": "—",
+    "showing": "عرض {{filtered}} من {{total}} مستأجر",
+    "previous": "السابق",
+    "next": "التالي"
+  },
+  "actions": {
+    "activate": "تفعيل",
+    "suspend": "إيقاف",
+    "activated": "تم تفعيل المستأجر",
+    "suspended": "تم إيقاف المستأجر",
+    "failed": "فشل الإجراء"
+  },
+  "modal": {
+    "createTitle": "إنشاء مستأجر",
+    "fields": {
+      "name": { "label": "اسم المستأجر *", "placeholder": "صيدلية الأمل" },
+      "slug": { "label": "المعرّف *", "placeholder": "amal-pharmacy" },
+      "email": { "label": "البريد الإلكتروني *", "placeholder": "admin@amalpharmacy.com" },
+      "phone": { "label": "الهاتف", "placeholder": "+966 5X XXX XXXX" },
+      "address": { "label": "العنوان", "placeholder": "شارع الملك فهد" },
+      "plan": { "label": "الخطة", "placeholder": "اختر خطة..." }
+    },
+    "actions": {
+      "cancel": "إلغاء",
+      "create": "إنشاء مستأجر",
+      "creating": "جارٍ الإنشاء..."
+    }
+  },
+  "tabs": {
+    "overview": "نظرة عامة",
+    "subscription": "الاشتراك",
+    "invoices": "الفواتير",
+    "features": "الميزات",
+    "usage": "الاستخدام",
+    "audit": "سجل المراجعة"
+  },
+  "detail": {
+    "accountInfo": "معلومات الحساب",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "address": "العنوان",
+    "accountStatus": "حالة الحساب",
+    "status": "الحالة",
+    "trialEnds": "انتهاء التجربة",
+    "periodEnd": "نهاية الفترة",
+    "allSubscriptions": "جميع الاشتراكات",
+    "inventoryItems": "عناصر المخزون",
+    "salesThisMonth": "مبيعات هذا الشهر",
+    "storage": "التخزين"
+  }
+}

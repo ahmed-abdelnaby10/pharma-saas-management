@@ -1,0 +1,50 @@
+{
+  "header": {
+    "title": "الاشتراكات",
+    "subtitle": "إدارة اشتراكات المستأجرين — وسّع الصف لعرض أو إنشاء أو تعديل",
+    "refresh": "تحديث"
+  },
+  "filters": {
+    "searchPlaceholder": "البحث في المستأجرين..."
+  },
+  "table": {
+    "tenant": "المستأجر",
+    "subscriptions": "الاشتراكات",
+    "actions": "الإجراءات",
+    "empty": "لا يوجد مستأجرون.",
+    "loading": "جارٍ تحميل المستأجرين..."
+  },
+  "row": {
+    "subscriptionCount": "{{count}} اشتراك",
+    "subscriptionCount_other": "{{count}} اشتراكات",
+    "periodEnds": "تنتهي الفترة في {{date}}",
+    "noSubscriptions": "لا توجد اشتراكات بعد.",
+    "loading": "جارٍ تحميل الاشتراكات...",
+    "add": "إضافة"
+  },
+  "status": {
+    "active": "نشط",
+    "trialing": "تجريبي",
+    "past_due": "متأخر السداد",
+    "paused": "متوقف مؤقتًا",
+    "canceled": "ملغى"
+  },
+  "modal": {
+    "createTitle": "اشتراك جديد — {{tenantName}}",
+    "editTitle": "تعديل الاشتراك",
+    "fields": {
+      "plan": { "label": "الخطة *", "placeholder": "اختر خطة..." },
+      "status": { "label": "الحالة الأولية" },
+      "trialEndsAt": { "label": "تاريخ انتهاء التجربة" }
+    },
+    "actions": {
+      "cancel": "إلغاء",
+      "create": "إنشاء",
+      "save": "حفظ",
+      "loadingPlans": "جارٍ تحميل الخطط..."
+    }
+  },
+  "footer": {
+    "showing": "{{filtered}} من {{total}} مستأجر"
+  }
+}

@@ -254,95 +254,108 @@ export const TENANT_API = {
 export const PLATFORM_API = {
   // Platform auth
   auth: {
-    login: "/platform/auth/login",
-    refresh: "/platform/auth/refresh",
-    me: "/platform/auth/me",
+    login: "/api/v1/platform/auth/login",
+    refresh: "/api/v1/platform/auth/refresh",
+    me: "/api/v1/platform/auth/me",
   },
 
   // Tenants
   tenants: {
-    list: "/platform/tenants",
-    create: "/platform/tenants",
-    get: (id: string) => `/platform/tenants/${id}`,
-    update: (id: string) => `/platform/tenants/${id}`,
-    suspend: (id: string) => `/platform/tenants/${id}/suspend`,
-    activate: (id: string) => `/platform/tenants/${id}/activate`,
+    list: "/api/v1/platform/tenants",
+    create: "/api/v1/platform/tenants",
+    get: (id: string) => `/api/v1/platform/tenants/${id}`,
+    update: (id: string) => `/api/v1/platform/tenants/${id}`,
+    suspend: (id: string) => `/api/v1/platform/tenants/${id}/suspend`,
+    activate: (id: string) => `/api/v1/platform/tenants/${id}/activate`,
   },
 
   // Subscriptions (per tenant)
   subscriptions: {
-    list: (tenantId: string) => `/platform/tenants/${tenantId}/subscriptions`,
-    create: (tenantId: string) => `/platform/tenants/${tenantId}/subscriptions`,
+    list: (tenantId: string) =>
+      `/api/v1/platform/tenants/${tenantId}/subscriptions`,
+    create: (tenantId: string) =>
+      `/api/v1/platform/tenants/${tenantId}/subscriptions`,
     get: (tenantId: string, subId: string) =>
-      `/platform/tenants/${tenantId}/subscriptions/${subId}`,
+      `/api/v1/platform/tenants/${tenantId}/subscriptions/${subId}`,
     update: (tenantId: string, subId: string) =>
-      `/platform/tenants/${tenantId}/subscriptions/${subId}`,
+      `/api/v1/platform/tenants/${tenantId}/subscriptions/${subId}`,
     cancel: (tenantId: string, subId: string) =>
-      `/platform/tenants/${tenantId}/subscriptions/${subId}/cancel`,
+      `/api/v1/platform/tenants/${tenantId}/subscriptions/${subId}/cancel`,
   },
 
   // Plans
   plans: {
-    list: "/platform/plans",
-    create: "/platform/plans",
-    get: (id: string) => `/platform/plans/${id}`,
-    update: (id: string) => `/platform/plans/${id}`,
-    delete: (id: string) => `/platform/plans/${id}`,
+    list: "/api/v1/platform/plans",
+    create: "/api/v1/platform/plans",
+    get: (id: string) => `/api/v1/platform/plans/${id}`,
+    update: (id: string) => `/api/v1/platform/plans/${id}`,
+    delete: (id: string) => `/api/v1/platform/plans/${id}`,
   },
 
   // Invoices
   invoices: {
-    list: "/platform/invoices",
-    get: (id: string) => `/platform/invoices/${id}`,
-    pay: (id: string) => `/platform/invoices/${id}/pay`,
+    list: "/api/v1/platform/invoices",
+    get: (id: string) => `/api/v1/platform/invoices/${id}`,
+    create: "/api/v1/platform/invoices",
+    issue: (id: string) => `/api/v1/platform/invoices/${id}/issue`,
+    pay: (id: string) => `/api/v1/platform/invoices/${id}/pay`,
+    markPaid: (id: string) => `/api/v1/platform/invoices/${id}/mark-paid`,
+    void: (id: string) => `/api/v1/platform/invoices/${id}/void`,
   },
 
   // Platform metrics
   metrics: {
-    overview: "/platform/metrics/overview",
-    mrr: "/platform/metrics/mrr",
-    churn: "/platform/metrics/churn",
+    overview: "/api/v1/platform/metrics/overview",
+    mrr: "/api/v1/platform/metrics/mrr",
+    churn: "/api/v1/platform/metrics/churn",
   },
 
   // Audit log
   audit: {
-    list: "/platform/audit",
+    list: "/api/v1/platform/audit",
   },
+
+  // Platform dashboard
+  dashboard: "/api/v1/platform/dashboard",
 
   // Support
   support: {
-    tickets: "/platform/support/tickets",
-    get: (id: string) => `/platform/support/tickets/${id}`,
-    reply: (id: string) => `/platform/support/tickets/${id}/reply`,
-    close: (id: string) => `/platform/support/tickets/${id}/close`,
+    tickets: "/api/v1/platform/support/tickets",
+    get: (id: string) => `/api/v1/platform/support/tickets/${id}`,
+    reply: (id: string) => `/api/v1/platform/support/tickets/${id}/reply`,
+    close: (id: string) => `/api/v1/platform/support/tickets/${id}/close`,
+    updateStatus: (id: string) =>
+      `/api/v1/platform/support/tickets/${id}/status`,
+    assign: (id: string) => `/api/v1/platform/support/tickets/${id}/assign`,
   },
 
   // Feature overrides per tenant
   features: {
-    list: (tenantId: string) => `/platform/tenants/${tenantId}/features`,
-    update: (tenantId: string) => `/platform/tenants/${tenantId}/features`,
+    list: (tenantId: string) => `/api/v1/platform/tenants/${tenantId}/features`,
+    update: (tenantId: string) =>
+      `/api/v1/platform/tenants/${tenantId}/features`,
   },
 
   // Platform catalog (master product library)
   catalog: {
-    list: "/platform/catalog",
-    create: "/platform/catalog",
-    get: (id: string) => `/platform/catalog/${id}`,
-    update: (id: string) => `/platform/catalog/${id}`,
-    delete: (id: string) => `/platform/catalog/${id}`,
+    list: "/api/v1/platform/catalog",
+    create: "/api/v1/platform/catalog",
+    get: (id: string) => `/api/v1/platform/catalog/${id}`,
+    update: (id: string) => `/api/v1/platform/catalog/${id}`,
+    delete: (id: string) => `/api/v1/platform/catalog/${id}`,
   },
 
   // Usage stats per tenant
   usage: {
-    get: (tenantId: string) => `/platform/tenants/${tenantId}/usage`,
+    get: (tenantId: string) => `/api/v1/platform/tenants/${tenantId}/usage`,
   },
 } as const;
 
-// ─── Public API endpoints (/api/public/*) ────────────────────────────────────
+// ─── Public API endpoints (/api/api/v1/public/*) ────────────────────────────────────
 export const PUBLIC_API = {
-  plans: "/public/plans",
-  downloads: "/public/downloads",
-  signupRequests: "/public/signup-requests",
+  plans: "/api/v1/plans",
+  downloads: "/api/v1/public/downloads",
+  signupRequests: "/api/v1/public/signup-requests",
 } as const;
 
 // ─── Platform Admin: signup requests ─────────────────────────────────────────

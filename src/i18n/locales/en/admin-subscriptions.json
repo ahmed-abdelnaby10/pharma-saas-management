@@ -1,0 +1,50 @@
+{
+  "header": {
+    "title": "Subscriptions",
+    "subtitle": "Manage per-tenant subscriptions — expand a row to view, create, or modify",
+    "refresh": "Refresh"
+  },
+  "filters": {
+    "searchPlaceholder": "Search tenants..."
+  },
+  "table": {
+    "tenant": "Tenant",
+    "subscriptions": "Subscriptions",
+    "actions": "Actions",
+    "empty": "No tenants found.",
+    "loading": "Loading tenants..."
+  },
+  "row": {
+    "subscriptionCount": "{{count}} subscription",
+    "subscriptionCount_other": "{{count}} subscriptions",
+    "periodEnds": "Period ends {{date}}",
+    "noSubscriptions": "No subscriptions yet.",
+    "loading": "Loading subscriptions...",
+    "add": "Add"
+  },
+  "status": {
+    "active": "Active",
+    "trialing": "Trialing",
+    "past_due": "Past Due",
+    "paused": "Paused",
+    "canceled": "Canceled"
+  },
+  "modal": {
+    "createTitle": "New subscription — {{tenantName}}",
+    "editTitle": "Edit subscription",
+    "fields": {
+      "plan": { "label": "Plan *", "placeholder": "Select a plan..." },
+      "status": { "label": "Initial status" },
+      "trialEndsAt": { "label": "Trial ends at" }
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "create": "Create",
+      "save": "Save",
+      "loadingPlans": "Loading plans..."
+    }
+  },
+  "footer": {
+    "showing": "{{filtered}} of {{total}} tenants"
+  }
+}

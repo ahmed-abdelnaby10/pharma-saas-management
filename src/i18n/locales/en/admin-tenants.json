@@ -1,0 +1,86 @@
+{
+  "header": {
+    "title": "Tenants",
+    "subtitle": "Manage all pharmacy clients and their subscriptions",
+    "export": "Export",
+    "createTenant": "Create Tenant"
+  },
+  "stats": {
+    "total": "Total",
+    "active": "Active",
+    "trialing": "Trialing",
+    "suspended": "Suspended"
+  },
+  "filters": {
+    "searchPlaceholder": "Search tenants...",
+    "status": "Status:"
+  },
+  "status": {
+    "all": "All Statuses",
+    "active": "Active",
+    "trial": "Trialing",
+    "trialing": "Trialing",
+    "suspended": "Suspended",
+    "churned": "Churned"
+  },
+  "table": {
+    "tenant": "Tenant",
+    "plan": "Plan",
+    "status": "Status",
+    "branches": "Branches",
+    "users": "Users",
+    "created": "Created",
+    "actions": "Actions",
+    "empty": "No tenants found.",
+    "loading": "Loading tenants...",
+    "emptyValue": "—",
+    "showing": "Showing {{filtered}} of {{total}} tenants",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "actions": {
+    "activate": "Activate",
+    "suspend": "Suspend",
+    "activated": "Tenant activated",
+    "suspended": "Tenant suspended",
+    "failed": "Action failed"
+  },
+  "modal": {
+    "createTitle": "Create Tenant",
+    "fields": {
+      "name": { "label": "Tenant Name *", "placeholder": "Acme Pharmacy" },
+      "slug": { "label": "Slug *", "placeholder": "acme-pharmacy" },
+      "email": { "label": "Email *", "placeholder": "admin@acmepharmacy.com" },
+      "phone": { "label": "Phone", "placeholder": "+1 555 000 0000" },
+      "address": { "label": "Address", "placeholder": "123 Main St" },
+      "plan": { "label": "Plan", "placeholder": "Select a plan..." }
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "create": "Create Tenant",
+      "creating": "Creating..."
+    }
+  },
+  "tabs": {
+    "overview": "Overview",
+    "subscription": "Subscription",
+    "invoices": "Invoices",
+    "features": "Features",
+    "usage": "Usage",
+    "audit": "Audit"
+  },
+  "detail": {
+    "accountInfo": "Account Information",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "accountStatus": "Account Status",
+    "status": "Status",
+    "trialEnds": "Trial Ends",
+    "periodEnd": "Period End",
+    "allSubscriptions": "All Subscriptions",
+    "inventoryItems": "Inventory Items",
+    "salesThisMonth": "Sales This Month",
+    "storage": "Storage"
+  }
+}

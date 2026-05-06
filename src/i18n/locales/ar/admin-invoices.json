@@ -1,0 +1,65 @@
+{
+  "status": {
+    "draft": "مسودة",
+    "open": "مفتوحة",
+    "paid": "مدفوعة",
+    "uncollectible": "غير قابلة للتحصيل",
+    "void": "ملغاة",
+    "all": "كل الحالات"
+  },
+  "header": {
+    "title": "الفواتير والفوترة",
+    "subtitle": "أدر عمليات الفوترة والتحصيل",
+    "export": "تصدير",
+    "createInvoice": "إنشاء فاتورة"
+  },
+  "summary": {
+    "totalBilled": "إجمالي المفوتر",
+    "totalPaid": "إجمالي المدفوع",
+    "overdue": "المتأخر",
+    "openInvoices": "الفواتير المفتوحة"
+  },
+  "filters": {
+    "searchPlaceholder": "ابحث في الفواتير...",
+    "status": "الحالة:"
+  },
+  "table": {
+    "loading": "جارٍ تحميل الفواتير...",
+    "invoiceId": "معرف الفاتورة",
+    "tenant": "المستأجر",
+    "date": "التاريخ",
+    "dueDate": "تاريخ الاستحقاق",
+    "amount": "المبلغ",
+    "status": "الحالة",
+    "actions": "الإجراءات",
+    "empty": "لم يتم العثور على فواتير.",
+    "showing": "عرض {{filtered}} من أصل {{total}} فاتورة",
+    "previous": "السابق",
+    "next": "التالي",
+    "emptyValue": "-"
+  },
+  "actions": {
+    "issue": "إصدار",
+    "markPaid": "تحديد كمدفوعة",
+    "void": "إلغاء",
+    "issued": "تم إصدار الفاتورة",
+    "markedPaid": "تم تحديد الفاتورة كمدفوعة",
+    "voided": "تم إلغاء الفاتورة",
+    "failed": "فشل الإجراء"
+  },
+  "modal": {
+    "createTitle": "إنشاء فاتورة",
+    "fields": {
+      "tenant": { "label": "المستأجر *", "placeholder": "اختر مستأجراً..." },
+      "subscription": { "label": "الاشتراك *", "placeholder": "اختر اشتراكاً..." },
+      "amount": { "label": "المبلغ *", "placeholder": "0.00" },
+      "currency": { "label": "العملة", "placeholder": "USD" },
+      "dueDate": { "label": "تاريخ الاستحقاق", "placeholder": "" }
+    },
+    "actions": {
+      "cancel": "إلغاء",
+      "create": "إنشاء فاتورة",
+      "creating": "جارٍ الإنشاء..."
+    }
+  }
+}

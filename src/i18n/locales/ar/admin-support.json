@@ -1,0 +1,45 @@
+{
+  "header": {
+    "title": "تذاكر الدعم",
+    "subtitle": "إدارة طلبات دعم العملاء"
+  },
+  "filters": {
+    "searchPlaceholder": "البحث في التذاكر...",
+    "status": {
+      "all": "جميع الحالات",
+      "open": "مفتوح",
+      "in_progress": "قيد المعالجة",
+      "resolved": "تم الحل",
+      "closed": "مغلق"
+    }
+  },
+  "priority": {
+    "low": "منخفض",
+    "medium": "متوسط",
+    "high": "مرتفع",
+    "critical": "حرج"
+  },
+  "status": {
+    "open": "مفتوح",
+    "in_progress": "قيد المعالجة",
+    "resolved": "تم الحل",
+    "closed": "مغلق"
+  },
+  "table": {
+    "subject": "الموضوع",
+    "tenant": "المستأجر",
+    "priority": "الأولوية",
+    "status": "الحالة",
+    "created": "تاريخ الإنشاء",
+    "actions": "الإجراءات",
+    "emptyValue": "—",
+    "loading": "جارٍ تحميل التذاكر...",
+    "showing": "عرض {{filtered}} من {{total}} تذكرة"
+  },
+  "empty": {
+    "heading": "لا توجد تذاكر",
+    "subline": "لا توجد طلبات دعم مفتوحة"
+  },
+  "updated": "تم تحديث التذكرة",
+  "updateFailed": "فشل تحديث التذكرة"
+}

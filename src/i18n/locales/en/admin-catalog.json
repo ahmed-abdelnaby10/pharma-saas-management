@@ -1,0 +1,86 @@
+{
+  "categories": {
+    "medicine": "Medicine",
+    "cosmetic": "Cosmetic",
+    "supplement": "Supplement",
+    "equipment": "Equipment",
+    "other": "Other",
+    "all": "All categories"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "toasts": {
+    "created": "Item created",
+    "createFailed": "Failed to create",
+    "updated": "Item updated",
+    "updateFailed": "Failed to update",
+    "deleted": "Item deleted",
+    "deleteFailed": "Failed to delete"
+  },
+  "modal": {
+    "editTitle": "Edit catalog item",
+    "newTitle": "New catalog item",
+    "fields": {
+      "nameEn": {
+        "label": "Name (EN) *",
+        "placeholder": "Paracetamol 500mg"
+      },
+      "nameAr": {
+        "label": "Name (AR)",
+        "placeholder": "Paracetamol"
+      },
+      "category": {
+        "label": "Category *"
+      },
+      "unit": {
+        "label": "Unit",
+        "placeholder": "tablet, bottle..."
+      },
+      "sku": {
+        "label": "SKU",
+        "placeholder": "SKU-001"
+      },
+      "barcode": {
+        "label": "Barcode",
+        "placeholder": "6123456789"
+      },
+      "manufacturer": {
+        "label": "Manufacturer"
+      },
+      "description": {
+        "label": "Description"
+      }
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "save": "Save changes",
+      "create": "Create"
+    }
+  },
+  "page": {
+    "title": "Product Catalog",
+    "subtitle": "Master library of all products available to tenants",
+    "newItem": "New item",
+    "searchPlaceholder": "Search by name, SKU, barcode...",
+    "loading": "Loading catalog...",
+    "empty": "No items found",
+    "deleteConfirm": "Delete \"{{name}}\" from catalog?",
+    "table": {
+      "name": "Name",
+      "category": "Category",
+      "sku": "SKU",
+      "barcode": "Barcode",
+      "unit": "Unit",
+      "manufacturer": "Manufacturer",
+      "status": "Status",
+      "actions": "Actions",
+      "itemsCount_one": "{{count}} item",
+      "itemsCount_other": "{{count}} items"
+    },
+    "placeholder": {
+      "emptyValue": "-"
+    }
+  }
+}

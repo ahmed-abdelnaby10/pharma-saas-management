@@ -10,6 +10,7 @@ import {
   Edit2,
   X,
 } from "lucide-react";
+import { useLanguage } from "@/app/contexts/useLanguage";
 import {
   useTenantsQuery,
   usePlansQuery,
@@ -31,11 +32,12 @@ const STATUS_STYLES: Record<string, string> = {
 };
 
 function StatusBadge({ status }: { status: string }) {
+  const { t } = useLanguage();
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize ${STATUS_STYLES[status] ?? STATUS_STYLES.canceled}`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${STATUS_STYLES[status] ?? STATUS_STYLES.canceled}`}
     >
-      {status.replace("_", " ")}
+      {t(`adminSubscriptions:status.${status}`)}
     </span>
   );
 }
@@ -49,6 +51,7 @@ interface CreateSubModalProps {
 }
 
 function CreateSubModal({ tenantId, tenantName, onClose }: CreateSubModalProps) {
+  const { t } = useLanguage();
   const { data: plans = [], isLoading: plansLoading } = usePlansQuery();
   const createSub = useCreateSubscriptionMutation();
 
@@ -70,7 +73,7 @@ function CreateSubModal({ tenantId, tenantName, onClose }: CreateSubModalProps) 
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900">
-            New subscription — {tenantName}
+            {t("adminSubscriptions:modal.createTitle", { tenantName })}
           </h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <X className="w-5 h-5" />
@@ -79,10 +82,13 @@ function CreateSubModal({ tenantId, tenantName, onClose }: CreateSubModalProps) 
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Plan *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {t("adminSubscriptions:modal.fields.plan.label")}
+            </label>
             {plansLoading ? (
               <div className="flex items-center gap-2 text-gray-500 text-sm py-2">
-                <Loader2 className="w-4 h-4 animate-spin" /> Loading plans…
+                <Loader2 className="w-4 h-4 animate-spin" />
+                {t("adminSubscriptions:modal.actions.loadingPlans")}
               </div>
             ) : (
               <select
@@ -91,7 +97,7 @@ function CreateSubModal({ tenantId, tenantName, onClose }: CreateSubModalProps) 
                 required
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
               >
-                <option value="">Select a plan…</option>
+                <option value="">{t("adminSubscriptions:modal.fields.plan.placeholder")}</option>
                 {plans.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name} — ${p.monthlyPrice}/mo
@@ -102,21 +108,25 @@ function CreateSubModal({ tenantId, tenantName, onClose }: CreateSubModalProps) 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Initial status</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {t("adminSubscriptions:modal.fields.status.label")}
+            </label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as TenantSubscriptionStatus)}
               className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
-              <option value="active">Active</option>
-              <option value="trialing">Trialing</option>
-              <option value="paused">Paused</option>
+              <option value="active">{t("adminSubscriptions:status.active")}</option>
+              <option value="trialing">{t("adminSubscriptions:status.trialing")}</option>
+              <option value="paused">{t("adminSubscriptions:status.paused")}</option>
             </select>
           </div>
 
           {status === "trialing" && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Trial ends at</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {t("adminSubscriptions:modal.fields.trialEndsAt.label")}
+              </label>
               <input
                 type="date"
                 value={trialEndsAt}
@@ -127,8 +137,12 @@ function CreateSubModal({ tenantId, tenantName, onClose }: CreateSubModalProps) 
           )}
 
           <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
-              Cancel
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              {t("adminSubscriptions:modal.actions.cancel")}
             </button>
             <button
               type="submit"
@@ -136,7 +150,7 @@ function CreateSubModal({ tenantId, tenantName, onClose }: CreateSubModalProps) 
               className="px-4 py-2 text-sm text-white bg-teal-600 rounded-lg hover:bg-teal-700 disabled:opacity-60 flex items-center gap-2"
             >
               {createSub.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
-              Create
+              {t("adminSubscriptions:modal.actions.create")}
             </button>
           </div>
         </form>
@@ -154,6 +168,7 @@ interface EditSubModalProps {
 }
 
 function EditSubModal({ sub, tenantId, onClose }: EditSubModalProps) {
+  const { t } = useLanguage();
   const { data: plans = [], isLoading: plansLoading } = usePlansQuery();
   const updateSub = useUpdateSubscriptionMutation();
 
@@ -172,7 +187,9 @@ function EditSubModal({ sub, tenantId, onClose }: EditSubModalProps) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Edit subscription</h3>
+          <h3 className="text-lg font-semibold text-gray-900">
+            {t("adminSubscriptions:modal.editTitle")}
+          </h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <X className="w-5 h-5" />
           </button>
@@ -180,10 +197,13 @@ function EditSubModal({ sub, tenantId, onClose }: EditSubModalProps) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Plan</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {t("adminSubscriptions:modal.fields.plan.label")}
+            </label>
             {plansLoading ? (
               <div className="flex items-center gap-2 text-gray-500 text-sm py-2">
-                <Loader2 className="w-4 h-4 animate-spin" /> Loading…
+                <Loader2 className="w-4 h-4 animate-spin" />
+                {t("adminSubscriptions:modal.actions.loadingPlans")}
               </div>
             ) : (
               <select
@@ -201,23 +221,29 @@ function EditSubModal({ sub, tenantId, onClose }: EditSubModalProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {t("adminSubscriptions:modal.fields.status.label")}
+            </label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as TenantSubscriptionStatus)}
               className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
-              <option value="active">Active</option>
-              <option value="trialing">Trialing</option>
-              <option value="past_due">Past due</option>
-              <option value="paused">Paused</option>
-              <option value="canceled">Canceled</option>
+              <option value="active">{t("adminSubscriptions:status.active")}</option>
+              <option value="trialing">{t("adminSubscriptions:status.trialing")}</option>
+              <option value="past_due">{t("adminSubscriptions:status.past_due")}</option>
+              <option value="paused">{t("adminSubscriptions:status.paused")}</option>
+              <option value="canceled">{t("adminSubscriptions:status.canceled")}</option>
             </select>
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
-              Cancel
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              {t("adminSubscriptions:modal.actions.cancel")}
             </button>
             <button
               type="submit"
@@ -225,7 +251,7 @@ function EditSubModal({ sub, tenantId, onClose }: EditSubModalProps) {
               className="px-4 py-2 text-sm text-white bg-teal-600 rounded-lg hover:bg-teal-700 disabled:opacity-60 flex items-center gap-2"
             >
               {updateSub.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
-              Save
+              {t("adminSubscriptions:modal.actions.save")}
             </button>
           </div>
         </form>
@@ -241,6 +267,8 @@ interface TenantRowProps {
 }
 
 function TenantRow({ tenant }: TenantRowProps) {
+  const { t, language } = useLanguage();
+  const dateLocale = language === "ar" ? "ar-EG" : "en-US";
   const [expanded, setExpanded] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
   const [editSub, setEditSub] = useState<TenantSubscription | null>(null);
@@ -250,9 +278,12 @@ function TenantRow({ tenant }: TenantRowProps) {
   });
   const cancel = useCancelSubscriptionMutation();
 
+  const subCountLabel = subs.length === 1
+    ? t("adminSubscriptions:row.subscriptionCount", { count: 1 })
+    : t("adminSubscriptions:row.subscriptionCount_other", { count: subs.length });
+
   return (
     <>
-      {/* Tenant header row */}
       <tr
         className="hover:bg-gray-50 cursor-pointer"
         onClick={() => setExpanded((v) => !v)}
@@ -271,7 +302,7 @@ function TenantRow({ tenant }: TenantRowProps) {
           </div>
         </td>
         <td className="px-6 py-4 text-sm text-gray-500">
-          {expanded ? (isLoading ? "…" : `${subs.length} subscription${subs.length !== 1 ? "s" : ""}`) : "—"}
+          {expanded ? (isLoading ? "…" : subCountLabel) : "—"}
         </td>
         <td className="px-6 py-4 text-right">
           <button
@@ -282,19 +313,20 @@ function TenantRow({ tenant }: TenantRowProps) {
             className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-teal-700 bg-teal-50 border border-teal-200 rounded-lg hover:bg-teal-100"
           >
             <Plus className="w-3.5 h-3.5" />
-            Add
+            {t("adminSubscriptions:row.add")}
           </button>
         </td>
       </tr>
 
-      {/* Expanded subscription rows */}
       {expanded && !isLoading && subs.map((sub) => (
         <tr key={sub.id} className="bg-gray-50 border-b border-gray-100">
           <td className="px-6 py-3 pl-16 whitespace-nowrap">
             <div className="text-sm text-gray-700">{sub.plan?.name ?? sub.planId}</div>
             {sub.currentPeriodEnd && (
               <div className="text-xs text-gray-400">
-                Period ends {new Date(sub.currentPeriodEnd).toLocaleDateString()}
+                {t("adminSubscriptions:row.periodEnds", {
+                  date: new Date(sub.currentPeriodEnd).toLocaleDateString(dateLocale),
+                })}
               </div>
             )}
           </td>
@@ -305,7 +337,6 @@ function TenantRow({ tenant }: TenantRowProps) {
             <div className="flex items-center justify-end gap-1">
               <button
                 onClick={() => setEditSub(sub)}
-                title="Edit"
                 className="p-1.5 text-gray-400 hover:text-teal-600 rounded"
               >
                 <Edit2 className="w-4 h-4" />
@@ -314,7 +345,6 @@ function TenantRow({ tenant }: TenantRowProps) {
                 onClick={() =>
                   cancel.mutate({ tenantId: tenant.id, subscriptionId: sub.id })
                 }
-                title="Cancel subscription"
                 className="p-1.5 text-gray-400 hover:text-red-500 rounded"
                 disabled={sub.status === "canceled"}
               >
@@ -327,9 +357,9 @@ function TenantRow({ tenant }: TenantRowProps) {
 
       {expanded && isLoading && (
         <tr className="bg-gray-50">
-          <td colSpan={3} className="px-6 py-3 pl-16 text-sm text-gray-500 flex items-center gap-2">
+          <td colSpan={3} className="px-6 py-3 pl-16 text-sm text-gray-500">
             <Loader2 className="w-4 h-4 animate-spin inline mr-1" />
-            Loading subscriptions…
+            {t("adminSubscriptions:row.loading")}
           </td>
         </tr>
       )}
@@ -337,12 +367,11 @@ function TenantRow({ tenant }: TenantRowProps) {
       {expanded && !isLoading && subs.length === 0 && (
         <tr className="bg-gray-50">
           <td colSpan={3} className="px-6 py-3 pl-16 text-sm text-gray-400 italic">
-            No subscriptions yet.
+            {t("adminSubscriptions:row.noSubscriptions")}
           </td>
         </tr>
       )}
 
-      {/* Modals */}
       {createOpen && (
         <CreateSubModal
           tenantId={tenant.id}
@@ -364,6 +393,7 @@ function TenantRow({ tenant }: TenantRowProps) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export function SubscriptionsPage() {
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data: tenants = [], isLoading, refetch, isFetching } = useTenantsQuery();
@@ -379,9 +409,11 @@ export function SubscriptionsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-gray-900">Subscriptions</h1>
+          <h1 className="text-3xl font-semibold text-gray-900">
+            {t("adminSubscriptions:header.title")}
+          </h1>
           <p className="mt-1 text-sm text-gray-500">
-            Manage per-tenant subscriptions — expand a row to view, create, or modify
+            {t("adminSubscriptions:header.subtitle")}
           </p>
         </div>
         <button
@@ -390,7 +422,7 @@ export function SubscriptionsPage() {
           className="inline-flex items-center gap-2 px-3 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-60"
         >
           <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
-          Refresh
+          {t("adminSubscriptions:header.refresh")}
         </button>
       </div>
 
@@ -400,7 +432,7 @@ export function SubscriptionsPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search tenants…"
+            placeholder={t("adminSubscriptions:filters.searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -413,7 +445,7 @@ export function SubscriptionsPage() {
         {isLoading ? (
           <div className="flex items-center justify-center py-16 text-gray-500">
             <Loader2 className="w-5 h-5 animate-spin mr-2" />
-            Loading tenants…
+            {t("adminSubscriptions:table.loading")}
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -421,13 +453,13 @@ export function SubscriptionsPage() {
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Tenant
+                    {t("adminSubscriptions:table.tenant")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Subscriptions
+                    {t("adminSubscriptions:table.subscriptions")}
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
+                    {t("adminSubscriptions:table.actions")}
                   </th>
                 </tr>
               </thead>
@@ -435,7 +467,7 @@ export function SubscriptionsPage() {
                 {filtered.length === 0 && (
                   <tr>
                     <td colSpan={3} className="py-12 text-center text-sm text-gray-500">
-                      No tenants found.
+                      {t("adminSubscriptions:table.empty")}
                     </td>
                   </tr>
                 )}
@@ -448,7 +480,10 @@ export function SubscriptionsPage() {
         )}
 
         <div className="px-6 py-3 border-t border-gray-200 text-sm text-gray-500">
-          {filtered.length} of {tenants.length} tenant{tenants.length !== 1 ? "s" : ""}
+          {t("adminSubscriptions:footer.showing", {
+            filtered: filtered.length,
+            total: tenants.length,
+          })}
         </div>
       </div>
     </div>

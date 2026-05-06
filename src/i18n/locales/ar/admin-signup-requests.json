@@ -1,0 +1,59 @@
+{
+  "header": {
+    "title": "طلبات التسجيل",
+    "subtitle": "راجع وأدر طلبات التجربة الواردة من نموذج التسجيل العام."
+  },
+  "filters": {
+    "searchPlaceholder": "ابحث بالاسم أو البريد الإلكتروني…",
+    "tabs": {
+      "all": "الكل",
+      "pending": "قيد الانتظار",
+      "approved": "موافق عليها",
+      "rejected": "مرفوضة"
+    }
+  },
+  "status": {
+    "pending": "قيد الانتظار",
+    "approved": "موافق عليه",
+    "rejected": "مرفوض"
+  },
+  "table": {
+    "loading": "جارٍ التحميل…",
+    "business": "اسم الشركة",
+    "contact": "جهة الاتصال",
+    "plan": "الخطة",
+    "submitted": "تاريخ الإرسال",
+    "status": "الحالة",
+    "emptyValue": "—"
+  },
+  "empty": {
+    "heading": "لا توجد طلبات تسجيل",
+    "subline": "ستظهر هنا الطلبات الجديدة الواردة من نموذج التسجيل العام."
+  },
+  "actions": {
+    "approve": "موافقة",
+    "reject": "رفض",
+    "done": "تم",
+    "cancel": "إلغاء"
+  },
+  "approveModal": {
+    "title": "الموافقة على الطلب",
+    "successTitle": "تم إنشاء المستأجر",
+    "successMessage": "تم إنشاء مستأجر <strong>{{name}}</strong>. شارك كلمة المرور المؤقتة أدناه — ستُعرض مرة واحدة فقط.",
+    "approveMessage": "الموافقة على <strong>{{name}}</strong> ستنشئ مستأجراً جديداً وترسل بيانات الاعتماد إلى <strong>{{email}}</strong>.",
+    "adminEmailLabel": "بريد المدير الإلكتروني",
+    "adminEmailNote": "(تجاوز اختياري)",
+    "tempPasswordLabel": "كلمة المرور المؤقتة",
+    "approving": "جارٍ الموافقة…",
+    "copyTitle": "نسخ كلمة المرور"
+  },
+  "rejectModal": {
+    "title": "رفض الطلب",
+    "message": "رفض <strong>{{name}}</strong> سيغلق هذا الطلب نهائياً. يرجى تقديم سبب.",
+    "reasonLabel": "السبب *",
+    "reasonPlaceholder": "لماذا يتم رفض هذا الطلب؟",
+    "rejecting": "جارٍ الرفض…",
+    "rejected": "تم رفض طلب {{name}}.",
+    "reasonRequired": "يرجى إدخال سبب الرفض."
+  }
+}

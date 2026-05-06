@@ -4,10 +4,10 @@
     "subtitle": "Native Windows desktop app with better hardware integration and performance. Use the same account as the web version."
   },
   "cta": {
-    "title": "PharmaSaaS for Windows",
+    "title": "Yomdix for Windows",
     "meta": "Version 2.1.0 - Released March 2026 - 45 MB",
     "button": "Download for Windows",
-    "note": "Free to download - Requires PharmaSaaS account"
+    "note": "Free to download - Requires Yomdix account"
   },
   "benefits": {
     "title": "Why use the desktop app?",
@@ -89,7 +89,7 @@
       },
       "login": {
         "title": "Login",
-        "description": "Sign in with your existing PharmaSaaS account"
+        "description": "Sign in with your existing Yomdix account"
       },
       "start": {
         "title": "Start Working",
@@ -106,7 +106,7 @@
       },
       "free": {
         "question": "Is the desktop app free?",
-        "answer": "Yes, the desktop app is free to download. You just need an active PharmaSaaS subscription."
+        "answer": "Yes, the desktop app is free to download. You just need an active Yomdix subscription."
       },
       "both": {
         "question": "Can I use both web and desktop?",

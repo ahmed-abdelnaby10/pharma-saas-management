@@ -1,0 +1,59 @@
+{
+  "status": {
+    "active": "نشط",
+    "trialing": "تجريبي",
+    "pastDue": "متأخر السداد",
+    "suspended": "موقوف"
+  },
+  "loading": "جارٍ تحميل لوحة التحكم...",
+  "header": {
+    "title": "لوحة تحكم المنصة",
+    "subtitle": "راقب أداء وصحة منصتك السحابية",
+    "exportReport": "تصدير التقرير",
+    "createTenant": "إنشاء مستأجر"
+  },
+  "kpis": {
+    "totalTenants": "إجمالي المستأجرين",
+    "activeTenants": "المستأجرون النشطون",
+    "mrr": "الإيراد الشهري المتكرر",
+    "pastDue": "المتأخرات",
+    "trialingTenants": "المستأجرون التجريبيون",
+    "suspended": "الموقوفون",
+    "arr": "الإيراد السنوي المتكرر",
+    "overdueInvoices": "الفواتير المتأخرة",
+    "churn": "انكماش {{value}}%",
+    "empty": "-"
+  },
+  "charts": {
+    "revenueTrend": {
+      "title": "اتجاه الإيرادات",
+      "subtitle": "آخر 6 أشهر",
+      "options": {
+        "last6Months": "آخر 6 أشهر",
+        "last12Months": "آخر 12 شهرًا",
+        "thisYear": "هذا العام"
+      }
+    },
+    "subscriptionGrowth": {
+      "title": "نمو الاشتراكات",
+      "subtitle": "الاشتراكات الجديدة لكل شهر"
+    }
+  },
+  "sections": {
+    "tenantStatus": "حالة المستأجرين",
+    "subscriptionHealth": "صحة الاشتراكات",
+    "recentActivity": "النشاط الأخير",
+    "quickActions": "إجراءات سريعة"
+  },
+  "recentActivity": {
+    "empty": "لا يوجد نشاط حديث"
+  },
+  "quickActions": {
+    "createTenant": "إنشاء مستأجر",
+    "startTrial": "بدء تجربة",
+    "createInvoice": "إنشاء فاتورة",
+    "assignPlan": "تعيين خطة",
+    "suspendTenant": "إيقاف مستأجر",
+    "viewReports": "عرض التقارير"
+  }
+}

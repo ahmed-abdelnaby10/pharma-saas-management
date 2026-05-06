@@ -1,0 +1,96 @@
+{
+  "header": {
+    "title": "Plans & Features",
+    "subtitle": "Manage subscription plans and feature configurations",
+    "createPlan": "Create Plan"
+  },
+  "labels": {
+    "monthlyPrice": "/month",
+    "yearlyPrice": "/year",
+    "mostPopular": "Most Popular",
+    "featuresIncluded": "Features Included",
+    "perMonth": "per month",
+    "orYearly": "or ${{price}}/year",
+    "loading": "Loading plans..."
+  },
+  "features": {
+    "branches": "Max Branches",
+    "users": "Max Users",
+    "trialDays": "Trial Days",
+    "ocrPages": "OCR Pages/Month",
+    "multiBranch": "Multi-Branch Management",
+    "advancedReports": "Advanced Reports",
+    "branchTransfers": "Branch Transfers",
+    "ocrImport": "OCR Import",
+    "prescriptionTracking": "Prescription Tracking",
+    "batchTracking": "Batch Tracking",
+    "expiryTracking": "Expiry Tracking",
+    "apiAccess": "API Access",
+    "prioritySupport": "Priority Support",
+    "dedicatedSupport": "Dedicated Support Manager",
+    "customIntegrations": "Custom Integrations"
+  },
+  "comparison": {
+    "title": "Feature Comparison",
+    "subtitle": "Complete feature matrix across all plans",
+    "feature": "Feature"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "modal": {
+    "createTitle": "Create Plan",
+    "editTitle": "Edit Plan",
+    "fields": {
+      "code": { "label": "Plan Code *", "placeholder": "starter_monthly" },
+      "name": { "label": "Plan Name *", "placeholder": "Growth" },
+      "description": { "label": "Description", "placeholder": "For expanding pharmacy businesses" },
+      "billingInterval": {
+        "label": "Billing Interval *",
+        "monthly": "Monthly",
+        "yearly": "Yearly"
+      },
+      "price": { "label": "Price *", "placeholder": "299" },
+      "currency": { "label": "Currency *", "placeholder": "EGP" },
+      "trialDays": { "label": "Trial Days *", "placeholder": "14" },
+      "isActive": { "label": "Active plan" },
+      "medicinesEnabled": { "label": "Enable medicines catalog (catalog.medicines)" },
+      "branchesMaxEnabled": { "label": "Enable branch limit feature (branches.max)" },
+      "branchesMaxLimitValue": { "placeholder": "Branches limit value (e.g. 1)" }
+    },
+    "validation": {
+      "codeRequired": "Plan code is required",
+      "nameRequired": "Plan name is required",
+      "billingIntervalRequired": "Billing interval is required",
+      "priceRequired": "Price is required",
+      "priceMin": "Price must be greater than or equal to 0",
+      "currencyRequired": "Currency is required",
+      "trialDaysRequired": "Trial days is required",
+      "trialDaysMin": "Trial days must be greater than or equal to 0",
+      "branchesLimitMin": "Branches limit must be at least 1"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "create": "Create Plan",
+      "save": "Save Changes",
+      "creating": "Creating..."
+    }
+  },
+  "actions": {
+    "editPlan": "Edit Plan",
+    "deletePlan": "Delete",
+    "deleteConfirm": "Delete plan \"{{name}}\"? This cannot be undone.",
+    "deleted": "Plan deleted",
+    "deleteFailed": "Failed to delete plan"
+  },
+  "empty": "No plans found.",
+  "table": {
+    "name": "Name",
+    "price": "Price",
+    "branches": "Branches",
+    "users": "Users",
+    "status": "Status",
+    "actions": "Actions"
+  }
+}

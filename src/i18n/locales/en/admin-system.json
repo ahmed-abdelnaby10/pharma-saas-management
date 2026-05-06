@@ -1,0 +1,50 @@
+{
+  "metrics": {
+    "header": {
+      "title": "System Metrics",
+      "subtitle": "Platform operations and infrastructure monitoring"
+    },
+    "health": {
+      "api": "API Status",
+      "database": "Database",
+      "jobs": "Background Jobs",
+      "operational": "Operational",
+      "processing": "Processing",
+      "apiMetric": "99.98% uptime",
+      "dbMetric": "< 50ms latency",
+      "jobMetric": "42 jobs in queue"
+    },
+    "stats": {
+      "activeSessions": "Active Sessions",
+      "requestsPerMin": "API Requests/min",
+      "ocrJobsToday": "OCR Jobs Today",
+      "failedJobs": "Failed Jobs"
+    },
+    "chart": {
+      "title": "System Performance Metrics",
+      "description": "API health, worker queues, OCR pipeline usage, processing times, and platform-wide event monitoring"
+    }
+  },
+  "settings": {
+    "header": {
+      "title": "Platform Settings",
+      "subtitle": "Configure platform-wide settings and preferences"
+    },
+    "cards": {
+      "adminUsers": { "title": "Admin Users", "description": "Manage platform administrators and their permissions" },
+      "notifications": { "title": "Notifications", "description": "Configure system alerts and notification preferences" },
+      "security": { "title": "Security", "description": "Security policies, 2FA, and access controls" },
+      "platformConfig": { "title": "Platform Configuration", "description": "General platform settings and configurations" }
+    }
+  },
+  "usage": {
+    "header": {
+      "title": "Usage & Limits",
+      "subtitle": "Monitor tenant resource consumption and quota risks"
+    },
+    "chart": {
+      "title": "Usage Monitoring",
+      "description": "Track branch usage, user limits, OCR consumption, and identify tenants approaching their quotas"
+    }
+  }
+}

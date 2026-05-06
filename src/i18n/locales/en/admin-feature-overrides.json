@@ -1,0 +1,20 @@
+{
+  "header": {
+    "title": "Feature Overrides",
+    "subtitle": "Manage tenant-specific feature exceptions and temporary access",
+    "addOverride": "Add Override"
+  },
+  "emptyState": {
+    "title": "Feature Override Management",
+    "description": "Control tenant-specific exceptions, temporary feature access, and plan limit overrides"
+  },
+  "action": {
+    "enable": "Enable",
+    "disable": "Disable"
+  },
+  "toast": {
+    "enabled": "Feature enabled",
+    "disabled": "Feature disabled",
+    "failed": "Failed to update feature"
+  }
+}

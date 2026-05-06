@@ -1,0 +1,96 @@
+{
+  "header": {
+    "title": "الخطط والميزات",
+    "subtitle": "إدارة خطط الاشتراك وإعدادات الميزات",
+    "createPlan": "إنشاء خطة"
+  },
+  "labels": {
+    "monthlyPrice": "/شهريًا",
+    "yearlyPrice": "/سنويًا",
+    "mostPopular": "الأكثر شيوعًا",
+    "featuresIncluded": "الميزات المضمّنة",
+    "perMonth": "في الشهر",
+    "orYearly": "أو ${{price}}/سنويًا",
+    "loading": "جارٍ تحميل الخطط..."
+  },
+  "features": {
+    "branches": "الحد الأقصى للفروع",
+    "users": "الحد الأقصى للمستخدمين",
+    "trialDays": "أيام التجربة",
+    "ocrPages": "صفحات OCR في الشهر",
+    "multiBranch": "إدارة متعددة الفروع",
+    "advancedReports": "تقارير متقدمة",
+    "branchTransfers": "تحويلات بين الفروع",
+    "ocrImport": "استيراد OCR",
+    "prescriptionTracking": "تتبع الوصفات",
+    "batchTracking": "تتبع الدُّفعات",
+    "expiryTracking": "تتبع انتهاء الصلاحية",
+    "apiAccess": "وصول API",
+    "prioritySupport": "دعم متقدم",
+    "dedicatedSupport": "مدير دعم مخصص",
+    "customIntegrations": "تكاملات مخصصة"
+  },
+  "comparison": {
+    "title": "مقارنة الميزات",
+    "subtitle": "مصفوفة الميزات الكاملة عبر جميع الخطط",
+    "feature": "الميزة"
+  },
+  "status": {
+    "active": "نشط",
+    "inactive": "غير نشط"
+  },
+  "modal": {
+    "createTitle": "إنشاء خطة",
+    "editTitle": "تعديل الخطة",
+    "fields": {
+      "code": { "label": "كود الخطة *", "placeholder": "starter_monthly" },
+      "name": { "label": "اسم الخطة *", "placeholder": "نمو" },
+      "description": { "label": "الوصف", "placeholder": "للصيدليات المتنامية" },
+      "billingInterval": {
+        "label": "فترة الفوترة *",
+        "monthly": "شهري",
+        "yearly": "سنوي"
+      },
+      "price": { "label": "السعر *", "placeholder": "299" },
+      "currency": { "label": "العملة *", "placeholder": "EGP" },
+      "trialDays": { "label": "أيام التجربة *", "placeholder": "14" },
+      "isActive": { "label": "الخطة نشطة" },
+      "medicinesEnabled": { "label": "تفعيل كتالوج الأدوية (catalog.medicines)" },
+      "branchesMaxEnabled": { "label": "تفعيل ميزة حد الفروع (branches.max)" },
+      "branchesMaxLimitValue": { "placeholder": "قيمة حد الفروع (مثال: 1)" }
+    },
+    "validation": {
+      "codeRequired": "كود الخطة مطلوب",
+      "nameRequired": "اسم الخطة مطلوب",
+      "billingIntervalRequired": "فترة الفوترة مطلوبة",
+      "priceRequired": "السعر مطلوب",
+      "priceMin": "يجب أن يكون السعر أكبر من أو يساوي 0",
+      "currencyRequired": "العملة مطلوبة",
+      "trialDaysRequired": "أيام التجربة مطلوبة",
+      "trialDaysMin": "يجب أن تكون أيام التجربة أكبر من أو تساوي 0",
+      "branchesLimitMin": "حد الفروع يجب أن يكون 1 على الأقل"
+    },
+    "actions": {
+      "cancel": "إلغاء",
+      "create": "إنشاء خطة",
+      "save": "حفظ التغييرات",
+      "creating": "جارٍ الإنشاء..."
+    }
+  },
+  "actions": {
+    "editPlan": "تعديل الخطة",
+    "deletePlan": "حذف",
+    "deleteConfirm": "حذف الخطة \"{{name}}\"؟ لا يمكن التراجع عن هذا.",
+    "deleted": "تم حذف الخطة",
+    "deleteFailed": "فشل حذف الخطة"
+  },
+  "empty": "لا توجد خطط.",
+  "table": {
+    "name": "الاسم",
+    "price": "السعر",
+    "branches": "الفروع",
+    "users": "المستخدمون",
+    "status": "الحالة",
+    "actions": "الإجراءات"
+  }
+}

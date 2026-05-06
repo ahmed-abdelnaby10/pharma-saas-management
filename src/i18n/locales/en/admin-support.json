@@ -1,0 +1,45 @@
+{
+  "header": {
+    "title": "Support Tickets",
+    "subtitle": "Manage customer support requests"
+  },
+  "filters": {
+    "searchPlaceholder": "Search tickets...",
+    "status": {
+      "all": "All statuses",
+      "open": "Open",
+      "in_progress": "In Progress",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    }
+  },
+  "priority": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical"
+  },
+  "status": {
+    "open": "Open",
+    "in_progress": "In Progress",
+    "resolved": "Resolved",
+    "closed": "Closed"
+  },
+  "table": {
+    "subject": "Subject",
+    "tenant": "Tenant",
+    "priority": "Priority",
+    "status": "Status",
+    "created": "Created",
+    "actions": "Actions",
+    "emptyValue": "—",
+    "loading": "Loading tickets...",
+    "showing": "Showing {{filtered}} of {{total}} tickets"
+  },
+  "empty": {
+    "heading": "No tickets",
+    "subline": "All clear — no open support requests"
+  },
+  "updated": "Ticket updated",
+  "updateFailed": "Failed to update ticket"
+}
